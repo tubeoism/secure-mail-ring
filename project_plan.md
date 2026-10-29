@@ -2,10 +2,10 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Phiên bản tài liệu | **v0.3 — Bản nháp, đã chốt một phần quyết định** |
+| Phiên bản tài liệu | **v0.4 — Bản nháp, đã chốt một phần quyết định** |
 | Ngày | 2026-10-29 |
 | Chủ sở hữu | Product Owner (người yêu cầu) |
-| Trạng thái | Đã chốt D-01, D-02, D-03, D-04, D-12, D-16 và phạm vi F6–F8. Còn mở D-05 → D-11, D-13 → D-15 (§12) trước khi khóa phạm vi (Stage 0 gate) |
+| Trạng thái | Đã chốt D-01, D-02, D-03, D-04, D-12, D-13, D-15, D-16 và phạm vi F6–F8. Còn mở D-05 → D-11, D-14, D-17 (§12) trước khi khóa phạm vi (Stage 0 gate) |
 | Quy ước | `FR-x.y` = yêu cầu chức năng · `NFR-x` = phi chức năng · `D-xx` = quyết định cần duyệt · `R-xx` = rủi ro · **[Verify-S0]** = giả định kỹ thuật phải được kiểm chứng ở Stage 0 trước khi xây dựng tiếp |
 
 > Nguyên tắc làm việc: mỗi stage đi theo chuỗi **Scope → Draft → Validate/Test → Sign-off → Package**. Không stage nào bắt đầu khi gate của stage trước chưa được ký duyệt. Mọi thông số API Office.js trong tài liệu này được ghi theo hiểu biết hiện tại và **phải xác minh trên đúng build Outlook của người dùng** ở Stage 0 — không xây trên giả định chưa kiểm chứng.
@@ -17,6 +17,7 @@
 | v0.1 | 2026-10-29 | Bản nháp đầu tiên |
 | v0.2 | 2026-10-29 | Chốt D-01 (M365 Exchange Online), D-02 (classic + new Outlook), D-03 (**không có quyền admin → người dùng tự cài manifest**, để ngỏ đường admin center), D-04 (mặc định Warn + tùy chọn strict), D-12 (Tầng 2, chừa Tầng 3). Bỏ link/trang import → **mã cấu hình dán trực tiếp**. Đưa E-1, E-2, E-4 vào v1 thành **F6** (domain gần giống), **F7** (người nhận lần đầu), **F8** (ràng buộc trường). Thêm mô hình xử lý vi phạm 3 mức Warn / Acknowledge / Block. Hiệu chỉnh effort |
 | v0.3 | 2026-10-29 | D-02 sửa: **cam kết classic Outlook**, new Outlook chỉ kiểm tra khói (không thuộc tiêu chí nghiệm thu). D-16: phương án dự phòng B = **COM add-in thuần trên .NET Framework 4.8.1**, kích hoạt theo tiêu chí đo ở Spike 7 (thử sideload 5 ngày); đã đánh giá và loại .NET 10 (comhost/Native AOT) — §4.4. Effort còn 37–57 ngày |
+| v0.4 | 2026-10-29 | D-15: **có** nút "Import từ email này" (FR-2.9). D-13: **~100 người dùng, tối đa 500** → tách S7 (pilot 10–20 người) và **S8 (triển khai theo đợt)**, bổ sung mô hình hỗ trợ, nhận diện phiên bản manifest, R-18/R-19, quyết định mới D-17 (đo độ phủ cài đặt). Effort 42–65 ngày |
 
 ---
 
@@ -28,7 +29,7 @@
 
 **Khuyến nghị nền tảng.** **Office Web Add-in (Office.js) + Smart Alerts (`OnMessageSend`)**, viết bằng TypeScript. Đây là công nghệ duy nhất chạy được trên cả *classic Outlook for Windows* và *new Outlook for Windows* (new Outlook **không** hỗ trợ COM/VSTO). Chi tiết so sánh tại §4.
 
-**Ước lượng sơ bộ.** 8 stage (S0–S7), khoảng **37–57 ngày công** cho 1 developer (đã gồm F6–F8; new Outlook chỉ kiểm tra khói), tùy kết quả Stage 0 và các quyết định còn mở ở §12. Chi phí công cụ: **0 đồng** (toàn bộ công cụ miễn phí/mã nguồn mở; hosting dùng free tier).
+**Ước lượng sơ bộ.** 9 stage (S0–S8), khoảng **42–65 ngày công** cho 1 developer (đã gồm F6–F8, pilot và triển khai theo đợt cho ~100–500 người dùng; new Outlook chỉ kiểm tra khói), tùy kết quả Stage 0 và các quyết định còn mở ở §12. Chi phí công cụ: **0 đồng** (toàn bộ công cụ miễn phí/mã nguồn mở; hosting dùng free tier).
 
 **Ba điểm cần nói thẳng ngay từ đầu:**
 
@@ -116,8 +117,9 @@
 | FR-2.6 | Diff làm nổi bật thay đổi rủi ro: địa chỉ/domain **mới** được thêm, domain ngoài, chính sách bị **nới lỏng** (Block → Warn) |
 | FR-2.7 | Phiên bản hóa: mỗi ring có `id` + `rev`. Import trùng `id` với `rev` mới hơn → cập nhật sau khi xem diff; `rev` cũ hơn → từ chối, báo rõ |
 | FR-2.8 | Mã mang theo `issuer` (email người tạo) và `issuedAt`, hiển thị trong preview; hạn dùng của mã là tùy chọn |
+| FR-2.9 | **Import từ email (D-15):** khi đọc email chia sẻ, nút add-in tự tìm khối mã trong thân thư, kiểm tra (a) người gửi thuộc domain nội bộ, (b) header `Authentication-Results` cho thấy DKIM/DMARC pass cho domain đó, (c) `issuer` trong mã trùng người gửi thư (lệch → cảnh báo) — rồi vào cùng luồng preview/diff như FR-2.5. Kết quả kiểm tra nguồn hiển thị trong preview ("Đã xác minh nguồn gửi" / "Không xác minh được") |
 
-**Đánh đổi của import bằng dán mã (ghi nhận).** So với import từ email, dán mã mất khả năng kiểm tra nguồn gửi (DKIM/DMARC). Các neo tin cậy còn lại: (1) chỉ add-in build cho đúng tổ chức mới giải mã được (khóa nhúng lúc build); (2) AES-GCM phát hiện mọi chỉnh sửa trên mã; (3) diff preview buộc người dùng nhìn thấy thay đổi trước khi chấp nhận. Người ngoài muốn tạo mã giả phải trích được khóa từ bundle đã obfuscate — chi phí cao so với lợi ích. **Tùy chọn D-15:** thêm nút "Import từ email này" ở chế độ đọc thư để khôi phục kiểm tra nguồn gửi. Nếu muốn có, nút này phải được khai báo ngay trong manifest v1, tránh buộc người dùng cài lại sau này.
+**Đánh đổi của import bằng dán mã (ghi nhận).** So với import từ email, dán mã mất khả năng kiểm tra nguồn gửi (DKIM/DMARC). Các neo tin cậy còn lại: (1) chỉ add-in build cho đúng tổ chức mới giải mã được (khóa nhúng lúc build); (2) AES-GCM phát hiện mọi chỉnh sửa trên mã; (3) diff preview buộc người dùng nhìn thấy thay đổi trước khi chấp nhận. Người ngoài muốn tạo mã giả phải trích được khóa từ bundle đã obfuscate — chi phí cao so với lợi ích. **D-15 (đã chốt):** bổ sung nút "Import từ email này" ở chế độ đọc thư (FR-2.9) để khôi phục kiểm tra nguồn gửi; nút được khai báo ngay trong manifest v1. Dán mã vẫn giữ làm đường dự phòng (mã nhận qua Teams/Zalo).
 
 ### F3 — Sắp xếp người nhận To/CC/BCC
 
@@ -205,7 +207,7 @@ Ghi nhận: dương tính giả của Bloom nghĩa là ~1% địa chỉ mới b�
 |---|---|
 | NFR-1 | Kiểm tra khi Send (gồm F1, F3, F4, F6–F8) hoàn tất < 1,5 giây cho email ≤ 50 người nhận, ≤ 20 file (đo ở Stage 4) |
 | NFR-2 | Fail-safe: lỗi nội bộ của add-in **không được** làm mất email hoặc treo Outlook; hành vi khi add-in không tải được do manifest quyết định (SoftBlock — §5.4) |
-| NFR-3 | Không gửi dữ liệu email ra ngoài Outlook (trừ Tầng 3 nếu chọn: chỉ gửi token định danh, không gửi nội dung) |
+| NFR-3 | Không gửi dữ liệu email ra ngoài Outlook. Ngoại lệ có kiểm soát: heartbeat độ phủ nếu D-17 được duyệt (hash hộp thư + phiên bản) và Tầng 3 nếu bật (token định danh) — không bao giờ gửi nội dung, người nhận hay tên file |
 | NFR-4 | Quyền tối thiểu trong manifest: `ReadWriteItem` (không xin `ReadWriteMailbox`) |
 | NFR-5 | Song ngữ UI Việt/Anh (i18n từ đầu, chi phí thấp nếu làm sớm) |
 | NFR-6 | Core logic là module thuần TypeScript, không phụ thuộc Office.js, độ phủ unit test ≥ 90% |
@@ -269,7 +271,7 @@ Requirement set ghi theo tài liệu Microsoft hiện hành — **toàn bộ c�
 | Người gửi | `mailbox.userProfile.emailAddress`; `item.from.getAsync` | 1.1; 1.7 |
 | Lưu cấu hình ring | `Office.context.roamingSettings` (giới hạn ~32 KB, đồng bộ theo hộp thư) | Mailbox 1.1 |
 | Mở email chia sẻ cấu hình | `mailbox.displayNewMessageForm` | Mailbox 1.6 |
-| (Tùy chọn D-15) Import từ email + kiểm tra header xác thực | `item.body.getAsync`; `item.getAllInternetHeadersAsync` | 1.3; 1.8 |
+| Import từ email + kiểm tra header xác thực (D-15) | `item.body.getAsync`; `item.getAllInternetHeadersAsync` | 1.3; 1.8 |
 
 ### 4.4 Phương án dự phòng B — COM add-in (chỉ classic Outlook)
 
@@ -295,7 +297,7 @@ flowchart LR
   subgraph Outlook["Outlook (classic / new)"]
     TP["Task pane<br/>React + Fluent UI<br/>(browser runtime)"]
     EV["Event handler<br/>launchevent.js<br/>(JS-only runtime trên classic Win)"]
-    RM["Read-mode command<br/>Import từ email<br/>(tùy chọn D-15)"]
+    RM["Read-mode command<br/>Import từ email (D-15)"]
     RS[("roamingSettings<br/>rings + prefs")]
     IT[("Item đang soạn<br/>custom props / sessionData")]
   end
@@ -431,7 +433,7 @@ smr1.<keyId>.<base64url( AES-GCM( deflate( JSON ring + issuer + issuedAt ) ) )>
 
 | ID | Mối đe dọa | Kịch bản | Kiểm soát |
 |---|---|---|---|
-| T-1 | Import cấu hình độc hại | Kẻ tấn công gửi mã cấu hình thêm domain của hắn vào ring `ALPHA` | Khóa tổ chức + AES-GCM; diff preview làm nổi bật phần mở rộng; `rev` monotonic; hiển thị `issuer`; mức sàn không bị mã import hạ xuống; (D-15) kiểm tra DKIM/DMARC khi import từ email |
+| T-1 | Import cấu hình độc hại | Kẻ tấn công gửi mã cấu hình thêm domain của hắn vào ring `ALPHA` | Khóa tổ chức + AES-GCM; diff preview làm nổi bật phần mở rộng; `rev` monotonic; hiển thị `issuer`; mức sàn không bị mã import hạ xuống; kiểm tra DKIM/DMARC + `issuer` khi import từ email (FR-2.9) |
 | T-2 | Domain lookalike | `abccorp.vn` vs `abcc0rp.vn`, homograph Cyrillic | Chuẩn hóa punycode; **F6** |
 | T-3 | Phân phối lại add-in cho tổ chức khác | Copy manifest + bundle sang host khác, sửa chuỗi domain | Obfuscation + `domainLock` theo origin hosting + Tầng 3 |
 | T-4 | Vượt kiểm tra domain phía client | Người dùng sửa JS/patch runtime | Chấp nhận ở Tầng 1–2; Tầng 3 dùng xác thực phía server |
@@ -484,10 +486,11 @@ Effort tính theo ngày công của 1 developer, mang tính chỉ báo; sẽ hi�
 | S2 | Add-in shell & quản lý ring | 6–8 | S1 | Tự cài chạy trên classic Outlook |
 | S3 | Tích hợp soạn thư | 4–6 | S2 | Chọn ring/tag/reply ổn định |
 | S4 | On-send guard (Smart Alerts) | 6–10 | S3 | F1, F3, F4, F6–F8 đạt acceptance |
-| S5 | Chia sẻ cấu hình | 3–5 | S2 | F2 đạt acceptance, test giả mạo |
+| S5 | Chia sẻ cấu hình | 4–7 | S2 | F2 đạt acceptance, test giả mạo |
 | S6 | Domain lock & hardening | 4–6 | S4 | Bundle obfuscate vẫn đạt NFR-1 |
-| S7 | UAT, đóng gói, triển khai | 3–5 | S4–S6 | Sign-off phát hành v1.0 |
-| | **Tổng** | **37–57** | | |
+| S7 | Pilot (UAT), đóng gói | 4–6 | S4–S6 | Sign-off phát hành v1.0 |
+| S8 | Triển khai theo đợt (~100 → 500 người) | 3–5 | S7 | Đạt chỉ tiêu độ phủ và tỷ lệ lỗi mỗi đợt |
+| | **Tổng** | **42–65** | | |
 
 ### Stage 0 — Discovery & Technical spike
 
@@ -541,7 +544,7 @@ Chuyển sang B nghĩa là lập lại kế hoạch kỹ thuật S1–S6 và ư�
 ### Stage 2 — Add-in shell & quản lý ring
 
 - Scaffold bằng `yo office`, manifest XML, 2 entry point: task pane (React) và `launchevent` (JS thuần).
-- Manifest v1 khai báo **đầy đủ ngay từ đầu** mọi event (`OnNewMessageCompose`, `OnMessageRecipientsChanged`, `OnMessageAttachmentsChanged`, `OnMessageSend`), nút compose, (nếu D-15) nút read mode, quyền `ReadWriteItem` — tránh bắt người dùng cài lại.
+- Manifest v1 khai báo **đầy đủ ngay từ đầu** mọi event (`OnNewMessageCompose`, `OnMessageRecipientsChanged`, `OnMessageAttachmentsChanged`, `OnMessageSend`), nút compose, nút read mode (D-15), quyền `ReadWriteItem` — tránh bắt người dùng cài lại.
 - Màn hình: danh sách ring, form tạo/sửa (thành viên, tag, thứ tự kéo-thả 3 cột, token file, ràng buộc trường, mức xử lý theo từng loại vi phạm, preset Strict), cảnh báo mẫu bị che khuất/ràng buộc mâu thuẫn, nhân bản ring, xóa có xác nhận.
 - Settings: mức sàn toàn cục, ngoại lệ lookalike, chế độ học F7, ô "Nhập mã cấu hình", thước đo dung lượng lưu trữ.
 - Lớp lưu trữ `roamingSettings` có nén, kiểm tra quota, báo lỗi rõ khi gần đầy.
@@ -573,7 +576,7 @@ Chuyển sang B nghĩa là lập lại kế hoạch kỹ thuật S1–S6 và ư�
 
 - Export mã cấu hình, nút copy, tạo email chia sẻ (`displayNewMessageForm`), chặn người nhận ngoài domain nội bộ.
 - Import bằng dán mã: giải mã, validate schema, diff preview làm nổi bật phần mở rộng/nới lỏng, import/cập nhật theo `rev`, áp mức sàn.
-- (Nếu D-15) Nút "Import từ email này" ở read mode, kiểm tra người gửi + `Authentication-Results`.
+- Nút "Import từ email này" ở read mode (FR-2.9): kiểm tra người gửi, `Authentication-Results`, `issuer`.
 
 **Gate:** test âm tính — mã bị sửa 1 ký tự, mã của bản build tổ chức khác, `rev` cũ hơn, mã hết hạn, mã cố hạ mức sàn — đều bị từ chối với thông điệp rõ ràng.
 
@@ -586,14 +589,28 @@ Chuyển sang B nghĩa là lập lại kế hoạch kỹ thuật S1–S6 và ư�
 
 **Gate:** build cho domain A từ chối hộp thư domain B; bundle production vượt qua script kiểm tra; hiệu năng vẫn đạt NFR-1.
 
-### Stage 7 — UAT, đóng gói, triển khai
+### Stage 7 — Pilot (UAT), đóng gói
 
-- UAT với 3–5 người dùng thật trong 1–2 tuần; đo **tỷ lệ false positive và tỷ lệ override** theo từng loại vi phạm (chỉ báo control erosion), đặc biệt F6 và F7.
+- Pilot với **10–20 người dùng** thuộc 2–3 nhóm engagement khác nhau, trong 2 tuần; đo **tỷ lệ false positive và tỷ lệ override** theo từng loại vi phạm (chỉ báo control erosion), đặc biệt F6 và F7; đo thời gian tự cài và số ca cần hỗ trợ.
+- Chọn **key user** cho mỗi nhóm (hỗ trợ tuyến 1 ở S8).
 - Tài liệu: hướng dẫn cài đặt + sử dụng (Việt, ảnh chụp từng bước cho classic và new Outlook), hướng dẫn triển khai/build (Anh), mô tả kiểm soát & giới hạn (Anh — dùng được cho hồ sơ kiểm soát nội bộ).
 - Phát hành: build production → hosting → gửi file `manifest.xml` + hướng dẫn cài cho người dùng (D-03). Đường admin center để ngỏ (§9).
 - Quy trình cập nhật & rollback: bundle có version, giữ bản trước trên hosting để quay lui trong vài phút.
 
-**Gate:** sign-off phát hành v1.0.
+**Gate:** sign-off phát hành v1.0 — tỷ lệ override, false positive và số ca hỗ trợ trong ngưỡng đã thống nhất trước pilot.
+
+### Stage 8 — Triển khai theo đợt
+
+| Đợt | Quy mô | Điều kiện sang đợt sau |
+|---|---|---|
+| Đợt 1 | ~100 người (các nhóm engagement nhạy cảm nhất trước) | ≥ 90% người dùng mục tiêu đã cài (theo D-17); không có lỗi mức nghiêm trọng trong 2 tuần |
+| Đợt 2 | Mở rộng tới 500 người | Như trên; khối lượng hỗ trợ ổn định |
+
+- Bộ hỗ trợ: hướng dẫn tự cài có ảnh, video ngắn 2 phút, FAQ, quy trình xóa cache Wef, kênh hỗ trợ qua key user.
+- Đổi manifest trong giai đoạn triển khai: **đóng băng** — mọi thay đổi manifest gom cho đợt cài lại có kế hoạch.
+- **Khuyến nghị trước Đợt 2:** trình IT phương án triển khai qua admin center (§9) — với 500 người, tự cài là chi phí vận hành lớn nhất và là điểm yếu về độ phủ kiểm soát.
+
+**Gate:** mỗi đợt đạt điều kiện trong bảng.
 
 ---
 
@@ -606,7 +623,7 @@ Chuyển sang B nghĩa là lập lại kế hoạch kỹ thuật S1–S6 và ư�
 | Unit | `packages/core` — toàn bộ quy tắc | Vitest (+ property-based với `fast-check`) | Mỗi commit (CI) |
 | Component | Handler & task pane với Office.js giả lập | `office-addin-mock` | Mỗi commit |
 | Integration thủ công | Outlook thật, theo ma trận 8.2 | Checklist có bằng chứng (ảnh chụp) | Cuối S3, S4, S5, S6 |
-| UAT | Người dùng thật, email thật | Nhật ký phản hồi | S7 |
+| Pilot | 10–20 người dùng thật, email thật | Nhật ký phản hồi, số ca hỗ trợ | S7 |
 
 ### 8.2 Ma trận kiểm thử tích hợp
 
@@ -641,12 +658,15 @@ Chuyển sang B nghĩa là lập lại kế hoạch kỹ thuật S1–S6 và ư�
 |---|---|
 | Môi trường | `dev` (localhost + sideload), `staging` (hosting riêng, manifest riêng), `prod` |
 | Hosting | Static HTTPS, free tier; domain riêng (ví dụ `mailring.<domain-công-ty>`) để `domainLock` có ý nghĩa |
+| Quy mô (D-13) | ~100 người dùng, tối đa 500; triển khai theo đợt (S8) |
 | Phân phối manifest (v1) | **Người dùng tự cài** (D-03): gửi file `manifest.xml` + hướng dẫn; cài một lần theo hộp thư, có hiệu lực trên cả classic và new Outlook **[Verify-S0]** |
 | Đường mở rộng (khi có quyền admin) | Cùng manifest đó triển khai qua **Microsoft 365 admin center → Integrated Apps** (gán theo user/group, người dùng không gỡ được, cập nhật tập trung) — không đổi code; mở thêm khả năng Tầng 3 và E-6 |
 | Phiên bản | SemVer; version nằm trong manifest và trong bundle; hiển thị ở màn hình About |
+| Nhận diện manifest cũ | Mọi URL trong manifest mang tham số `?mv=<phiên bản manifest>` → bundle biết người dùng đang chạy manifest nào và hiện thông báo "Cần cài lại bản mới" khi lệch (R-14) |
+| Độ phủ cài đặt | Không có telemetry thì **không biết ai đã cài** → không chứng minh được kiểm soát phủ bao nhiêu người. Đề xuất heartbeat tối thiểu (D-17) |
 | Cập nhật | Thay đổi code: chỉ deploy bundle (tự áp dụng cho mọi người dùng). Thay đổi manifest (quyền, event, nút mới): **mọi người dùng phải gỡ và cài lại** → khai báo đủ từ v1, gom thay đổi manifest thành đợt hiếm |
 | Rollback | Giữ bundle phiên bản trước trên hosting; chuyển alias trong vài phút |
-| Giám sát | Không có telemetry ở v1 (NFR-3). Nếu cần nhật ký override cho mục đích kiểm toán → §11 |
+| Giám sát | Mặc định không có telemetry (NFR-3), trừ heartbeat nếu D-17 được duyệt. Nhật ký override cho mục đích kiểm toán → E-5 |
 
 ### Cấu trúc repo đề xuất
 
@@ -660,7 +680,7 @@ secure-mail-ring/
 ├── src/
 │   ├── taskpane/                     # React + Fluent UI (quản lý ring, import mã, Acknowledge)
 │   ├── launchevent/launchevent.ts    # JS-only runtime, không import UI
-│   ├── readmode/                     # (tùy chọn D-15) import từ email
+│   ├── readmode/                     # import từ email (D-15)
 │   └── shared/                       # i18n, storage adapter
 ├── build/
 │   ├── obfuscator.config.cjs
@@ -688,9 +708,11 @@ secure-mail-ring/
 | R-11 | Sắp xếp làm mất/nhân bản người nhận | Thấp | **Rất cao** | Bất biến FR-3.6 + property-based test + rollback | S1, S4 |
 | R-12 | Homograph/IDN qua mặt so khớp domain | Thấp | Cao | Punycode; F6 | S1 |
 | R-13 | Tenant chặn người dùng tự cài custom add-in | Thấp–Trung bình | **Rất cao** | Kiểm tra ngày 1 Stage 0; phương án: xin IT cài qua admin center | S0 |
-| R-14 | Đổi manifest buộc mọi người dùng cài lại → người dùng ở lại bản cũ | Trung bình | Trung bình | Manifest v1 khai báo đủ; code cập nhật qua hosting không cần cài lại; add-in báo khi phát hiện manifest cũ | S2, S7 |
+| R-14 | Đổi manifest buộc mọi người dùng cài lại → người dùng ở lại bản cũ | **Cao** (100–500 người) | Trung bình | Manifest v1 khai báo đủ; code cập nhật qua hosting không cần cài lại; nhận diện `?mv=` và báo cài lại; đóng băng manifest khi triển khai | S2, S8 |
 | R-15 | F7 gây nhiễu giai đoạn đầu → người dùng quen bỏ qua mọi cảnh báo | Trung bình | Cao | Chế độ học 14 ngày; dán danh sách đã biết; đo tỷ lệ override ở UAT | S4, S7 |
 | R-16 | F6 gắn cờ cặp domain hợp lệ giống nhau (công ty mẹ–con) | Trung bình | Thấp | Danh sách ngoại lệ FR-6.4; ngưỡng chỉnh được | S1, S7 |
+| R-18 | Độ phủ kiểm soát không đầy đủ: người dùng không cài, gỡ ra, hoặc tắt add-in — và không ai biết | Cao | Cao | Heartbeat D-17; key user theo dõi; chuyển sang admin center trước Đợt 2 | S8 |
+| R-19 | Khối lượng hỗ trợ tự cài vượt khả năng (500 người) | Trung bình | Trung bình | Bộ hỗ trợ S8; key user tuyến 1; triển khai theo đợt | S8 |
 | R-17 | Sideload không ổn định trên classic Outlook (add-in mất kích hoạt, cache manifest cũ) | Chưa rõ | Cao | Thử 5 ngày ở Spike 7; tiêu chí chuyển phương án B (§4.4); hướng dẫn xóa cache Wef | S0 |
 
 ---
@@ -702,8 +724,8 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 | # | Đề xuất | Giá trị kiểm soát | Effort | Khuyến nghị |
 |---|---|---|---|---|
 | E-3 | Tự gợi ý ring dựa trên người nhận khi chưa chọn ring | Giảm thao tác, tăng tỷ lệ dùng | 1 ngày | Nên có (gắn với D-05) |
-| E-5 | Nhật ký override (ai, khi nào, ring nào, vi phạm gì) — local hoặc gửi về backend | Detective control, bằng chứng kiểm toán | 2–5 ngày (cần backend nếu tập trung) | Cân nhắc nếu dùng cho nhóm |
-| E-6 | Thư viện ring tập trung theo tenant (admin publish, người dùng subscribe) | Thay thế chia sẻ thủ công, đồng bộ thật | 8–12 ngày (backend + Graph/SSO) | v2, khi có quyền admin |
+| E-5 | Nhật ký override (ai, khi nào, ring nào, vi phạm gì) — local hoặc gửi về backend | Detective control, bằng chứng kiểm toán | 2–5 ngày (cần backend nếu tập trung) | **Nên làm ở v1.1** với quy mô 100–500 người; dùng chung backend với D-17 |
+| E-6 | Thư viện ring tập trung theo tenant (admin publish, người dùng subscribe) | Thay thế chia sẻ thủ công, đồng bộ thật | 8–12 ngày (backend + Graph/SSO) | v2, khi có quyền admin — ở quy mô 500 người, chia sẻ bằng mã thủ công sẽ khó quản lý phiên bản |
 | E-7 | Gợi ý đổi tên file thiếu token (chỉ gợi ý, không tự đổi) | Giảm ma sát | 1 ngày | v1.1 |
 | E-8 | Hết hạn ring (engagement kết thúc) → tự chuyển ring sang trạng thái lưu trữ | Vệ sinh cấu hình | 0,5 ngày | Nên có |
 
@@ -723,6 +745,8 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 | D-12 | Tầng bảo vệ | **Tầng 2 cho v1**, chừa sẵn Tầng 3 | 2026-10-29 | §6.3, interface `LicenseProvider` |
 | — | Hình thức chia sẻ cấu hình | **Mã cấu hình mã hóa, dán để import** (bỏ link/trang import) | 2026-10-29 | F2, §5.5 |
 | — | Đề xuất E-1, E-2, E-4 | **Đưa vào v1** → F6, F7, F8 | 2026-10-29 | §3, S1, S4; effort +3–4 ngày |
+| D-13 | Quy mô người dùng | **~100, tối đa 500** | 2026-10-29 | S7 pilot 10–20 người, S8 triển khai theo đợt; R-14, R-18, R-19; D-17 |
+| D-15 | Nút "Import từ email này" | **Có** | 2026-10-29 | FR-2.9; manifest v1; S5 +1–2 ngày |
 
 ### 12.2 Còn mở
 
@@ -735,9 +759,8 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 | D-09 | Sai domain (domain lock) thì handler Send làm gì? | Fail-open (cho gửi, báo "không được cấp phép") · Fail-closed (chặn gửi) | **Fail-open** — tránh add-in làm tê liệt email của người dùng ngoài phạm vi | |
 | D-10 | Số ring dự kiến / người dùng | < 30 · 30–100 · > 100 | < 30 (vừa `roamingSettings`) | > 100 cần lưu trữ khác (OfficeRuntime.storage — không roaming — hoặc backend) |
 | D-11 | Ghi X-header `X-MailRing-Id` ra thư gửi đi? | Có (ID ngẫu nhiên) · Không | Không ở v1 (giảm rò rỉ thông tin) | Khả năng truy vết |
-| D-13 | Quy mô người dùng | Cá nhân · nhóm < 20 · toàn công ty | — | Ưu tiên E-5, E-6; khối lượng hỗ trợ tự cài |
 | D-14 | Ngôn ngữ UI | Việt · Anh · song ngữ | Song ngữ | Effort i18n nhỏ nếu làm từ S2 |
-| D-15 | Thêm nút "Import từ email này" (read mode) bên cạnh dán mã? | Không · Có | **Có** — khôi phục kiểm tra nguồn gửi DKIM/DMARC; phải chốt trước S2 vì nằm trong manifest v1 | +1–2 ngày S5; quyết định muộn → người dùng phải cài lại |
+| D-17 | Heartbeat đo độ phủ cài đặt: add-in gửi 1 lần/ngày {hash hộp thư, phiên bản bundle, phiên bản manifest} lên Cloudflare Worker free tier — **không** gửi nội dung email hay người nhận | Không · Có | **Có** — không có nó thì không chứng minh được kiểm soát đang phủ bao nhiêu người (R-18). Ngoại lệ có kiểm soát của NFR-3 | +2–3 ngày (S6/S8), **chưa tính vào tổng effort**; Worker bật CORS cho origin hosting **[Verify-S0]**. Đối chiếu độ phủ: hash danh sách người dùng mục tiêu bằng cùng salt rồi so khớp |
 
 ---
 
@@ -745,11 +768,12 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 
 | Gate | Nội dung duyệt | Người duyệt | Ngày | Trạng thái |
 |---|---|---|---|---|
-| G0 | Kế hoạch v0.x + decision log | Product Owner | | ⏳ Một phần — đã chốt D-01, D-02, D-03, D-04, D-12, D-16, F2, F6–F8; chờ D-05 → D-11, D-13 → D-15 |
+| G0 | Kế hoạch v0.x + decision log | Product Owner | | ⏳ Một phần — đã chốt D-01, D-02, D-03, D-04, D-12, D-16, F2, F6–F8; chờ D-05 → D-11, D-14, D-17 |
 | G0b | Kết quả Stage 0 (Go/No-go) | Product Owner | | — |
 | G1 | Core engine | Product Owner | | — |
 | G4 | On-send guard | Product Owner | | — |
-| G7 | Phát hành v1.0 | Product Owner | | — |
+| G7 | Phát hành v1.0 (sau pilot) | Product Owner | | — |
+| G8 | Hoàn tất từng đợt triển khai | Product Owner | | — |
 
 ---
 
