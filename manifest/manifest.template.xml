@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Placeholder only. The real v1 manifest (all events, compose + read-mode buttons,
+  ?mv= version marker, ReadWriteItem, SoftBlock) is delivered by CL-06.
+  Host and version placeholders are rendered at build time.
+-->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:type="MailApp">
+  <!-- {{ADDIN_HOST}} {{MANIFEST_VERSION}} -->
+</OfficeApp>
