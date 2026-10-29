@@ -70,3 +70,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-10-29 | CL-03 code delivered (PR open) → In QA |
 | 2026-10-29 | Board correction: CL-04, CL-05 and AG-07 had been set to In QA/Done by a batch edit made with the CL-02 commits; nothing was delivered for them. Reset to Draft. CL-03 moved from the stale Done to In QA |
 | 2026-10-29 | CL-03 merged (PR #9) → Done. Real `sortRecipients` and `findShadowedPatterns` are live in the contracts `core`; Antigravity advisory review of PR #9 not yet recorded |
+| 2026-10-29 | CL-04 card written (Draft, awaiting PO decisions Q1–Q3 and approval) |
