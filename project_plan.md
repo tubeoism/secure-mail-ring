@@ -2,10 +2,10 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Phiên bản tài liệu | **v0.4 — Bản nháp, đã chốt một phần quyết định** |
+| Phiên bản tài liệu | **v0.5 — Bản nháp, đã chốt một phần quyết định** |
 | Ngày | 2026-10-29 |
 | Chủ sở hữu | Product Owner (người yêu cầu) |
-| Trạng thái | Đã chốt D-01, D-02, D-03, D-04, D-12, D-13, D-15, D-16 và phạm vi F6–F8. Còn mở D-05 → D-11, D-14, D-17 (§12) trước khi khóa phạm vi (Stage 0 gate) |
+| Trạng thái | Đã chốt D-01, D-02, D-03, D-04, D-12, D-13, D-15, D-16 và phạm vi F6–F8. Còn mở D-05 → D-11, D-14, D-17 → D-21 (§12) trước khi khóa phạm vi (Stage 0 gate) |
 | Quy ước | `FR-x.y` = yêu cầu chức năng · `NFR-x` = phi chức năng · `D-xx` = quyết định cần duyệt · `R-xx` = rủi ro · **[Verify-S0]** = giả định kỹ thuật phải được kiểm chứng ở Stage 0 trước khi xây dựng tiếp |
 
 > Nguyên tắc làm việc: mỗi stage đi theo chuỗi **Scope → Draft → Validate/Test → Sign-off → Package**. Không stage nào bắt đầu khi gate của stage trước chưa được ký duyệt. Mọi thông số API Office.js trong tài liệu này được ghi theo hiểu biết hiện tại và **phải xác minh trên đúng build Outlook của người dùng** ở Stage 0 — không xây trên giả định chưa kiểm chứng.
@@ -18,6 +18,7 @@
 | v0.2 | 2026-10-29 | Chốt D-01 (M365 Exchange Online), D-02 (classic + new Outlook), D-03 (**không có quyền admin → người dùng tự cài manifest**, để ngỏ đường admin center), D-04 (mặc định Warn + tùy chọn strict), D-12 (Tầng 2, chừa Tầng 3). Bỏ link/trang import → **mã cấu hình dán trực tiếp**. Đưa E-1, E-2, E-4 vào v1 thành **F6** (domain gần giống), **F7** (người nhận lần đầu), **F8** (ràng buộc trường). Thêm mô hình xử lý vi phạm 3 mức Warn / Acknowledge / Block. Hiệu chỉnh effort |
 | v0.3 | 2026-10-29 | D-02 sửa: **cam kết classic Outlook**, new Outlook chỉ kiểm tra khói (không thuộc tiêu chí nghiệm thu). D-16: phương án dự phòng B = **COM add-in thuần trên .NET Framework 4.8.1**, kích hoạt theo tiêu chí đo ở Spike 7 (thử sideload 5 ngày); đã đánh giá và loại .NET 10 (comhost/Native AOT) — §4.4. Effort còn 37–57 ngày |
 | v0.4 | 2026-10-29 | D-15: **có** nút "Import từ email này" (FR-2.9). D-13: **~100 người dùng, tối đa 500** → tách S7 (pilot 10–20 người) và **S8 (triển khai theo đợt)**, bổ sung mô hình hỗ trợ, nhận diện phiên bản manifest, R-18/R-19, quyết định mới D-17 (đo độ phủ cài đặt). Effort 42–65 ngày |
+| v0.5 | 2026-10-29 | Thêm **§14 — mô hình phát triển 2 agent**: Claude Code (lead, core, QA) và Antigravity (chức năng phụ). Bộ file điều phối: `AGENTS.md`, `CLAUDE.md`, `.agents/rules/antigravity.md`, `docs/agents/qa-checklist.md`, `docs/tasks/` (BOARD, template, CCR, card AG-01), PR template. Effort tổng 45–69 ngày công (gồm chi phí điều phối), lịch rút ngắn nhờ chạy song song. Quyết định mới D-18 → D-21 |
 
 ---
 
@@ -29,7 +30,7 @@
 
 **Khuyến nghị nền tảng.** **Office Web Add-in (Office.js) + Smart Alerts (`OnMessageSend`)**, viết bằng TypeScript. Đây là công nghệ duy nhất chạy được trên cả *classic Outlook for Windows* và *new Outlook for Windows* (new Outlook **không** hỗ trợ COM/VSTO). Chi tiết so sánh tại §4.
 
-**Ước lượng sơ bộ.** 9 stage (S0–S8), khoảng **42–65 ngày công** cho 1 developer (đã gồm F6–F8, pilot và triển khai theo đợt cho ~100–500 người dùng; new Outlook chỉ kiểm tra khói), tùy kết quả Stage 0 và các quyết định còn mở ở §12. Chi phí công cụ: **0 đồng** (toàn bộ công cụ miễn phí/mã nguồn mở; hosting dùng free tier).
+**Ước lượng sơ bộ.** 9 stage (S0–S8), khoảng **42–65 ngày công** nếu một người làm (đã gồm F6–F8, pilot và triển khai theo đợt cho ~100–500 người dùng; new Outlook chỉ kiểm tra khói). Với mô hình 2 agent (§14): **45–69 ngày công tổng** do thêm chi phí điều phối, nhưng thời gian lịch ngắn hơn vì hai luồng chạy song song, tùy kết quả Stage 0 và các quyết định còn mở ở §12. Chi phí công cụ: **0 đồng** (toàn bộ công cụ miễn phí/mã nguồn mở; hosting dùng free tier).
 
 **Ba điểm cần nói thẳng ngay từ đầu:**
 
@@ -673,6 +674,9 @@ Chuyển sang B nghĩa là lập lại kế hoạch kỹ thuật S1–S6 và ư�
 ```
 secure-mail-ring/
 ├── project_plan.md
+├── AGENTS.md                         # hợp đồng chung cho mọi agent (§14)
+├── CLAUDE.md                         # vai trò lead / core / QA
+├── .agents/rules/antigravity.md      # vai trò feature developer
 ├── manifest/
 │   └── manifest.template.xml        # placeholder host/version, render lúc build
 ├── packages/core/                    # rule engine thuần TS + test
@@ -685,8 +689,12 @@ secure-mail-ring/
 ├── build/
 │   ├── obfuscator.config.cjs
 │   └── postbuild-check.mjs           # chặn domain rõ/secret/source map
-├── docs/                             # user guide (VI), admin guide (EN), control description (EN)
-└── .github/workflows/ci.yml
+├── docs/
+│   ├── agents/qa-checklist.md        # checklist QA của lead
+│   ├── tasks/                        # BOARD, task card, CCR, evidence
+│   ├── user/ · rollout/              # do Antigravity viết
+│   └── admin/ · control/             # do lead viết (EN)
+└── .github/{workflows/ci.yml, pull_request_template.md}
 ```
 
 ---
@@ -761,6 +769,10 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 | D-11 | Ghi X-header `X-MailRing-Id` ra thư gửi đi? | Có (ID ngẫu nhiên) · Không | Không ở v1 (giảm rò rỉ thông tin) | Khả năng truy vết |
 | D-14 | Ngôn ngữ UI | Việt · Anh · song ngữ | Song ngữ | Effort i18n nhỏ nếu làm từ S2 |
 | D-17 | Heartbeat đo độ phủ cài đặt: add-in gửi 1 lần/ngày {hash hộp thư, phiên bản bundle, phiên bản manifest} lên Cloudflare Worker free tier — **không** gửi nội dung email hay người nhận | Không · Có | **Có** — không có nó thì không chứng minh được kiểm soát đang phủ bao nhiêu người (R-18). Ngoại lệ có kiểm soát của NFR-3 | +2–3 ngày (S6/S8), **chưa tính vào tổng effort**; Worker bật CORS cho origin hosting **[Verify-S0]**. Đối chiếu độ phủ: hash danh sách người dùng mục tiêu bằng cùng salt rồi so khớp |
+| D-18 | Ai merge PR? | PO merge mọi PR · Claude merge PR của Antigravity sau khi QA PASS | **PO merge mọi PR** — giữ phân tách maker / checker / approver | Nếu Claude merge: nhanh hơn nhưng mất vai trò approver độc lập |
+| D-19 | Antigravity tự push branch và mở PR trên GitHub? | Có (đăng nhập GitHub trên máy PO) · Không (PO commit hộ) | **Có** | Không → PO thành nút thắt cho mọi thay đổi |
+| D-20 | Ai chạy ma trận kiểm thử thủ công trên Outlook (§8.2)? | PO · key user được chỉ định | **PO** ở S0–S7; key user từ S8 | Claude chạy trên Linux cloud, không chạy được Outlook |
+| D-21 | Antigravity review tư vấn (không chặn) PR core của Claude? | Có · Không | **Có** — bù một phần cho việc core không có checker độc lập | +~0,5 ngày/stage cho Antigravity |
 
 ---
 
@@ -768,12 +780,95 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 
 | Gate | Nội dung duyệt | Người duyệt | Ngày | Trạng thái |
 |---|---|---|---|---|
-| G0 | Kế hoạch v0.x + decision log | Product Owner | | ⏳ Một phần — đã chốt D-01, D-02, D-03, D-04, D-12, D-16, F2, F6–F8; chờ D-05 → D-11, D-14, D-17 |
+| G0 | Kế hoạch v0.x + decision log | Product Owner | | ⏳ Một phần — đã chốt D-01, D-02, D-03, D-04, D-12, D-16, F2, F6–F8; chờ D-05 → D-11, D-14, D-17 → D-21 |
 | G0b | Kết quả Stage 0 (Go/No-go) | Product Owner | | — |
 | G1 | Core engine | Product Owner | | — |
 | G4 | On-send guard | Product Owner | | — |
 | G7 | Phát hành v1.0 (sau pilot) | Product Owner | | — |
 | G8 | Hoàn tất từng đợt triển khai | Product Owner | | — |
+
+---
+
+## 14. Mô hình phát triển 2 agent
+
+### 14.1 Nguyên tắc phân chia
+
+| Nguyên tắc | Áp dụng |
+|---|---|
+| **Chia theo rủi ro, không chia theo khối lượng** | Mọi thứ làm nên kiểm soát (quy tắc, đường gửi thư, manifest, mã hóa, domain lock, build) thuộc Claude. Antigravity làm phần hiển thị và tài liệu — sai ở đó gây khó chịu, không gây rò rỉ dữ liệu |
+| **Hợp đồng trước, code sau** | Claude công bố interface + mock + dữ liệu mẫu (`contract-vN`) trước mỗi stage. Antigravity xây UI trên mock, không cần Outlook, không cần core xong |
+| **Sở hữu theo đường dẫn** | Mỗi thư mục có đúng một chủ (`AGENTS.md` §2). CI chặn PR từ nhánh `ag/*` chạm vào đường dẫn của lead |
+| **Maker – checker – approver** | Antigravity viết → Claude QA → PO merge. Code của Claude: cổng tự động (coverage ≥ 90%, mutation score ≥ 80%, property-based test) + Antigravity review tư vấn + PO merge |
+| **Giao tiếp chỉ qua repo** | Hai agent không nói chuyện trực tiếp; mọi trao đổi qua task card, mô tả PR, comment QA, CCR |
+
+### 14.2 Phân công
+
+| Hạng mục | Claude Code (lead) | Antigravity |
+|---|---|---|
+| Rule engine `packages/core` (F1, F3, F4, F6–F8, policy, codec, license, kiểm tra nguồn import) | ✅ Viết | Chỉ dùng qua API công khai |
+| Đường gửi thư `src/launchevent` (Smart Alerts) | ✅ Viết | — |
+| Manifest, Office/Storage adapter, contract | ✅ Viết | Chỉ dùng |
+| Bảo mật: domain lock, obfuscation, kiểm tra sau build, CI/CD, hosting | ✅ Viết | — |
+| Giao diện task pane: danh sách ring, trình sửa ring, sắp xếp kéo–thả, ràng buộc trường, cài đặt, chọn ring khi soạn, màn hình Acknowledge, export/import, diff preview | QA | ✅ Viết |
+| Nội dung song ngữ (vi/en) cho mọi key | Định nghĩa key + kiểm tra độ dài | ✅ Viết nội dung |
+| Heartbeat worker (nếu D-17 được duyệt) | Viết payload phía client + QA quyền riêng tư | ✅ Viết endpoint |
+| Tài liệu người dùng, FAQ, bộ triển khai, kịch bản video (VI) | QA độ chính xác | ✅ Viết |
+| Tài liệu quản trị/build, mô tả kiểm soát (EN — dùng cho hồ sơ kiểm soát nội bộ) | ✅ Viết | — |
+| Spike Stage 0, kế hoạch kiểm thử tích hợp, phân tích số liệu pilot | ✅ Viết | — |
+
+Danh sách việc cụ thể (CL-00 → CL-10, AG-01 → AG-14), phụ thuộc và đường găng: `docs/tasks/BOARD.md`.
+
+### 14.3 Quy trình một task của Antigravity
+
+```mermaid
+sequenceDiagram
+  participant L as Claude (lead)
+  participant PO as Product Owner
+  participant A as Antigravity
+  participant CI as CI
+  L->>L: Công bố contract-vN (type, adapter, mock, fixture, i18n key)
+  L->>PO: Task card AG-xx (Draft)
+  PO->>L: Duyệt card → Ready
+  A->>A: Branch ag/AG-xx, code trên mock, npm run verify
+  A->>CI: Mở PR [AG-xx]
+  CI-->>A: lint · typecheck · test · path guard · i18n
+  L->>A: QA theo checklist → PASS / CHANGES REQUESTED / BLOCKED (CCR)
+  A->>L: Sửa và trả lời từng finding (tối đa 3 vòng, sau đó báo PO)
+  PO->>PO: Merge sau QA PASS → Done
+```
+
+Khi thiếu API: Antigravity viết **CCR** (Contract Change Request), tiếp tục làm trên mock; Claude bổ sung vào core và gắn tag contract mới. Antigravity không bao giờ tự sửa core để "chữa cháy".
+
+### 14.4 Bộ file điều phối
+
+| File | Ai đọc | Nội dung |
+|---|---|---|
+| `AGENTS.md` | Cả hai (Antigravity đọc tự động; Claude import qua `CLAUDE.md`) | Vai trò, bản đồ sở hữu, quy tắc contract, quy ước git, Definition of Done, bất biến bảo mật. Giữ dưới ~12.000 ký tự (giới hạn file rule của Antigravity theo nguồn cộng đồng **[Verify]**) |
+| `CLAUDE.md` | Claude | Trách nhiệm lead, quy trình QA, cổng bù trừ cho code core |
+| `.agents/rules/antigravity.md` | Antigravity | Quy trình bắt đầu task, giới hạn đường dẫn, xử lý khi bị chặn, phản hồi QA |
+| `docs/agents/qa-checklist.md` | Claude | Checklist QA 7 nhóm (A–G), thang mức độ, mẫu comment |
+| `docs/tasks/BOARD.md`, `_TEMPLATE.md`, `_CCR_TEMPLATE.md`, `AG-01.md` | Cả hai | Bảng việc, mẫu task card, mẫu CCR, card mẫu đầu tiên |
+| `.github/pull_request_template.md` | Cả hai | Bằng chứng cho từng tiêu chí nghiệm thu |
+
+### 14.5 Effort và lịch
+
+| Luồng | Effort | Ghi chú |
+|---|---|---|
+| Claude (lead + QA) | 29–43 ngày | Gồm 3–5 ngày QA và xử lý CCR |
+| Antigravity | 16–26 ngày | Chưa gồm AG-12 (heartbeat, 1–2 ngày nếu duyệt D-17) |
+| **Tổng** | **45–69 ngày** | Cao hơn phương án một người ~3–4 ngày do chi phí điều phối (contract, mock, card, QA) |
+
+Thời gian lịch ngắn hơn vì S2, S5, S7 chạy song song hai luồng; đường găng nằm ở luồng của Claude (contract → core → `OnMessageSend`).
+
+### 14.6 Rủi ro riêng của mô hình 2 agent
+
+| ID | Rủi ro | Biện pháp |
+|---|---|---|
+| R-20 | Antigravity tự viết lại logic nghiệp vụ trong UI (lệch với core) | Mục B checklist QA; UI chỉ hiển thị kết quả core trả về |
+| R-21 | Contract thay đổi giữa chừng làm vỡ UI | Tag `contract-vN`; thay đổi phá vỡ chỉ kèm ghi chú BOARD; CCR |
+| R-22 | Core không có người kiểm tra độc lập | Mutation testing, property-based test, Antigravity review tư vấn (D-21), PO merge |
+| R-23 | Vòng QA kéo dài | Tối đa 3 vòng rồi chuyển PO; finding Minor không chặn |
+| R-24 | Hai agent hiểu khác nhau về yêu cầu | Task card có tiêu chí nghiệm thu kiểm chứng được; PO duyệt card trước khi Ready |
 
 ---
 
@@ -789,3 +884,6 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 | Requirement set | Phiên bản tập API Office.js (Mailbox 1.x) mà client hỗ trợ |
 | NAA | Nested App Authentication — cơ chế SSO hiện hành cho Office add-in qua MSAL |
 | Control erosion | Hiện tượng kiểm soát mất hiệu lực vì người dùng quen bỏ qua cảnh báo |
+| Contract (`contract-vN`) | Tập interface, type, mock, dữ liệu mẫu và i18n key mà lead công bố để Antigravity xây UI |
+| CCR | Contract Change Request — yêu cầu bổ sung contract do Antigravity gửi lead |
+| Mutation testing | Kỹ thuật cố tình cấy lỗi vào code để kiểm tra bộ test có phát hiện được không |
