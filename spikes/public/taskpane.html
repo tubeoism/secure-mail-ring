@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SMR spikes</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+      body {
+        font:
+          14px Segoe UI,
+          sans-serif;
+        margin: 12px;
+      }
+      button {
+        margin: 2px 4px 2px 0;
+      }
+      pre {
+        white-space: pre-wrap;
+        background: #f3f2f1;
+        padding: 8px;
+        max-height: 240px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>SMR spike harness</h3>
+    <p>Mode: <b id="mode"></b></p>
+    <div id="modes"></div>
+    <h4>Spike 1: requirement sets</h4>
+    <button id="req">Check requirement sets</button>
+    <h4>Spike 3: roamingSettings capacity</h4>
+    <button id="cap">Measure capacity</button>
+    <h4>Spike 6: acknowledge</h4>
+    <button id="ack">Acknowledge (sessionData)</button>
+    <h4>Event log</h4>
+    <button id="refresh">Refresh log</button>
+    <button id="clear">Clear log</button>
+    <pre id="out"></pre>
+    <script src="taskpane.js"></script>
+  </body>
+</html>

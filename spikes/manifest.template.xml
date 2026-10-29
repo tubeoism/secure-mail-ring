@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CL-01 spike manifest. Throwaway: the product manifest is CL-06. Rendered by render-manifest.mjs. -->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
+           xsi:type="MailApp">
+  <Id>{{ADDIN_ID}}</Id>
+  <Version>{{VERSION}}</Version>
+  <ProviderName>Secure Mail Ring spikes</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="SMR spikes"/>
+  <Description DefaultValue="Technical spike harness (CL-01). Not for production."/>
+  <IconUrl DefaultValue="{{HOST}}/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="{{HOST}}/icon-80.png"/>
+  <SupportUrl DefaultValue="{{HOST}}/taskpane.html"/>
+  <AppDomains><AppDomain>{{HOST}}</AppDomain></AppDomains>
+  <Hosts><Host Name="Mailbox"/></Hosts>
+  <Requirements><Sets><Set Name="Mailbox" MinVersion="1.10"/></Sets></Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="{{HOST}}/taskpane.html"/>
+        <RequestedHeight>250</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.10"><bt:Set Name="Mailbox"/></bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <Runtimes>
+            <Runtime resid="Runtime.Html">
+              <Override type="javascript" resid="Runtime.Js"/>
+            </Runtime>
+          </Runtimes>
+          <DesktopFormFactor>
+            <FunctionFile resid="Runtime.Html"/>
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageComposeHandler"/>
+                <LaunchEvent Type="OnMessageSend" FunctionName="onMessageSendHandler" SendMode="SoftBlock"/>
+              </LaunchEvents>
+              <SourceLocation resid="Runtime.Html"/>
+            </ExtensionPoint>
+            <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="SmrGroupCompose">
+                  <Label resid="Group.Label"/>
+                  <Control xsi:type="Button" id="SmrPaneButton">
+                    <Label resid="Pane.Label"/>
+                    <Supertip><Title resid="Pane.Label"/><Description resid="Pane.Tip"/></Supertip>
+                    <Icon><bt:Image size="16" resid="Icon.16"/><bt:Image size="32" resid="Icon.32"/><bt:Image size="80" resid="Icon.80"/></Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Pane.Url"/>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+            <ExtensionPoint xsi:type="MessageReadCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="SmrGroupRead">
+                  <Label resid="Group.Label"/>
+                  <Control xsi:type="Button" id="SmrReadButton">
+                    <Label resid="Read.Label"/>
+                    <Supertip><Title resid="Read.Label"/><Description resid="Pane.Tip"/></Supertip>
+                    <Icon><bt:Image size="16" resid="Icon.16"/><bt:Image size="32" resid="Icon.32"/><bt:Image size="80" resid="Icon.80"/></Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Pane.Url"/>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Images>
+          <bt:Image id="Icon.16" DefaultValue="{{HOST}}/icon-16.png"/>
+          <bt:Image id="Icon.32" DefaultValue="{{HOST}}/icon-32.png"/>
+          <bt:Image id="Icon.80" DefaultValue="{{HOST}}/icon-80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="Runtime.Html" DefaultValue="{{HOST}}/launchevent.html"/>
+          <bt:Url id="Runtime.Js" DefaultValue="{{HOST}}/launchevent.js"/>
+          <bt:Url id="Pane.Url" DefaultValue="{{HOST}}/taskpane.html"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="Group.Label" DefaultValue="SMR spikes"/>
+          <bt:String id="Pane.Label" DefaultValue="Spike pane"/>
+          <bt:String id="Read.Label" DefaultValue="Spike (read)"/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="Pane.Tip" DefaultValue="Open the CL-01 spike harness."/>
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>
