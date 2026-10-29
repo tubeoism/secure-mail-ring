@@ -3,6 +3,7 @@ export * from "@smr/core";
 export type * from "./adapters";
 export { I18N_KEYS, type I18nKey } from "./i18nKeys";
 export { stubCore } from "./stubCore";
+export { core } from "./core";
 export {
   MockOfficeAdapter,
   type MockCall,
