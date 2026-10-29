@@ -1,0 +1,56 @@
+[
+  {
+    "code": "-----BEGIN MAILRING-----\nsmr1.k1.U1RVQi1DT0RFLUZPUi1BTFBIQQ\nU1RVQi1DT0RFLVBBUlQtVFdP\n-----END MAILRING-----",
+    "payload": {
+      "keyId": "k1",
+      "ring": {
+        "schema": "smr/1",
+        "id": "01JBX4Q8ALPHA000000000001",
+        "rev": 3,
+        "name": "Alpha – IA ABC Corp FY26",
+        "subjectTag": "[ALPHA]",
+        "owner": "an.nguyen@auditfirm.vn",
+        "updatedAt": "2026-10-29T08:00:00Z",
+        "members": [
+          {
+            "kind": "address",
+            "value": "cfo@abccorp.vn"
+          },
+          {
+            "kind": "domain",
+            "value": "abccorp.vn"
+          },
+          {
+            "kind": "address",
+            "value": "kt@partner.vn"
+          }
+        ],
+        "internalDomain": "allow",
+        "order": {
+          "to": ["cfo@abccorp.vn", "abccorp.vn", "*"],
+          "cc": ["kt@partner.vn", "auditfirm.vn", "*"],
+          "bcc": []
+        },
+        "attachments": {
+          "tokens": ["ALPHA", "ABC-IA"],
+          "mode": "any",
+          "ignoreInline": true,
+          "exemptExtensions": [".ics", ".vcf"]
+        },
+        "policy": {
+          "outsider": "warn",
+          "missingToken": "warn",
+          "foreignRingToken": "warn",
+          "lookalike": "warn",
+          "firstTime": "warn",
+          "fieldRule": "warn"
+        },
+        "fieldRules": [],
+        "firstTimeCheck": true,
+        "expiresAt": null
+      },
+      "issuer": "an.nguyen@auditfirm.vn",
+      "issuedAt": "2026-10-29T08:00:00Z"
+    }
+  }
+]

@@ -1,0 +1,191 @@
+[
+  {
+    "kind": "outsider",
+    "mode": "warn",
+    "subject": "x@gmail.com",
+    "messageKey": "finding.outsider",
+    "params": {
+      "address": "x@gmail.com",
+      "field": "BCC"
+    },
+    "field": "bcc"
+  },
+  {
+    "kind": "outsider",
+    "mode": "acknowledge",
+    "subject": "x@gmail.com",
+    "messageKey": "finding.outsider",
+    "params": {
+      "address": "x@gmail.com",
+      "field": "BCC"
+    },
+    "field": "bcc"
+  },
+  {
+    "kind": "outsider",
+    "mode": "block",
+    "subject": "x@gmail.com",
+    "messageKey": "finding.outsider",
+    "params": {
+      "address": "x@gmail.com",
+      "field": "BCC"
+    },
+    "field": "bcc"
+  },
+  {
+    "kind": "missingToken",
+    "mode": "warn",
+    "subject": "report.xlsx",
+    "messageKey": "finding.missingToken",
+    "params": {
+      "file": "report.xlsx"
+    }
+  },
+  {
+    "kind": "missingToken",
+    "mode": "acknowledge",
+    "subject": "report.xlsx",
+    "messageKey": "finding.missingToken",
+    "params": {
+      "file": "report.xlsx"
+    }
+  },
+  {
+    "kind": "missingToken",
+    "mode": "block",
+    "subject": "report.xlsx",
+    "messageKey": "finding.missingToken",
+    "params": {
+      "file": "report.xlsx"
+    }
+  },
+  {
+    "kind": "foreignRingToken",
+    "mode": "warn",
+    "subject": "BETA_draft.docx",
+    "messageKey": "finding.foreignRingToken",
+    "params": {
+      "file": "BETA_draft.docx",
+      "ring": "Beta"
+    }
+  },
+  {
+    "kind": "foreignRingToken",
+    "mode": "acknowledge",
+    "subject": "BETA_draft.docx",
+    "messageKey": "finding.foreignRingToken",
+    "params": {
+      "file": "BETA_draft.docx",
+      "ring": "Beta"
+    }
+  },
+  {
+    "kind": "foreignRingToken",
+    "mode": "block",
+    "subject": "BETA_draft.docx",
+    "messageKey": "finding.foreignRingToken",
+    "params": {
+      "file": "BETA_draft.docx",
+      "ring": "Beta"
+    }
+  },
+  {
+    "kind": "lookalike",
+    "mode": "warn",
+    "subject": "cfo@abcc0rp.vn",
+    "messageKey": "finding.lookalike",
+    "params": {
+      "address": "cfo@abcc0rp.vn",
+      "similarTo": "abccorp.vn",
+      "ring": "Alpha"
+    },
+    "field": "to"
+  },
+  {
+    "kind": "lookalike",
+    "mode": "acknowledge",
+    "subject": "cfo@abcc0rp.vn",
+    "messageKey": "finding.lookalike",
+    "params": {
+      "address": "cfo@abcc0rp.vn",
+      "similarTo": "abccorp.vn",
+      "ring": "Alpha"
+    },
+    "field": "to"
+  },
+  {
+    "kind": "lookalike",
+    "mode": "block",
+    "subject": "cfo@abcc0rp.vn",
+    "messageKey": "finding.lookalike",
+    "params": {
+      "address": "cfo@abcc0rp.vn",
+      "similarTo": "abccorp.vn",
+      "ring": "Alpha"
+    },
+    "field": "to"
+  },
+  {
+    "kind": "firstTime",
+    "mode": "warn",
+    "subject": "new.person@abccorp.vn",
+    "messageKey": "finding.firstTime",
+    "params": {
+      "address": "new.person@abccorp.vn"
+    },
+    "field": "to"
+  },
+  {
+    "kind": "firstTime",
+    "mode": "acknowledge",
+    "subject": "new.person@abccorp.vn",
+    "messageKey": "finding.firstTime",
+    "params": {
+      "address": "new.person@abccorp.vn"
+    },
+    "field": "to"
+  },
+  {
+    "kind": "firstTime",
+    "mode": "block",
+    "subject": "new.person@abccorp.vn",
+    "messageKey": "finding.firstTime",
+    "params": {
+      "address": "new.person@abccorp.vn"
+    },
+    "field": "to"
+  },
+  {
+    "kind": "fieldRule",
+    "mode": "warn",
+    "subject": "b@deltaco.vn",
+    "messageKey": "finding.fieldRule.mustNotBeIn",
+    "params": {
+      "address": "b@deltaco.vn",
+      "field": "BCC"
+    },
+    "field": "bcc"
+  },
+  {
+    "kind": "fieldRule",
+    "mode": "acknowledge",
+    "subject": "b@deltaco.vn",
+    "messageKey": "finding.fieldRule.mustNotBeIn",
+    "params": {
+      "address": "b@deltaco.vn",
+      "field": "BCC"
+    },
+    "field": "bcc"
+  },
+  {
+    "kind": "fieldRule",
+    "mode": "block",
+    "subject": "b@deltaco.vn",
+    "messageKey": "finding.fieldRule.mustNotBeIn",
+    "params": {
+      "address": "b@deltaco.vn",
+      "field": "BCC"
+    },
+    "field": "bcc"
+  }
+]

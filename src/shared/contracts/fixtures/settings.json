@@ -1,0 +1,17 @@
+{
+  "schema": "smr/1",
+  "policyFloor": {
+    "foreignRingToken": "acknowledge"
+  },
+  "lookalikeExceptions": [
+    {
+      "a": "abccorp.vn",
+      "b": "abc-corp.vn"
+    }
+  ],
+  "learning": {
+    "enabled": true,
+    "until": "2026-11-12T00:00:00Z"
+  },
+  "language": "vi"
+}
