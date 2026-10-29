@@ -2,10 +2,10 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Phiên bản tài liệu | **v0.5 — Bản nháp, đã chốt một phần quyết định** |
+| Phiên bản tài liệu | **v1.0 — Đã duyệt (G0)** |
 | Ngày | 2026-10-29 |
 | Chủ sở hữu | Product Owner (người yêu cầu) |
-| Trạng thái | Đã chốt D-01, D-02, D-03, D-04, D-12, D-13, D-15, D-16 và phạm vi F6–F8. Còn mở D-05 → D-11, D-14, D-17 → D-21 (§12) trước khi khóa phạm vi (Stage 0 gate) |
+| Trạng thái | **Đã khóa phạm vi.** Mọi thay đổi sau v1.0 đi theo change control: đề xuất → cập nhật phiên bản v1.x + lịch sử → PO duyệt. Các mục **[Verify-S0]** được xác minh ở Stage 0; kết quả có thể kích hoạt quyết định mới theo gate §7 |
 | Quy ước | `FR-x.y` = yêu cầu chức năng · `NFR-x` = phi chức năng · `D-xx` = quyết định cần duyệt · `R-xx` = rủi ro · **[Verify-S0]** = giả định kỹ thuật phải được kiểm chứng ở Stage 0 trước khi xây dựng tiếp |
 
 > Nguyên tắc làm việc: mỗi stage đi theo chuỗi **Scope → Draft → Validate/Test → Sign-off → Package**. Không stage nào bắt đầu khi gate của stage trước chưa được ký duyệt. Mọi thông số API Office.js trong tài liệu này được ghi theo hiểu biết hiện tại và **phải xác minh trên đúng build Outlook của người dùng** ở Stage 0 — không xây trên giả định chưa kiểm chứng.
@@ -19,6 +19,7 @@
 | v0.3 | 2026-10-29 | D-02 sửa: **cam kết classic Outlook**, new Outlook chỉ kiểm tra khói (không thuộc tiêu chí nghiệm thu). D-16: phương án dự phòng B = **COM add-in thuần trên .NET Framework 4.8.1**, kích hoạt theo tiêu chí đo ở Spike 7 (thử sideload 5 ngày); đã đánh giá và loại .NET 10 (comhost/Native AOT) — §4.4. Effort còn 37–57 ngày |
 | v0.4 | 2026-10-29 | D-15: **có** nút "Import từ email này" (FR-2.9). D-13: **~100 người dùng, tối đa 500** → tách S7 (pilot 10–20 người) và **S8 (triển khai theo đợt)**, bổ sung mô hình hỗ trợ, nhận diện phiên bản manifest, R-18/R-19, quyết định mới D-17 (đo độ phủ cài đặt). Effort 42–65 ngày |
 | v0.5 | 2026-10-29 | Thêm **§14 — mô hình phát triển 2 agent**: Claude Code (lead, core, QA) và Antigravity (chức năng phụ). Bộ file điều phối: `AGENTS.md`, `CLAUDE.md`, `.agents/rules/antigravity.md`, `docs/agents/qa-checklist.md`, `docs/tasks/` (BOARD, template, CCR, card AG-01), PR template. Effort tổng 45–69 ngày công (gồm chi phí điều phối), lịch rút ngắn nhờ chạy song song. Quyết định mới D-18 → D-21 |
+| **v1.0** | 2026-10-29 | **PO duyệt G0.** Chốt toàn bộ quyết định còn mở theo đề xuất: D-05 → D-11, D-14, D-17 → D-21. D-17 được duyệt → AG-12 (heartbeat) vào phạm vi. D-05 kéo theo E-3 (gợi ý ring) vào v1; E-8 (hết hạn ring) vào v1 vì đã nằm trong mô hình dữ liệu và AG-03. Effort tổng 46–71 ngày công |
 
 ---
 
@@ -30,7 +31,7 @@
 
 **Khuyến nghị nền tảng.** **Office Web Add-in (Office.js) + Smart Alerts (`OnMessageSend`)**, viết bằng TypeScript. Đây là công nghệ duy nhất chạy được trên cả *classic Outlook for Windows* và *new Outlook for Windows* (new Outlook **không** hỗ trợ COM/VSTO). Chi tiết so sánh tại §4.
 
-**Ước lượng sơ bộ.** 9 stage (S0–S8), khoảng **42–65 ngày công** nếu một người làm (đã gồm F6–F8, pilot và triển khai theo đợt cho ~100–500 người dùng; new Outlook chỉ kiểm tra khói). Với mô hình 2 agent (§14): **45–69 ngày công tổng** do thêm chi phí điều phối, nhưng thời gian lịch ngắn hơn vì hai luồng chạy song song, tùy kết quả Stage 0 và các quyết định còn mở ở §12. Chi phí công cụ: **0 đồng** (toàn bộ công cụ miễn phí/mã nguồn mở; hosting dùng free tier).
+**Ước lượng sơ bộ.** 9 stage (S0–S8), khoảng **42–65 ngày công** nếu một người làm (đã gồm F6–F8, pilot và triển khai theo đợt cho ~100–500 người dùng; new Outlook chỉ kiểm tra khói). Với mô hình 2 agent (§14): **46–71 ngày công tổng** (gồm heartbeat D-17) do thêm chi phí điều phối, nhưng thời gian lịch ngắn hơn vì hai luồng chạy song song, tùy kết quả Stage 0 và các quyết định còn mở ở §12. Chi phí công cụ: **0 đồng** (toàn bộ công cụ miễn phí/mã nguồn mở; hosting dùng free tier).
 
 **Ba điểm cần nói thẳng ngay từ đầu:**
 
@@ -208,7 +209,7 @@ Ghi nhận: dương tính giả của Bloom nghĩa là ~1% địa chỉ mới b�
 |---|---|
 | NFR-1 | Kiểm tra khi Send (gồm F1, F3, F4, F6–F8) hoàn tất < 1,5 giây cho email ≤ 50 người nhận, ≤ 20 file (đo ở Stage 4) |
 | NFR-2 | Fail-safe: lỗi nội bộ của add-in **không được** làm mất email hoặc treo Outlook; hành vi khi add-in không tải được do manifest quyết định (SoftBlock — §5.4) |
-| NFR-3 | Không gửi dữ liệu email ra ngoài Outlook. Ngoại lệ có kiểm soát: heartbeat độ phủ nếu D-17 được duyệt (hash hộp thư + phiên bản) và Tầng 3 nếu bật (token định danh) — không bao giờ gửi nội dung, người nhận hay tên file |
+| NFR-3 | Không gửi dữ liệu email ra ngoài Outlook. Ngoại lệ có kiểm soát: heartbeat độ phủ (D-17, đã duyệt) (hash hộp thư + phiên bản) và Tầng 3 nếu bật (token định danh) — không bao giờ gửi nội dung, người nhận hay tên file |
 | NFR-4 | Quyền tối thiểu trong manifest: `ReadWriteItem` (không xin `ReadWriteMailbox`) |
 | NFR-5 | Song ngữ UI Việt/Anh (i18n từ đầu, chi phí thấp nếu làm sớm) |
 | NFR-6 | Core logic là module thuần TypeScript, không phụ thuộc Office.js, độ phủ unit test ≥ 90% |
@@ -667,7 +668,7 @@ Chuyển sang B nghĩa là lập lại kế hoạch kỹ thuật S1–S6 và ư�
 | Độ phủ cài đặt | Không có telemetry thì **không biết ai đã cài** → không chứng minh được kiểm soát phủ bao nhiêu người. Đề xuất heartbeat tối thiểu (D-17) |
 | Cập nhật | Thay đổi code: chỉ deploy bundle (tự áp dụng cho mọi người dùng). Thay đổi manifest (quyền, event, nút mới): **mọi người dùng phải gỡ và cài lại** → khai báo đủ từ v1, gom thay đổi manifest thành đợt hiếm |
 | Rollback | Giữ bundle phiên bản trước trên hosting; chuyển alias trong vài phút |
-| Giám sát | Mặc định không có telemetry (NFR-3), trừ heartbeat nếu D-17 được duyệt. Nhật ký override cho mục đích kiểm toán → E-5 |
+| Giám sát | Mặc định không có telemetry (NFR-3), trừ heartbeat độ phủ (D-17). Nhật ký override cho mục đích kiểm toán → E-5 |
 
 ### Cấu trúc repo đề xuất
 
@@ -727,15 +728,15 @@ secure-mail-ring/
 
 ## 11. Đề xuất bổ sung
 
-E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề xuất còn lại chờ duyệt — không mặc định nằm trong v1:
+E-1, E-2, E-4 đã vào v1 thành F6, F7, F8 (v0.2); E-3 và E-8 vào v1 ở bản v1.0. Các đề xuất còn lại thuộc lộ trình sau v1:
 
 | # | Đề xuất | Giá trị kiểm soát | Effort | Khuyến nghị |
 |---|---|---|---|---|
-| E-3 | Tự gợi ý ring dựa trên người nhận khi chưa chọn ring | Giảm thao tác, tăng tỷ lệ dùng | 1 ngày | Nên có (gắn với D-05) |
+| E-3 | Tự gợi ý ring dựa trên người nhận khi chưa chọn ring | Giảm thao tác, tăng tỷ lệ dùng | 1 ngày | ✅ **v1** (D-05) — CL-05 + AG-08 |
 | E-5 | Nhật ký override (ai, khi nào, ring nào, vi phạm gì) — local hoặc gửi về backend | Detective control, bằng chứng kiểm toán | 2–5 ngày (cần backend nếu tập trung) | **Nên làm ở v1.1** với quy mô 100–500 người; dùng chung backend với D-17 |
 | E-6 | Thư viện ring tập trung theo tenant (admin publish, người dùng subscribe) | Thay thế chia sẻ thủ công, đồng bộ thật | 8–12 ngày (backend + Graph/SSO) | v2, khi có quyền admin — ở quy mô 500 người, chia sẻ bằng mã thủ công sẽ khó quản lý phiên bản |
 | E-7 | Gợi ý đổi tên file thiếu token (chỉ gợi ý, không tự đổi) | Giảm ma sát | 1 ngày | v1.1 |
-| E-8 | Hết hạn ring (engagement kết thúc) → tự chuyển ring sang trạng thái lưu trữ | Vệ sinh cấu hình | 0,5 ngày | Nên có |
+| E-8 | Hết hạn ring (engagement kết thúc) → tự chuyển ring sang trạng thái lưu trữ | Vệ sinh cấu hình | 0,5 ngày | ✅ **v1** — CL-05 + AG-03 |
 
 ---
 
@@ -755,32 +756,30 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 | — | Đề xuất E-1, E-2, E-4 | **Đưa vào v1** → F6, F7, F8 | 2026-10-29 | §3, S1, S4; effort +3–4 ngày |
 | D-13 | Quy mô người dùng | **~100, tối đa 500** | 2026-10-29 | S7 pilot 10–20 người, S8 triển khai theo đợt; R-14, R-18, R-19; D-17 |
 | D-15 | Nút "Import từ email này" | **Có** | 2026-10-29 | FR-2.9; manifest v1; S5 +1–2 ngày |
+| D-05 | Email không chọn ring | Theo đề xuất: Gợi ý ring (E-3) + cảnh báo nếu có người ngoài domain nội bộ | 2026-10-29 | Ma sát với email thường ngày |
+| D-06 | Thời điểm sắp xếp người nhận | Theo đề xuất: Cả hai | 2026-10-29 | Người dùng có thấy thứ tự cuối trước khi gửi hay không |
+| D-07 | Người nhận cùng domain nội bộ nhưng không có trong ring | Theo đề xuất: Cấu hình theo ring, mặc định *allow* | 2026-10-29 | Tường lửa thông tin nội bộ (ethical wall) |
+| D-08 | Distribution List | Theo đề xuất: Khai báo đích danh | 2026-10-29 | — |
+| D-09 | Sai domain (domain lock) thì handler Send làm gì? | Theo đề xuất: **Fail-open** — tránh add-in làm tê liệt email của người dùng ngoài phạm vi | 2026-10-29 | — |
+| D-10 | Số ring dự kiến / người dùng | Theo đề xuất: < 30 (vừa `roamingSettings`) | 2026-10-29 | > 100 cần lưu trữ khác (OfficeRuntime.storage — không roaming — hoặc backend) |
+| D-11 | Ghi X-header `X-MailRing-Id` ra thư gửi đi? | Theo đề xuất: Không ở v1 (giảm rò rỉ thông tin) | 2026-10-29 | Khả năng truy vết |
+| D-14 | Ngôn ngữ UI | Theo đề xuất: Song ngữ | 2026-10-29 | Effort i18n nhỏ nếu làm từ S2 |
+| D-17 | Heartbeat đo độ phủ cài đặt: add-in gửi 1 lần/ngày {hash hộp thư, phiên bản bundle, phiên bản manifest} lên Cloudflare Worker free tier — **không** gửi nội dung email hay người nhận | Theo đề xuất: **Có** — không có nó thì không chứng minh được kiểm soát đang phủ bao nhiêu người (R-18). Ngoại lệ có kiểm soát của NFR-3 | 2026-10-29 | +2–3 ngày (S6/S8), **chưa tính vào tổng effort**; Worker bật CORS cho origin hosting **[Verify-S0]**. Đối chiếu độ phủ: hash danh sách người dùng mục tiêu bằng cùng salt rồi so khớp |
+| D-18 | Ai merge PR? | Theo đề xuất: **PO merge mọi PR** — giữ phân tách maker / checker / approver | 2026-10-29 | Nếu Claude merge: nhanh hơn nhưng mất vai trò approver độc lập |
+| D-19 | Antigravity tự push branch và mở PR trên GitHub? | Theo đề xuất: **Có** | 2026-10-29 | Không → PO thành nút thắt cho mọi thay đổi |
+| D-20 | Ai chạy ma trận kiểm thử thủ công trên Outlook (§8.2)? | Theo đề xuất: **PO** ở S0–S7; key user từ S8 | 2026-10-29 | Claude chạy trên Linux cloud, không chạy được Outlook |
+| D-21 | Antigravity review tư vấn (không chặn) PR core của Claude? | Theo đề xuất: **Có** — bù một phần cho việc core không có checker độc lập | 2026-10-29 | +~0,5 ngày/stage cho Antigravity |
 
 ### 12.2 Còn mở
 
-| ID | Câu hỏi | Phương án | Đề xuất mặc định | Ảnh hưởng nếu thay đổi |
-|---|---|---|---|---|
-| D-05 | Email không chọn ring | Bỏ qua kiểm tra · cảnh báo nếu có người ngoài domain nội bộ · bắt buộc chọn ring | Gợi ý ring (E-3) + cảnh báo nếu có người ngoài domain nội bộ | Ma sát với email thường ngày |
-| D-06 | Thời điểm sắp xếp người nhận | Tự động khi Send · chỉ khi bấm nút · cả hai | Cả hai | Người dùng có thấy thứ tự cuối trước khi gửi hay không |
-| D-07 | Người nhận cùng domain nội bộ nhưng không có trong ring | Luôn hợp lệ · cảnh báo · coi như người ngoài | Cấu hình theo ring, mặc định *allow* | Tường lửa thông tin nội bộ (ethical wall) |
-| D-08 | Distribution List | Phải khai báo đích danh · chặn mọi DL · bỏ qua | Khai báo đích danh | |
-| D-09 | Sai domain (domain lock) thì handler Send làm gì? | Fail-open (cho gửi, báo "không được cấp phép") · Fail-closed (chặn gửi) | **Fail-open** — tránh add-in làm tê liệt email của người dùng ngoài phạm vi | |
-| D-10 | Số ring dự kiến / người dùng | < 30 · 30–100 · > 100 | < 30 (vừa `roamingSettings`) | > 100 cần lưu trữ khác (OfficeRuntime.storage — không roaming — hoặc backend) |
-| D-11 | Ghi X-header `X-MailRing-Id` ra thư gửi đi? | Có (ID ngẫu nhiên) · Không | Không ở v1 (giảm rò rỉ thông tin) | Khả năng truy vết |
-| D-14 | Ngôn ngữ UI | Việt · Anh · song ngữ | Song ngữ | Effort i18n nhỏ nếu làm từ S2 |
-| D-17 | Heartbeat đo độ phủ cài đặt: add-in gửi 1 lần/ngày {hash hộp thư, phiên bản bundle, phiên bản manifest} lên Cloudflare Worker free tier — **không** gửi nội dung email hay người nhận | Không · Có | **Có** — không có nó thì không chứng minh được kiểm soát đang phủ bao nhiêu người (R-18). Ngoại lệ có kiểm soát của NFR-3 | +2–3 ngày (S6/S8), **chưa tính vào tổng effort**; Worker bật CORS cho origin hosting **[Verify-S0]**. Đối chiếu độ phủ: hash danh sách người dùng mục tiêu bằng cùng salt rồi so khớp |
-| D-18 | Ai merge PR? | PO merge mọi PR · Claude merge PR của Antigravity sau khi QA PASS | **PO merge mọi PR** — giữ phân tách maker / checker / approver | Nếu Claude merge: nhanh hơn nhưng mất vai trò approver độc lập |
-| D-19 | Antigravity tự push branch và mở PR trên GitHub? | Có (đăng nhập GitHub trên máy PO) · Không (PO commit hộ) | **Có** | Không → PO thành nút thắt cho mọi thay đổi |
-| D-20 | Ai chạy ma trận kiểm thử thủ công trên Outlook (§8.2)? | PO · key user được chỉ định | **PO** ở S0–S7; key user từ S8 | Claude chạy trên Linux cloud, không chạy được Outlook |
-| D-21 | Antigravity review tư vấn (không chặn) PR core của Claude? | Có · Không | **Có** — bù một phần cho việc core không có checker độc lập | +~0,5 ngày/stage cho Antigravity |
-
+Không còn quyết định mở (v1.0). Quyết định phát sinh từ Stage 0 hoặc sau này được ghi tiếp vào §12.1 theo change control.
 ---
 
 ## 13. Sign-off
 
 | Gate | Nội dung duyệt | Người duyệt | Ngày | Trạng thái |
 |---|---|---|---|---|
-| G0 | Kế hoạch v0.x + decision log | Product Owner | | ⏳ Một phần — đã chốt D-01, D-02, D-03, D-04, D-12, D-16, F2, F6–F8; chờ D-05 → D-11, D-14, D-17 → D-21 |
+| G0 | Kế hoạch v1.0 + decision log | Product Owner | 2026-10-29 | ✅ Đã duyệt |
 | G0b | Kết quả Stage 0 (Go/No-go) | Product Owner | | — |
 | G1 | Core engine | Product Owner | | — |
 | G4 | On-send guard | Product Owner | | — |
@@ -811,7 +810,7 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 | Bảo mật: domain lock, obfuscation, kiểm tra sau build, CI/CD, hosting | ✅ Viết | — |
 | Giao diện task pane: danh sách ring, trình sửa ring, sắp xếp kéo–thả, ràng buộc trường, cài đặt, chọn ring khi soạn, màn hình Acknowledge, export/import, diff preview | QA | ✅ Viết |
 | Nội dung song ngữ (vi/en) cho mọi key | Định nghĩa key + kiểm tra độ dài | ✅ Viết nội dung |
-| Heartbeat worker (nếu D-17 được duyệt) | Viết payload phía client + QA quyền riêng tư | ✅ Viết endpoint |
+| Heartbeat worker (D-17) | Viết payload phía client + QA quyền riêng tư | ✅ Viết endpoint |
 | Tài liệu người dùng, FAQ, bộ triển khai, kịch bản video (VI) | QA độ chính xác | ✅ Viết |
 | Tài liệu quản trị/build, mô tả kiểm soát (EN — dùng cho hồ sơ kiểm soát nội bộ) | ✅ Viết | — |
 | Spike Stage 0, kế hoạch kiểm thử tích hợp, phân tích số liệu pilot | ✅ Viết | — |
@@ -855,8 +854,8 @@ Khi thiếu API: Antigravity viết **CCR** (Contract Change Request), tiếp t�
 | Luồng | Effort | Ghi chú |
 |---|---|---|
 | Claude (lead + QA) | 29–43 ngày | Gồm 3–5 ngày QA và xử lý CCR |
-| Antigravity | 16–26 ngày | Chưa gồm AG-12 (heartbeat, 1–2 ngày nếu duyệt D-17) |
-| **Tổng** | **45–69 ngày** | Cao hơn phương án một người ~3–4 ngày do chi phí điều phối (contract, mock, card, QA) |
+| Antigravity | 17–28 ngày | Gồm AG-12 (heartbeat, D-17 đã duyệt) |
+| **Tổng** | **46–71 ngày** | Cao hơn phương án một người ~3–4 ngày do chi phí điều phối (contract, mock, card, QA), cộng 1–2 ngày heartbeat |
 
 Thời gian lịch ngắn hơn vì S2, S5, S7 chạy song song hai luồng; đường găng nằm ở luồng của Claude (contract → core → `OnMessageSend`).
 

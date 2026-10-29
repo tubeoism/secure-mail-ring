@@ -13,7 +13,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-02 | S1 | **Contract v1**: types, `OfficeAdapter`, `StorageAdapter`, `MockOfficeAdapter`, fixtures, i18n key list → tag `contract-v1` | CL-00 | 2–3 | Draft |
 | CL-03 | S1 | Core: `normalize`, `match`, `order`, `attachments` | CL-02 | 2–3 | Draft |
 | CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | Draft |
-| CL-05 | S1 | Core: `policy`, `codec`, `license`, `importVerify`, `diff`, heartbeat payload builder | CL-02 | 2–3 | Draft |
+| CL-05 | S1 | Core: `policy`, `codec`, `license`, `importVerify`, `diff`, ring suggestion (E-3), ring expiry (E-8), heartbeat payload builder | CL-02 | 2–3 | Draft |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
 | CL-07 | S3 | Compose events: `OnNewMessageCompose`, recipients/attachments changed, ring binding (`sessionData` + custom property) | CL-06 | 2–3 | Draft |
 | CL-08 | S4 | `OnMessageSend` handler: evaluation, Warn/Acknowledge/Block, ack verification, reorder with invariant, Bloom write | CL-03, CL-04, CL-05, CL-07 | 4–6 | Draft |
@@ -26,7 +26,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 
 | ID | Stage | Task | Depends on | Est. | Status |
 |---|---|---|---|---|---|
-| AG-01 | S0–S1 | Clickable task-pane prototype on mocks for PO UX review | CL-00, CL-02 | 2–3 | Draft (card written) |
+| AG-01 | S0–S1 | Clickable task-pane prototype on mocks for PO UX review | CL-00, CL-02 | 2–3 | Ready (starts when dependencies are Done) |
 | AG-02 | S2 | Ring list: list, search, duplicate, delete with confirm, archived rings | AG-01, CL-06 | 1–2 | Draft |
 | AG-03 | S2 | Ring editor: members, subject tag, attachment tokens, per-finding policy, Strict preset, expiry | AG-02, CL-05 | 2–3 | Draft |
 | AG-04 | S2 | Ordering editor: 3-column drag-and-drop (To/CC/BCC), shadowed-pattern warnings from core | AG-03, CL-03 | 1–2 | Draft |
@@ -37,10 +37,10 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | AG-09 | S4 | Acknowledge pane: findings with per-item tick, confirm flow | AG-08, CL-08 | 1–2 | Draft |
 | AG-10 | S5 | Export / share: code block, copy, "Share with colleagues", share-email template | AG-03, CL-05 | 1–2 | Draft |
 | AG-11 | S5 | Import: paste screen, diff preview with risk highlights, read-mode "Import from this email" with verification result | AG-10, CL-05, CL-06 | 2–3 | Draft |
-| AG-12 | S6 | Heartbeat worker (Cloudflare Worker) — **only if D-17 approved** | CL-05 | 1–2 | Draft |
+| AG-12 | S6 | Heartbeat worker (Cloudflare Worker) — D-17 approved | CL-05 | 1–2 | Draft |
 | AG-13 | S7 | User docs (VI): install guide, user guide, FAQ, Wef-cache troubleshooting, 2-minute video script | AG-11 | 1–2 | Draft |
 | AG-14 | S8 | Rollout kit: announcement emails, key-user handbook, pilot feedback form | AG-13 | 1 | Draft |
-| | | **Feature total** (excl. AG-12) | | **16–26** | |
+| | | **Feature total** | | **17–28** | |
 
 ## Critical path
 
@@ -57,3 +57,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | Date | Change |
 |---|---|
 | 2026-10-29 | Board created; AG-01 card written (Draft, awaiting PO approval) |
+| 2026-10-29 | Plan v1.0 approved (G0). AG-01 → Ready. D-17 approved → AG-12 in scope. E-3, E-8 added to CL-05 |
