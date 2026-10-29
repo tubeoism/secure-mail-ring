@@ -2,10 +2,10 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Phiên bản tài liệu | **v0.2 — Bản nháp, đã chốt một phần quyết định** |
+| Phiên bản tài liệu | **v0.3 — Bản nháp, đã chốt một phần quyết định** |
 | Ngày | 2026-10-29 |
 | Chủ sở hữu | Product Owner (người yêu cầu) |
-| Trạng thái | Đã chốt D-01, D-02, D-03, D-04, D-12 và phạm vi F6–F8. Còn mở D-05 → D-11, D-13 → D-15 (§12) trước khi khóa phạm vi (Stage 0 gate) |
+| Trạng thái | Đã chốt D-01, D-02, D-03, D-04, D-12, D-16 và phạm vi F6–F8. Còn mở D-05 → D-11, D-13 → D-15 (§12) trước khi khóa phạm vi (Stage 0 gate) |
 | Quy ước | `FR-x.y` = yêu cầu chức năng · `NFR-x` = phi chức năng · `D-xx` = quyết định cần duyệt · `R-xx` = rủi ro · **[Verify-S0]** = giả định kỹ thuật phải được kiểm chứng ở Stage 0 trước khi xây dựng tiếp |
 
 > Nguyên tắc làm việc: mỗi stage đi theo chuỗi **Scope → Draft → Validate/Test → Sign-off → Package**. Không stage nào bắt đầu khi gate của stage trước chưa được ký duyệt. Mọi thông số API Office.js trong tài liệu này được ghi theo hiểu biết hiện tại và **phải xác minh trên đúng build Outlook của người dùng** ở Stage 0 — không xây trên giả định chưa kiểm chứng.
@@ -16,6 +16,7 @@
 |---|---|---|
 | v0.1 | 2026-10-29 | Bản nháp đầu tiên |
 | v0.2 | 2026-10-29 | Chốt D-01 (M365 Exchange Online), D-02 (classic + new Outlook), D-03 (**không có quyền admin → người dùng tự cài manifest**, để ngỏ đường admin center), D-04 (mặc định Warn + tùy chọn strict), D-12 (Tầng 2, chừa Tầng 3). Bỏ link/trang import → **mã cấu hình dán trực tiếp**. Đưa E-1, E-2, E-4 vào v1 thành **F6** (domain gần giống), **F7** (người nhận lần đầu), **F8** (ràng buộc trường). Thêm mô hình xử lý vi phạm 3 mức Warn / Acknowledge / Block. Hiệu chỉnh effort |
+| v0.3 | 2026-10-29 | D-02 sửa: **cam kết classic Outlook**, new Outlook chỉ kiểm tra khói (không thuộc tiêu chí nghiệm thu). D-16: phương án dự phòng B = **COM add-in thuần trên .NET Framework 4.8.1**, kích hoạt theo tiêu chí đo ở Spike 7 (thử sideload 5 ngày); đã đánh giá và loại .NET 10 (comhost/Native AOT) — §4.4. Effort còn 37–57 ngày |
 
 ---
 
@@ -27,7 +28,7 @@
 
 **Khuyến nghị nền tảng.** **Office Web Add-in (Office.js) + Smart Alerts (`OnMessageSend`)**, viết bằng TypeScript. Đây là công nghệ duy nhất chạy được trên cả *classic Outlook for Windows* và *new Outlook for Windows* (new Outlook **không** hỗ trợ COM/VSTO). Chi tiết so sánh tại §4.
 
-**Ước lượng sơ bộ.** 8 stage (S0–S7), khoảng **39–59 ngày công** cho 1 developer (đã gồm F6–F8), tùy kết quả Stage 0 và các quyết định còn mở ở §12. Chi phí công cụ: **0 đồng** (toàn bộ công cụ miễn phí/mã nguồn mở; hosting dùng free tier).
+**Ước lượng sơ bộ.** 8 stage (S0–S7), khoảng **37–57 ngày công** cho 1 developer (đã gồm F6–F8; new Outlook chỉ kiểm tra khói), tùy kết quả Stage 0 và các quyết định còn mở ở §12. Chi phí công cụ: **0 đồng** (toàn bộ công cụ miễn phí/mã nguồn mở; hosting dùng free tier).
 
 **Ba điểm cần nói thẳng ngay từ đầu:**
 
@@ -54,7 +55,8 @@
 
 ### 2.2 Trong phạm vi
 
-- Outlook for Windows: **classic Outlook (Microsoft 365 Apps)** và **new Outlook for Windows**.
+- **Cam kết:** classic Outlook for Windows (Microsoft 365 Apps).
+- **Không cam kết:** new Outlook for Windows — chỉ kiểm tra khói (cài được, chặn/cảnh báo khi Send được). Cùng code base nên chạy được gần như không tốn thêm; lỗi chỉ riêng new Outlook không chặn phát hành (D-02).
 - Soạn thư mới, Reply, Reply All, Forward, mở lại bản nháp.
 - Ring quản lý cá nhân (per-mailbox), chia sẻ thủ công qua mã cấu hình (copy–paste).
 - **Người dùng tự cài** (sideload file manifest), không cần quyền admin.
@@ -226,7 +228,7 @@ Ghi nhận: dương tính giả của Bloom nghĩa là ~1% địa chỉ mới b�
 | Chống dịch ngược (công cụ miễn phí) | Yếu (JS) — obfuscator | Trung bình (.NET IL dễ decompile; ConfuserEx miễn phí nhưng đã ngừng phát triển) | Tốt nhất (native) |
 | Hướng đi của Microsoft | **Chiến lược chính thức** | Duy trì, không phát triển; không có tương lai trên new Outlook | Như VSTO |
 
-**Khuyến nghị: Office Web Add-in.** VSTO cho kiểm soát mạnh hơn trên classic Outlook nhưng là ngõ cụt khi tổ chức chuyển sang new Outlook — một kiểm soát mất hiệu lực khi người dùng bật công tắc "Try the new Outlook" là thiết kế không bền vững. Đổi lại, ta chấp nhận khả năng chống dịch ngược yếu hơn và bù bằng kiểm soát triển khai (§6).
+**Khuyến nghị: Office Web Add-in.** VSTO cho kiểm soát mạnh hơn trên classic Outlook nhưng là ngõ cụt khi tổ chức chuyển sang new Outlook — một kiểm soát mất hiệu lực khi người dùng bật công tắc "Try the new Outlook" là thiết kế không bền vững. Đổi lại, ta chấp nhận khả năng chống dịch ngược yếu hơn và bù bằng kiểm soát triển khai (§6). Nếu sideload tỏ ra không ổn định, chuyển sang phương án dự phòng ở §4.4.
 
 ### 4.2 Stack đề xuất
 
@@ -248,7 +250,7 @@ Ghi nhận: dương tính giả của Bloom nghĩa là ~1% địa chỉ mới b�
 | CI/CD | GitHub Actions | Lint → test → build → obfuscate → validate manifest → deploy |
 | Debug | `office-addin-debugging`, Edge DevTools (WebView2), runtime logging của event-based add-in trên Windows | |
 
-### 4.3 Ánh xạ tính năng → API Office.js
+### 4.3 Ánh xạ tính năng → API Office.js (phương án A)
 
 Requirement set ghi theo tài liệu Microsoft hiện hành — **toàn bộ cột này là [Verify-S0]**.
 
@@ -268,6 +270,19 @@ Requirement set ghi theo tài liệu Microsoft hiện hành — **toàn bộ c�
 | Lưu cấu hình ring | `Office.context.roamingSettings` (giới hạn ~32 KB, đồng bộ theo hộp thư) | Mailbox 1.1 |
 | Mở email chia sẻ cấu hình | `mailbox.displayNewMessageForm` | Mailbox 1.6 |
 | (Tùy chọn D-15) Import từ email + kiểm tra header xác thực | `item.body.getAsync`; `item.getAllInternetHeadersAsync` | 1.3; 1.8 |
+
+### 4.4 Phương án dự phòng B — COM add-in (chỉ classic Outlook)
+
+Chỉ kích hoạt theo gate Stage 0 (§7). Đã đánh giá các biến thể (D-16):
+
+| Biến thể | Kết luận | Lý do |
+|---|---|---|
+| **COM add-in thuần, .NET Framework 4.8.1** (`IDTExtensibility2`, Outlook PIA) | ✅ **Chọn làm B** | Runtime có sẵn trong Windows; cài theo user (chép file + registry HKCU), không cần admin, không có hộp thoại tin cậy của VSTO **[Verify]**; `ItemSend` toàn quyền; task pane WinForms dùng được. Dùng COM shim để cách ly lỗi với add-in khác |
+| VSTO (.NET Framework 4.8) | Không chọn | Phụ thuộc VSTO runtime + ClickOnce; chứng chỉ tự ký gây hộp thoại tin cậy |
+| .NET 10 framework-dependent (`EnableComHosting`) | ❌ Loại | COM component chỉ hỗ trợ framework-dependent, không self-contained → máy phải có .NET 10 Desktop Runtime, thường cần admin để cài; mỗi tiến trình chỉ nạp được một phiên bản .NET hiện đại **[Verify]** |
+| .NET 10 Native AOT (tự export COM) | ❌ Loại | `comhost` không hỗ trợ AOT; phải tự viết `IDispatch` cho ribbon callback và sự kiện, không có WinForms/WPF; gần như không có tiền lệ cho Outlook → effort và rủi ro quá cao so với lợi ích chống dịch ngược |
+
+Giới hạn chung của B: **chỉ chạy trên classic Outlook**; Outlook có thể **tự tắt add-in nạp chậm** (resiliency) → giữ thời gian khởi động tối thiểu. Hardening miễn phí cho B: ConfuserEx2 hoặc Obfuscar.
 
 ---
 
@@ -466,13 +481,13 @@ Effort tính theo ngày công của 1 developer, mang tính chỉ báo; sẽ hi�
 |---|---|---|---|---|
 | S0 | Discovery & Technical spike | 4–6 | — | **Go/No-go nền tảng** |
 | S1 | Core rule engine (gồm F6–F8) | 7–11 | S0 | Unit test xanh, ≥ 90% coverage |
-| S2 | Add-in shell & quản lý ring | 6–8 | S1 | Tự cài chạy trên 2 client |
+| S2 | Add-in shell & quản lý ring | 6–8 | S1 | Tự cài chạy trên classic Outlook |
 | S3 | Tích hợp soạn thư | 4–6 | S2 | Chọn ring/tag/reply ổn định |
-| S4 | On-send guard (Smart Alerts) | 7–11 | S3 | F1, F3, F4, F6–F8 đạt acceptance |
+| S4 | On-send guard (Smart Alerts) | 6–10 | S3 | F1, F3, F4, F6–F8 đạt acceptance |
 | S5 | Chia sẻ cấu hình | 3–5 | S2 | F2 đạt acceptance, test giả mạo |
 | S6 | Domain lock & hardening | 4–6 | S4 | Bundle obfuscate vẫn đạt NFR-1 |
-| S7 | UAT, đóng gói, triển khai | 4–6 | S4–S6 | Sign-off phát hành v1.0 |
-| | **Tổng** | **39–59** | | |
+| S7 | UAT, đóng gói, triển khai | 3–5 | S4–S6 | Sign-off phát hành v1.0 |
+| | **Tổng** | **37–57** | | |
 
 ### Stage 0 — Discovery & Technical spike
 
@@ -489,10 +504,19 @@ Effort tính theo ngày công của 1 developer, mang tính chỉ báo; sẽ hi�
 | Spike 4: hành vi khi offline, khi hosting trả 404, khi handler ném lỗi | Bảng fail-mode |
 | Spike 5: bundle đã qua `javascript-obfuscator` chạy được trong JS-only runtime | Danh sách tùy chọn obfuscator an toàn |
 | Spike 6: luồng Acknowledge — `commandId` mở task pane từ hộp thoại Smart Alerts; `sessionData` giữ xác nhận tới lần Send sau; có tín hiệu nào sau "Send Anyway" không (FR-7.5) | Kết luận + phương án dự phòng |
-| Spike 7: cài một lần theo hộp thư → add-in xuất hiện trên cả classic và new Outlook; quy trình gỡ/cài lại khi đổi manifest | Hướng dẫn cài nháp |
+| Spike 7: **thử ổn định sideload trên classic Outlook trong 5 ngày làm việc** — cài, khởi động lại máy, cập nhật bundle, đổi manifest + cài lại, xóa cache `%LOCALAPPDATA%\Microsoft\Office\16.0\Wef`; ghi nhật ký mỗi ngày Smart Alerts có kích hoạt không. Kiểm tra khói trên new Outlook | Nhật ký 5 ngày + hướng dẫn cài nháp. Chạy song song các spike khác (tốn thời gian lịch, ít effort) |
 | Dựng repo, CI rỗng, hosting dev | Skeleton repo |
 
-**Gate (Go/No-go):** nếu tenant chặn người dùng tự cài custom add-in, hoặc Spike 1 thất bại trên build hiện tại → dừng và trình phương án thay thế (xin IT cài qua admin center; nâng cấp kênh cập nhật Office; hoặc VSTO chỉ cho classic Outlook) trước khi đi tiếp.
+**Gate (Go/No-go):**
+
+| Kết quả Stage 0 | Quyết định |
+|---|---|
+| Mọi spike đạt, sideload ổn định 5 ngày | **Go phương án A** |
+| Tenant chặn người dùng tự cài custom add-in | Xin IT cài qua admin center; nếu không được → **chuyển phương án B** (§4.4) |
+| Add-in mất kích hoạt **quá 1 lần trong 5 ngày** mà không rõ nguyên nhân | **Chuyển phương án B** |
+| Spike 1 thất bại do build Outlook cũ | Nâng kênh cập nhật Microsoft 365 Apps rồi thử lại; không được → phương án B |
+
+Chuyển sang B nghĩa là lập lại kế hoạch kỹ thuật S1–S6 và ước lượng lại effort, trình duyệt trước khi viết code. `packages/core` (quy tắc nghiệp vụ, test case) vẫn là đặc tả dùng lại được.
 
 ### Stage 1 — Core rule engine (`packages/core`)
 
@@ -523,7 +547,7 @@ Effort tính theo ngày công của 1 developer, mang tính chỉ báo; sẽ hi�
 - Lớp lưu trữ `roamingSettings` có nén, kiểm tra quota, báo lỗi rõ khi gần đầy.
 - i18n Việt/Anh.
 
-**Gate:** tự cài thành công trên classic + new Outlook; CRUD ring đồng bộ giữa 2 client của cùng hộp thư.
+**Gate:** tự cài thành công trên classic Outlook; CRUD ring bền qua khởi động lại; kiểm tra khói new Outlook (cùng hộp thư thấy đúng ring).
 
 ### Stage 3 — Tích hợp soạn thư
 
@@ -532,7 +556,7 @@ Effort tính theo ngày công của 1 developer, mang tính chỉ báo; sẽ hi�
 - `OnMessageRecipientsChanged` / `OnMessageAttachmentsChanged` → thanh thông báo trước khi Send (không chặn).
 - Nút "Sắp xếp ngay".
 
-**Gate:** kịch bản Reply/Reply All/Forward/mở lại nháp giữ đúng ring trên cả 2 client.
+**Gate:** kịch bản Reply/Reply All/Forward/mở lại nháp giữ đúng ring trên classic Outlook.
 
 ### Stage 4 — On-send guard (Smart Alerts)
 
@@ -586,7 +610,7 @@ Effort tính theo ngày công của 1 developer, mang tính chỉ báo; sẽ hi�
 
 ### 8.2 Ma trận kiểm thử tích hợp
 
-| Kịch bản | Classic Outlook (M365, Current Channel) | New Outlook for Windows | OWA (best effort) |
+| Kịch bản | Classic Outlook (M365) — **bắt buộc** | New Outlook — kiểm tra khói | OWA — tùy chọn |
 |---|---|---|---|
 | Thư mới, người nhận đều trong ring | | | |
 | Có người ngoài ring ở BCC | | | |
@@ -667,6 +691,7 @@ secure-mail-ring/
 | R-14 | Đổi manifest buộc mọi người dùng cài lại → người dùng ở lại bản cũ | Trung bình | Trung bình | Manifest v1 khai báo đủ; code cập nhật qua hosting không cần cài lại; add-in báo khi phát hiện manifest cũ | S2, S7 |
 | R-15 | F7 gây nhiễu giai đoạn đầu → người dùng quen bỏ qua mọi cảnh báo | Trung bình | Cao | Chế độ học 14 ngày; dán danh sách đã biết; đo tỷ lệ override ở UAT | S4, S7 |
 | R-16 | F6 gắn cờ cặp domain hợp lệ giống nhau (công ty mẹ–con) | Trung bình | Thấp | Danh sách ngoại lệ FR-6.4; ngưỡng chỉnh được | S1, S7 |
+| R-17 | Sideload không ổn định trên classic Outlook (add-in mất kích hoạt, cache manifest cũ) | Chưa rõ | Cao | Thử 5 ngày ở Spike 7; tiêu chí chuyển phương án B (§4.4); hướng dẫn xóa cache Wef | S0 |
 
 ---
 
@@ -691,7 +716,8 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 | ID | Câu hỏi | Quyết định | Ngày | Hệ quả trong kế hoạch |
 |---|---|---|---|---|
 | D-01 | Hộp thư của người dùng | **Microsoft 365 Exchange Online** | 2026-10-29 | Office Web Add-in khả thi; R-01 đóng |
-| D-02 | Client trong phạm vi | **Classic + new Outlook for Windows** (OWA best effort) | 2026-10-29 | Test matrix §8.2 |
+| D-02 | Client trong phạm vi | **Cam kết classic Outlook**; new Outlook chỉ kiểm tra khói, không thuộc tiêu chí nghiệm thu (sửa ở v0.3) | 2026-10-29 | §2.2, test matrix §8.2, effort −2 ngày |
+| D-16 | Phương án dự phòng nếu sideload không ổn định | **COM add-in thuần trên .NET Framework 4.8.1**, kích hoạt theo gate Stage 0; loại .NET 10 framework-dependent (cần runtime → cần admin) và Native AOT (không được hỗ trợ, effort cao) | 2026-10-29 | §4.4, gate S0 |
 | D-03 | Cách triển khai | **Không có quyền admin → người dùng tự cài manifest**; để ngỏ đường admin center | 2026-10-29 | Manifest v1 khai báo đủ; R-13, R-14; §9 |
 | D-04 | Mức xử lý mặc định | **Warn** (phải bấm "Send Anyway" để override), có tùy chọn strict hơn: Acknowledge / Block, mức sàn toàn cục, preset Strict | 2026-10-29 | Mô hình xử lý vi phạm §3 |
 | D-12 | Tầng bảo vệ | **Tầng 2 cho v1**, chừa sẵn Tầng 3 | 2026-10-29 | §6.3, interface `LicenseProvider` |
@@ -719,7 +745,7 @@ E-1, E-2, E-4 đã được duyệt vào v1 thành F6, F7, F8 (v0.2). Các đề
 
 | Gate | Nội dung duyệt | Người duyệt | Ngày | Trạng thái |
 |---|---|---|---|---|
-| G0 | Kế hoạch v0.x + decision log | Product Owner | | ⏳ Một phần — đã chốt D-01, D-02, D-03, D-04, D-12, F2, F6–F8; chờ D-05 → D-11, D-13 → D-15 |
+| G0 | Kế hoạch v0.x + decision log | Product Owner | | ⏳ Một phần — đã chốt D-01, D-02, D-03, D-04, D-12, D-16, F2, F6–F8; chờ D-05 → D-11, D-13 → D-15 |
 | G0b | Kết quả Stage 0 (Go/No-go) | Product Owner | | — |
 | G1 | Core engine | Product Owner | | — |
 | G4 | On-send guard | Product Owner | | — |
