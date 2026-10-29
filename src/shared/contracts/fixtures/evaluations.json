@@ -1,0 +1,156 @@
+[
+  {
+    "compose": "clean-alpha",
+    "result": {
+      "findings": [],
+      "mutations": [],
+      "verdict": "allow",
+      "fingerprint": "fp-clean-alpha"
+    }
+  },
+  {
+    "compose": "outsider-bcc",
+    "result": {
+      "findings": [
+        {
+          "kind": "outsider",
+          "mode": "warn",
+          "subject": "x@gmail.com",
+          "messageKey": "finding.outsider",
+          "params": {
+            "address": "x@gmail.com",
+            "field": "BCC"
+          },
+          "field": "bcc"
+        }
+      ],
+      "mutations": [],
+      "verdict": "warn",
+      "fingerprint": "fp-outsider-bcc"
+    }
+  },
+  {
+    "compose": "lookalike-domain",
+    "result": {
+      "findings": [
+        {
+          "kind": "lookalike",
+          "mode": "warn",
+          "subject": "cfo@abcc0rp.vn",
+          "messageKey": "finding.lookalike",
+          "params": {
+            "address": "cfo@abcc0rp.vn",
+            "similarTo": "abccorp.vn",
+            "ring": "Alpha"
+          },
+          "field": "to"
+        }
+      ],
+      "mutations": [],
+      "verdict": "warn",
+      "fingerprint": "fp-lookalike-domain"
+    }
+  },
+  {
+    "compose": "cyrillic-homograph",
+    "result": {
+      "findings": [
+        {
+          "kind": "lookalike",
+          "mode": "block",
+          "subject": "cfo@abcc0rp.vn",
+          "messageKey": "finding.lookalike",
+          "params": {
+            "address": "cfo@abcc0rp.vn",
+            "similarTo": "abccorp.vn",
+            "ring": "Alpha"
+          },
+          "field": "to"
+        }
+      ],
+      "mutations": [],
+      "verdict": "block",
+      "fingerprint": "fp-cyrillic-homograph"
+    }
+  },
+  {
+    "compose": "foreign-ring-token",
+    "result": {
+      "findings": [
+        {
+          "kind": "foreignRingToken",
+          "mode": "acknowledge",
+          "subject": "BETA_draft.docx",
+          "messageKey": "finding.foreignRingToken",
+          "params": {
+            "file": "BETA_draft.docx",
+            "ring": "Beta"
+          }
+        }
+      ],
+      "mutations": [],
+      "verdict": "acknowledge",
+      "fingerprint": "fp-foreign-ring-token"
+    }
+  },
+  {
+    "compose": "missing-token",
+    "result": {
+      "findings": [
+        {
+          "kind": "missingToken",
+          "mode": "warn",
+          "subject": "report.xlsx",
+          "messageKey": "finding.missingToken",
+          "params": {
+            "file": "report.xlsx"
+          }
+        }
+      ],
+      "mutations": [],
+      "verdict": "warn",
+      "fingerprint": "fp-missing-token"
+    }
+  },
+  {
+    "compose": "field-rule-violation",
+    "result": {
+      "findings": [
+        {
+          "kind": "fieldRule",
+          "mode": "acknowledge",
+          "subject": "b@deltaco.vn",
+          "messageKey": "finding.fieldRule.mustNotBeIn",
+          "params": {
+            "address": "b@deltaco.vn",
+            "field": "BCC"
+          },
+          "field": "bcc"
+        }
+      ],
+      "mutations": [],
+      "verdict": "acknowledge",
+      "fingerprint": "fp-field-rule-violation"
+    }
+  },
+  {
+    "compose": "first-time-recipient",
+    "result": {
+      "findings": [
+        {
+          "kind": "firstTime",
+          "mode": "warn",
+          "subject": "new.person@abccorp.vn",
+          "messageKey": "finding.firstTime",
+          "params": {
+            "address": "new.person@abccorp.vn"
+          },
+          "field": "to"
+        }
+      ],
+      "mutations": [],
+      "verdict": "warn",
+      "fingerprint": "fp-first-time-recipient"
+    }
+  }
+]

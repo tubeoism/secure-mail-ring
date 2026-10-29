@@ -39,7 +39,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["scripts/**/*.mjs", "build/**", "spikes/*.mjs"],
+    files: ["scripts/**/*.mjs", "build/**", "spikes/*.mjs", "webpack*.mjs"],
     languageOptions: { globals: { process: "readonly", console: "readonly", URL: "readonly" } },
     rules: { "no-console": "off" },
   },

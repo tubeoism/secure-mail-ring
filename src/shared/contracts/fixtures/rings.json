@@ -1,0 +1,2466 @@
+[
+  {
+    "schema": "smr/1",
+    "id": "01JBX4Q8ALPHA000000000001",
+    "rev": 3,
+    "name": "Alpha – IA ABC Corp FY26",
+    "subjectTag": "[ALPHA]",
+    "owner": "an.nguyen@auditfirm.vn",
+    "updatedAt": "2026-10-29T08:00:00Z",
+    "members": [
+      {
+        "kind": "address",
+        "value": "cfo@abccorp.vn"
+      },
+      {
+        "kind": "domain",
+        "value": "abccorp.vn"
+      },
+      {
+        "kind": "address",
+        "value": "kt@partner.vn"
+      }
+    ],
+    "internalDomain": "allow",
+    "order": {
+      "to": ["cfo@abccorp.vn", "abccorp.vn", "*"],
+      "cc": ["kt@partner.vn", "auditfirm.vn", "*"],
+      "bcc": []
+    },
+    "attachments": {
+      "tokens": ["ALPHA", "ABC-IA"],
+      "mode": "any",
+      "ignoreInline": true,
+      "exemptExtensions": [".ics", ".vcf"]
+    },
+    "policy": {
+      "outsider": "warn",
+      "missingToken": "warn",
+      "foreignRingToken": "warn",
+      "lookalike": "warn",
+      "firstTime": "warn",
+      "fieldRule": "warn"
+    },
+    "fieldRules": [],
+    "firstTimeCheck": true,
+    "expiresAt": null
+  },
+  {
+    "schema": "smr/1",
+    "id": "01JBX4Q8BETA0000000000002",
+    "rev": 1,
+    "name": "Beta – Kiểm toán nội bộ (Strict)",
+    "subjectTag": "[BETA]",
+    "owner": "an.nguyen@auditfirm.vn",
+    "updatedAt": "2026-10-29T08:00:00Z",
+    "members": [
+      {
+        "kind": "subdomains",
+        "value": "betacorp.vn"
+      },
+      {
+        "kind": "address",
+        "value": "ceo@betacorp.vn"
+      }
+    ],
+    "internalDomain": "allow",
+    "order": {
+      "to": ["ceo@betacorp.vn", "*.betacorp.vn", "*"],
+      "cc": ["*"],
+      "bcc": []
+    },
+    "attachments": {
+      "tokens": ["BETA"],
+      "mode": "any",
+      "ignoreInline": true,
+      "exemptExtensions": [".ics", ".vcf"]
+    },
+    "policy": {
+      "outsider": "acknowledge",
+      "missingToken": "acknowledge",
+      "foreignRingToken": "block",
+      "lookalike": "block",
+      "firstTime": "acknowledge",
+      "fieldRule": "acknowledge"
+    },
+    "fieldRules": [],
+    "firstTimeCheck": true,
+    "expiresAt": null
+  },
+  {
+    "schema": "smr/1",
+    "id": "01JBX4Q8GAMMA000000000003",
+    "rev": 1,
+    "name": "Gamma – dự án đã kết thúc",
+    "subjectTag": "[GAMMA]",
+    "owner": "an.nguyen@auditfirm.vn",
+    "updatedAt": "2026-10-29T08:00:00Z",
+    "members": [
+      {
+        "kind": "domain",
+        "value": "gammaltd.vn"
+      }
+    ],
+    "internalDomain": "allow",
+    "order": {
+      "to": ["gammaltd.vn", "*"],
+      "cc": ["*"],
+      "bcc": []
+    },
+    "attachments": {
+      "tokens": ["GAMMA"],
+      "mode": "any",
+      "ignoreInline": true,
+      "exemptExtensions": [".ics", ".vcf"]
+    },
+    "policy": {
+      "outsider": "warn",
+      "missingToken": "warn",
+      "foreignRingToken": "warn",
+      "lookalike": "warn",
+      "firstTime": "warn",
+      "fieldRule": "warn"
+    },
+    "fieldRules": [],
+    "firstTimeCheck": true,
+    "expiresAt": "2026-06-30T00:00:00Z"
+  },
+  {
+    "schema": "smr/1",
+    "id": "01JBX4Q8DELTA000000000004",
+    "rev": 1,
+    "name": "Delta – field rules",
+    "subjectTag": "[DELTA]",
+    "owner": "an.nguyen@auditfirm.vn",
+    "updatedAt": "2026-10-29T08:00:00Z",
+    "members": [
+      {
+        "kind": "domain",
+        "value": "deltaco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "partner@auditfirm.vn"
+      }
+    ],
+    "internalDomain": "allow",
+    "order": {
+      "to": ["deltaco.vn", "*"],
+      "cc": ["partner@auditfirm.vn", "*"],
+      "bcc": []
+    },
+    "attachments": {
+      "tokens": ["DELTA"],
+      "mode": "any",
+      "ignoreInline": true,
+      "exemptExtensions": [".ics", ".vcf"]
+    },
+    "policy": {
+      "outsider": "warn",
+      "missingToken": "warn",
+      "foreignRingToken": "warn",
+      "lookalike": "warn",
+      "firstTime": "warn",
+      "fieldRule": "warn"
+    },
+    "fieldRules": [
+      {
+        "pattern": "partner@auditfirm.vn",
+        "type": "mustBeIn",
+        "field": "cc",
+        "when": "anyExternal"
+      },
+      {
+        "pattern": "deltaco.vn",
+        "type": "mustNotBeIn",
+        "field": "bcc"
+      }
+    ],
+    "firstTimeCheck": true,
+    "expiresAt": null
+  },
+  {
+    "schema": "smr/1",
+    "id": "01JBX4Q8EPSILON0000000005",
+    "rev": 1,
+    "name": "Epsilon – conflicting rules",
+    "subjectTag": "[EPS]",
+    "owner": "an.nguyen@auditfirm.vn",
+    "updatedAt": "2026-10-29T08:00:00Z",
+    "members": [
+      {
+        "kind": "domain",
+        "value": "epsilon.vn"
+      }
+    ],
+    "internalDomain": "allow",
+    "order": {
+      "to": ["epsilon.vn", "*"],
+      "cc": ["*"],
+      "bcc": []
+    },
+    "attachments": {
+      "tokens": ["EPS"],
+      "mode": "any",
+      "ignoreInline": true,
+      "exemptExtensions": [".ics", ".vcf"]
+    },
+    "policy": {
+      "outsider": "warn",
+      "missingToken": "warn",
+      "foreignRingToken": "warn",
+      "lookalike": "warn",
+      "firstTime": "warn",
+      "fieldRule": "warn"
+    },
+    "fieldRules": [
+      {
+        "pattern": "epsilon.vn",
+        "type": "mustBeIn",
+        "field": "cc"
+      },
+      {
+        "pattern": "epsilon.vn",
+        "type": "mustNotBeIn",
+        "field": "cc"
+      }
+    ],
+    "firstTimeCheck": true,
+    "expiresAt": null
+  },
+  {
+    "schema": "smr/1",
+    "id": "01JBX4Q8BIG00000000000006",
+    "rev": 1,
+    "name": "Big – ring at the member limit",
+    "subjectTag": "[BIG]",
+    "owner": "an.nguyen@auditfirm.vn",
+    "updatedAt": "2026-10-29T08:00:00Z",
+    "members": [
+      {
+        "kind": "domain",
+        "value": "bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user001@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user002@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user003@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user004@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user005@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user006@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user007@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user008@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user009@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user010@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user011@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user012@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user013@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user014@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user015@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user016@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user017@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user018@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user019@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user020@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user021@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user022@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user023@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user024@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user025@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user026@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user027@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user028@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user029@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user030@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user031@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user032@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user033@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user034@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user035@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user036@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user037@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user038@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user039@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user040@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user041@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user042@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user043@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user044@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user045@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user046@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user047@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user048@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user049@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user050@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user051@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user052@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user053@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user054@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user055@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user056@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user057@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user058@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user059@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user060@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user061@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user062@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user063@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user064@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user065@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user066@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user067@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user068@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user069@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user070@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user071@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user072@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user073@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user074@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user075@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user076@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user077@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user078@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user079@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user080@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user081@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user082@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user083@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user084@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user085@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user086@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user087@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user088@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user089@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user090@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user091@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user092@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user093@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user094@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user095@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user096@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user097@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user098@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user099@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user100@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user101@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user102@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user103@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user104@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user105@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user106@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user107@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user108@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user109@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user110@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user111@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user112@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user113@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user114@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user115@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user116@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user117@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user118@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user119@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user120@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user121@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user122@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user123@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user124@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user125@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user126@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user127@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user128@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user129@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user130@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user131@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user132@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user133@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user134@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user135@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user136@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user137@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user138@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user139@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user140@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user141@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user142@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user143@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user144@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user145@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user146@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user147@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user148@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user149@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user150@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user151@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user152@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user153@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user154@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user155@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user156@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user157@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user158@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user159@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user160@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user161@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user162@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user163@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user164@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user165@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user166@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user167@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user168@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user169@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user170@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user171@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user172@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user173@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user174@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user175@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user176@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user177@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user178@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user179@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user180@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user181@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user182@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user183@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user184@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user185@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user186@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user187@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user188@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user189@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user190@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user191@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user192@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user193@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user194@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user195@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user196@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user197@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user198@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user199@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user200@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user201@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user202@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user203@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user204@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user205@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user206@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user207@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user208@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user209@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user210@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user211@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user212@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user213@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user214@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user215@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user216@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user217@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user218@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user219@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user220@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user221@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user222@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user223@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user224@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user225@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user226@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user227@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user228@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user229@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user230@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user231@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user232@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user233@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user234@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user235@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user236@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user237@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user238@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user239@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user240@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user241@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user242@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user243@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user244@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user245@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user246@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user247@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user248@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user249@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user250@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user251@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user252@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user253@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user254@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user255@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user256@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user257@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user258@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user259@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user260@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user261@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user262@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user263@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user264@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user265@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user266@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user267@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user268@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user269@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user270@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user271@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user272@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user273@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user274@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user275@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user276@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user277@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user278@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user279@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user280@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user281@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user282@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user283@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user284@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user285@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user286@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user287@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user288@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user289@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user290@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user291@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user292@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user293@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user294@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user295@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user296@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user297@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user298@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user299@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user300@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user301@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user302@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user303@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user304@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user305@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user306@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user307@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user308@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user309@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user310@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user311@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user312@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user313@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user314@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user315@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user316@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user317@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user318@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user319@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user320@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user321@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user322@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user323@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user324@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user325@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user326@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user327@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user328@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user329@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user330@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user331@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user332@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user333@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user334@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user335@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user336@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user337@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user338@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user339@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user340@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user341@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user342@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user343@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user344@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user345@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user346@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user347@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user348@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user349@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user350@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user351@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user352@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user353@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user354@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user355@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user356@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user357@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user358@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user359@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user360@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user361@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user362@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user363@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user364@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user365@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user366@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user367@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user368@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user369@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user370@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user371@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user372@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user373@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user374@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user375@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user376@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user377@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user378@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user379@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user380@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user381@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user382@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user383@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user384@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user385@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user386@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user387@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user388@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user389@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user390@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user391@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user392@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user393@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user394@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user395@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user396@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user397@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user398@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user399@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user400@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user401@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user402@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user403@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user404@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user405@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user406@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user407@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user408@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user409@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user410@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user411@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user412@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user413@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user414@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user415@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user416@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user417@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user418@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user419@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user420@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user421@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user422@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user423@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user424@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user425@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user426@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user427@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user428@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user429@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user430@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user431@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user432@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user433@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user434@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user435@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user436@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user437@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user438@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user439@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user440@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user441@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user442@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user443@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user444@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user445@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user446@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user447@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user448@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user449@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user450@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user451@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user452@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user453@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user454@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user455@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user456@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user457@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user458@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user459@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user460@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user461@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user462@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user463@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user464@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user465@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user466@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user467@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user468@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user469@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user470@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user471@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user472@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user473@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user474@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user475@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user476@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user477@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user478@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user479@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user480@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user481@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user482@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user483@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user484@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user485@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user486@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user487@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user488@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user489@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user490@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user491@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user492@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user493@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user494@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user495@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user496@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user497@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user498@bigco.vn"
+      },
+      {
+        "kind": "address",
+        "value": "user499@bigco.vn"
+      }
+    ],
+    "internalDomain": "allow",
+    "order": {
+      "to": [
+        "user001@bigco.vn",
+        "user002@bigco.vn",
+        "user003@bigco.vn",
+        "user004@bigco.vn",
+        "user005@bigco.vn",
+        "user006@bigco.vn",
+        "user007@bigco.vn",
+        "user008@bigco.vn",
+        "user009@bigco.vn",
+        "user010@bigco.vn",
+        "user011@bigco.vn",
+        "user012@bigco.vn",
+        "user013@bigco.vn",
+        "user014@bigco.vn",
+        "user015@bigco.vn",
+        "user016@bigco.vn",
+        "user017@bigco.vn",
+        "user018@bigco.vn",
+        "user019@bigco.vn",
+        "user020@bigco.vn",
+        "user021@bigco.vn",
+        "user022@bigco.vn",
+        "user023@bigco.vn",
+        "user024@bigco.vn",
+        "user025@bigco.vn",
+        "user026@bigco.vn",
+        "user027@bigco.vn",
+        "user028@bigco.vn",
+        "user029@bigco.vn",
+        "user030@bigco.vn",
+        "user031@bigco.vn",
+        "user032@bigco.vn",
+        "user033@bigco.vn",
+        "user034@bigco.vn",
+        "user035@bigco.vn",
+        "user036@bigco.vn",
+        "user037@bigco.vn",
+        "user038@bigco.vn",
+        "user039@bigco.vn",
+        "user040@bigco.vn",
+        "user041@bigco.vn",
+        "user042@bigco.vn",
+        "user043@bigco.vn",
+        "user044@bigco.vn",
+        "user045@bigco.vn",
+        "user046@bigco.vn",
+        "user047@bigco.vn",
+        "user048@bigco.vn",
+        "user049@bigco.vn",
+        "user050@bigco.vn",
+        "user051@bigco.vn",
+        "user052@bigco.vn",
+        "user053@bigco.vn",
+        "user054@bigco.vn",
+        "user055@bigco.vn",
+        "user056@bigco.vn",
+        "user057@bigco.vn",
+        "user058@bigco.vn",
+        "user059@bigco.vn",
+        "user060@bigco.vn",
+        "user061@bigco.vn",
+        "user062@bigco.vn",
+        "user063@bigco.vn",
+        "user064@bigco.vn",
+        "user065@bigco.vn",
+        "user066@bigco.vn",
+        "user067@bigco.vn",
+        "user068@bigco.vn",
+        "user069@bigco.vn",
+        "user070@bigco.vn",
+        "user071@bigco.vn",
+        "user072@bigco.vn",
+        "user073@bigco.vn",
+        "user074@bigco.vn",
+        "user075@bigco.vn",
+        "user076@bigco.vn",
+        "user077@bigco.vn",
+        "user078@bigco.vn",
+        "user079@bigco.vn",
+        "user080@bigco.vn",
+        "user081@bigco.vn",
+        "user082@bigco.vn",
+        "user083@bigco.vn",
+        "user084@bigco.vn",
+        "user085@bigco.vn",
+        "user086@bigco.vn",
+        "user087@bigco.vn",
+        "user088@bigco.vn",
+        "user089@bigco.vn",
+        "user090@bigco.vn",
+        "user091@bigco.vn",
+        "user092@bigco.vn",
+        "user093@bigco.vn",
+        "user094@bigco.vn",
+        "user095@bigco.vn",
+        "user096@bigco.vn",
+        "user097@bigco.vn",
+        "user098@bigco.vn",
+        "user099@bigco.vn",
+        "user100@bigco.vn",
+        "user101@bigco.vn",
+        "user102@bigco.vn",
+        "user103@bigco.vn",
+        "user104@bigco.vn",
+        "user105@bigco.vn",
+        "user106@bigco.vn",
+        "user107@bigco.vn",
+        "user108@bigco.vn",
+        "user109@bigco.vn",
+        "user110@bigco.vn",
+        "user111@bigco.vn",
+        "user112@bigco.vn",
+        "user113@bigco.vn",
+        "user114@bigco.vn",
+        "user115@bigco.vn",
+        "user116@bigco.vn",
+        "user117@bigco.vn",
+        "user118@bigco.vn",
+        "user119@bigco.vn",
+        "user120@bigco.vn",
+        "user121@bigco.vn",
+        "user122@bigco.vn",
+        "user123@bigco.vn",
+        "user124@bigco.vn",
+        "user125@bigco.vn",
+        "user126@bigco.vn",
+        "user127@bigco.vn",
+        "user128@bigco.vn",
+        "user129@bigco.vn",
+        "user130@bigco.vn",
+        "user131@bigco.vn",
+        "user132@bigco.vn",
+        "user133@bigco.vn",
+        "user134@bigco.vn",
+        "user135@bigco.vn",
+        "user136@bigco.vn",
+        "user137@bigco.vn",
+        "user138@bigco.vn",
+        "user139@bigco.vn",
+        "user140@bigco.vn",
+        "user141@bigco.vn",
+        "user142@bigco.vn",
+        "user143@bigco.vn",
+        "user144@bigco.vn",
+        "user145@bigco.vn",
+        "user146@bigco.vn",
+        "user147@bigco.vn",
+        "user148@bigco.vn",
+        "user149@bigco.vn",
+        "user150@bigco.vn",
+        "user151@bigco.vn",
+        "user152@bigco.vn",
+        "user153@bigco.vn",
+        "user154@bigco.vn",
+        "user155@bigco.vn",
+        "user156@bigco.vn",
+        "user157@bigco.vn",
+        "user158@bigco.vn",
+        "user159@bigco.vn",
+        "user160@bigco.vn",
+        "user161@bigco.vn",
+        "user162@bigco.vn",
+        "user163@bigco.vn",
+        "user164@bigco.vn",
+        "user165@bigco.vn",
+        "user166@bigco.vn",
+        "user167@bigco.vn",
+        "user168@bigco.vn",
+        "user169@bigco.vn",
+        "user170@bigco.vn",
+        "user171@bigco.vn",
+        "user172@bigco.vn",
+        "user173@bigco.vn",
+        "user174@bigco.vn",
+        "user175@bigco.vn",
+        "user176@bigco.vn",
+        "user177@bigco.vn",
+        "user178@bigco.vn",
+        "user179@bigco.vn",
+        "user180@bigco.vn",
+        "user181@bigco.vn",
+        "user182@bigco.vn",
+        "user183@bigco.vn",
+        "user184@bigco.vn",
+        "user185@bigco.vn",
+        "user186@bigco.vn",
+        "user187@bigco.vn",
+        "user188@bigco.vn",
+        "user189@bigco.vn",
+        "user190@bigco.vn",
+        "user191@bigco.vn",
+        "user192@bigco.vn",
+        "user193@bigco.vn",
+        "user194@bigco.vn",
+        "user195@bigco.vn",
+        "user196@bigco.vn",
+        "user197@bigco.vn",
+        "user198@bigco.vn",
+        "user199@bigco.vn",
+        "user200@bigco.vn"
+      ],
+      "cc": ["*"],
+      "bcc": []
+    },
+    "attachments": {
+      "tokens": ["BIG"],
+      "mode": "any",
+      "ignoreInline": true,
+      "exemptExtensions": [".ics", ".vcf"]
+    },
+    "policy": {
+      "outsider": "warn",
+      "missingToken": "warn",
+      "foreignRingToken": "warn",
+      "lookalike": "warn",
+      "firstTime": "warn",
+      "fieldRule": "warn"
+    },
+    "fieldRules": [],
+    "firstTimeCheck": true,
+    "expiresAt": null
+  }
+]

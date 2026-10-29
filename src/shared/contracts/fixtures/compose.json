@@ -1,0 +1,254 @@
+[
+  {
+    "name": "clean-alpha",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[ALPHA] Báo cáo tuần",
+      "to": [
+        {
+          "address": "cfo@abccorp.vn",
+          "displayName": "CFO ABC",
+          "resolved": true
+        }
+      ],
+      "cc": [
+        {
+          "address": "kt@partner.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "bcc": [],
+      "attachments": [
+        {
+          "name": "ALPHA_report.xlsx",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8ALPHA000000000001"
+    }
+  },
+  {
+    "name": "outsider-bcc",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[ALPHA] Báo cáo tuần",
+      "to": [
+        {
+          "address": "cfo@abccorp.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "cc": [],
+      "bcc": [
+        {
+          "address": "x@gmail.com",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "attachments": [
+        {
+          "name": "ALPHA_report.xlsx",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8ALPHA000000000001"
+    }
+  },
+  {
+    "name": "lookalike-domain",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[ALPHA] Update",
+      "to": [
+        {
+          "address": "cfo@abcc0rp.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "cc": [],
+      "bcc": [],
+      "attachments": [
+        {
+          "name": "ALPHA_x.xlsx",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8ALPHA000000000001"
+    }
+  },
+  {
+    "name": "cyrillic-homograph",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[ALPHA] Update",
+      "to": [
+        {
+          "address": "cfo@аbccorp.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "cc": [],
+      "bcc": [],
+      "attachments": [
+        {
+          "name": "ALPHA_x.xlsx",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8ALPHA000000000001"
+    }
+  },
+  {
+    "name": "foreign-ring-token",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[ALPHA] Draft",
+      "to": [
+        {
+          "address": "cfo@abccorp.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "cc": [],
+      "bcc": [],
+      "attachments": [
+        {
+          "name": "BETA_draft.docx",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8ALPHA000000000001"
+    }
+  },
+  {
+    "name": "missing-token",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[ALPHA] Draft",
+      "to": [
+        {
+          "address": "cfo@abccorp.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "cc": [],
+      "bcc": [],
+      "attachments": [
+        {
+          "name": "report.xlsx",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8ALPHA000000000001"
+    }
+  },
+  {
+    "name": "field-rule-violation",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[DELTA] Hồ sơ",
+      "to": [
+        {
+          "address": "a@deltaco.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "cc": [],
+      "bcc": [
+        {
+          "address": "b@deltaco.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "attachments": [
+        {
+          "name": "DELTA_hoso.pdf",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8DELTA000000000004"
+    }
+  },
+  {
+    "name": "first-time-recipient",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[ALPHA] Hello",
+      "to": [
+        {
+          "address": "new.person@abccorp.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "cc": [],
+      "bcc": [],
+      "attachments": [
+        {
+          "name": "ALPHA_a.xlsx",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8ALPHA000000000001"
+    }
+  },
+  {
+    "name": "no-ring",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "Quick question",
+      "to": [
+        {
+          "address": "cfo@abccorp.vn",
+          "displayName": "",
+          "resolved": true
+        }
+      ],
+      "cc": [],
+      "bcc": [],
+      "attachments": [],
+      "ringId": null
+    }
+  },
+  {
+    "name": "unresolved-recipient",
+    "snapshot": {
+      "from": "an.nguyen@auditfirm.vn",
+      "subject": "[ALPHA] Hi",
+      "to": [
+        {
+          "address": "",
+          "displayName": "Nguyễn Văn A",
+          "resolved": false
+        }
+      ],
+      "cc": [],
+      "bcc": [],
+      "attachments": [
+        {
+          "name": "ALPHA_a.xlsx",
+          "isInline": false,
+          "kind": "file"
+        }
+      ],
+      "ringId": "01JBX4Q8ALPHA000000000001"
+    }
+  }
+]
