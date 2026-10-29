@@ -8,8 +8,8 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 
 | ID | Stage | Task | Depends on | Est. | Status |
 |---|---|---|---|---|---|
-| CL-00 | S0 | Repo scaffold (`yo office`, TS strict, ESLint, Vitest, workspaces), `npm run verify`, CI with path guard + i18n key check | — | 2–3 | In QA |
-| CL-01 | S0 | Technical spikes 1–7 (PO executes Outlook steps on Windows, incl. 5-day sideload stability log) | CL-00 | 3–4 | Draft |
+| CL-00 | S0 | Repo scaffold (`yo office`, TS strict, ESLint, Vitest, workspaces), `npm run verify`, CI with path guard + i18n key check | — | 2–3 | Done |
+| CL-01 | S0 | Technical spikes 1–7 (PO executes Outlook steps on Windows, incl. 5-day sideload stability log) | CL-00 | 3–4 | Ready |
 | CL-02 | S1 | **Contract v1**: types, `OfficeAdapter`, `StorageAdapter`, `MockOfficeAdapter`, fixtures, i18n key list → tag `contract-v1` | CL-00 | 2–3 | Draft |
 | CL-03 | S1 | Core: `normalize`, `match`, `order`, `attachments` | CL-02 | 2–3 | Draft |
 | CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | Draft |
@@ -59,3 +59,5 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-10-29 | Board created; AG-01 card written (Draft, awaiting PO approval) |
 | 2026-10-29 | Plan v1.0 approved (G0). AG-01 → Ready. D-17 approved → AG-12 in scope. E-3, E-8 added to CL-05 |
 | 2026-10-29 | CL-00 PR opened (Web Add-in platform confirmed by PO; scaffold hand-written, no `yo office`) → In QA |
+| 2026-10-29 | CL-00 merged (PR #2) → Done. CL-01 card written (Draft, awaiting PO approval; Q1–Q3 answered) |
+| 2026-10-29 | PO approved CL-01 → Ready (starts after PR #3 merges) |
