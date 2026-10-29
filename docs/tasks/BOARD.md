@@ -59,4 +59,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-10-29 | Board created; AG-01 card written (Draft, awaiting PO approval) |
 | 2026-10-29 | Plan v1.0 approved (G0). AG-01 → Ready. D-17 approved → AG-12 in scope. E-3, E-8 added to CL-05 |
 | 2026-10-29 | CL-00 PR opened (Web Add-in platform confirmed by PO; scaffold hand-written, no `yo office`) → In QA |
-| 2026-10-29 | CL-00 merged (PR #2) → Done. CL-01 card written (Draft, awaiting PO approval; open questions Q1–Q3) |
+| 2026-10-29 | CL-00 merged (PR #2) → Done. CL-01 card written (Draft, awaiting PO approval; Q1–Q3 answered) |
