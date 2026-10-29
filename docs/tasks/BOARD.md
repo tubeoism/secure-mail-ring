@@ -65,3 +65,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-10-29 | CL-02 card written (Draft, awaiting PO decisions Q1–Q3 and approval) |
 | 2026-10-29 | CL-02 contract code delivered (PR open) → In QA; tag `contract-v1` after PO merge and sign-off |
 | 2026-10-29 | CL-02 merged (PR #6) → Done. Contract v1 published at merge commit dda04bb; tag `contract-v1` pending (the session cannot push tags; PO or a permitted session creates it). AG-01 dependencies are Done |
+| 2026-10-29 | CL-03 card written (Draft, awaiting PO decisions Q1–Q3 and approval) |
