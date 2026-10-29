@@ -5,6 +5,7 @@ import {
   domainLabels,
   normalizeAddress,
   normalizeDomain,
+  punycodeDecode,
   punycodeEncode,
   splitAddress,
   toAsciiLabel,
@@ -378,5 +379,57 @@ describe("splitAddress", () => {
 describe("domainLabels", () => {
   it("lists labels right to left", () => {
     expect(domainLabels("mail.abccorp.vn")).toEqual(["vn", "abccorp", "mail"]);
+  });
+});
+
+describe("punycodeDecode", () => {
+  it.each(RFC_VECTORS)("decodes the RFC 3492 sample: %s", (_name, input, encoded) => {
+    expect(punycodeDecode(encoded)).toBe(input);
+  });
+
+  it("round-trips random labels (property)", () => {
+    fc.assert(
+      fc.property(fc.string({ unit: "binary", maxLength: 40 }), (label) => {
+        const scalar = [...label].filter((c) => {
+          const cp = c.codePointAt(0) ?? 0;
+          return cp < 0xd800 || cp > 0xdfff;
+        });
+        const clean = scalar.join("");
+        expect(punycodeDecode(punycodeEncode(clean))).toBe(clean);
+      }),
+      { numRuns: 500 },
+    );
+  });
+
+  it("handles delimiters and ASCII-only input", () => {
+    expect(punycodeDecode("abc-")).toBe("abc");
+    expect(punycodeDecode("")).toBe("");
+    expect(punycodeDecode("a-ba")).toBe("a\u0080");
+    expect(punycodeDecode("-a")).toBe("\u0080");
+  });
+
+  it("decodes upper-case digits like lower-case ones", () => {
+    expect(punycodeDecode("bcher-KVA")).toBe(punycodeDecode("bcher-kva"));
+    expect(punycodeDecode("bcher-kva")).toBe("bücher");
+  });
+
+  it.each([
+    ["non-ASCII before the delimiter", "é-abc"],
+    ["character outside the alphabet", "abc-!!"],
+    ["truncated delta", "abc-9"],
+    ["overflowing delta", "9".repeat(20)],
+    ["code point above U+10FFFF", "99999999a"],
+  ])("returns null for %s", (_name, input) => {
+    expect(punycodeDecode(input)).toBeNull();
+  });
+
+  it("never throws on arbitrary input (property)", () => {
+    fc.assert(
+      fc.property(fc.string({ maxLength: 40 }), (input) => {
+        const result = punycodeDecode(input);
+        expect(result === null || typeof result === "string").toBe(true);
+      }),
+      { numRuns: 500 },
+    );
   });
 });
