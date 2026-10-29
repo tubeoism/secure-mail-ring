@@ -27,8 +27,20 @@ export default tseslint.config(
     },
   },
   {
-    files: ["scripts/**/*.mjs", "build/**"],
-    languageOptions: { globals: { process: "readonly", console: "readonly" } },
+    files: ["spikes/public/**/*.js"],
+    languageOptions: {
+      sourceType: "script",
+      globals: {
+        Office: "readonly",
+        document: "readonly",
+        crypto: "readonly",
+        window: "readonly",
+      },
+    },
+  },
+  {
+    files: ["scripts/**/*.mjs", "build/**", "spikes/*.mjs"],
+    languageOptions: { globals: { process: "readonly", console: "readonly", URL: "readonly" } },
     rules: { "no-console": "off" },
   },
 );
