@@ -62,3 +62,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-10-29 | CL-00 merged (PR #2) → Done. CL-01 card written (Draft, awaiting PO approval; Q1–Q3 answered) |
 | 2026-10-29 | PO approved CL-01 → Ready (starts after PR #3 merges) |
 | 2026-10-29 | CL-01 harness and runbook delivered (PR open) → In progress; waiting on PO execution of spikes |
+| 2026-10-29 | CL-02 card written (Draft, awaiting PO decisions Q1–Q3 and approval) |
