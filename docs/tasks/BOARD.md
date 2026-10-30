@@ -11,8 +11,8 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-00 | S0 | Repo scaffold (`yo office`, TS strict, ESLint, Vitest, workspaces), `npm run verify`, CI with path guard + i18n key check | — | 2–3 | Done |
 | CL-01 | S0 | Technical spikes 1–7 (PO executes Outlook steps on Windows, incl. 5-day sideload stability log) | CL-00 | 3–4 | In progress |
 | CL-02 | S1 | **Contract v1**: types, `OfficeAdapter`, `StorageAdapter`, `MockOfficeAdapter`, fixtures, i18n key list → tag `contract-v1` | CL-00 | 2–3 | Done |
-| CL-03 | S1 | Core: `normalize`, `match`, `order`, `attachments` | CL-02 | 2–3 | In QA |
-| CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | Draft |
+| CL-03 | S1 | Core: `normalize`, `match`, `order`, `attachments` | CL-02 | 2–3 | Done |
+| CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | In QA |
 | CL-05 | S1 | Core: `policy`, `codec`, `license`, `importVerify`, `diff`, ring suggestion (E-3), ring expiry (E-8), heartbeat payload builder | CL-02 | 2–3 | Draft |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
 | CL-07 | S3 | Compose events: `OnNewMessageCompose`, recipients/attachments changed, ring binding (`sessionData` + custom property) | CL-06 | 2–3 | Draft |
@@ -69,3 +69,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-10-29 | PO approved CL-03 (Q1–Q3 yes) → Ready → In progress |
 | 2026-10-29 | CL-03 code delivered (PR open) → In QA |
 | 2026-10-29 | Board correction: CL-04, CL-05 and AG-07 had been set to In QA/Done by a batch edit made with the CL-02 commits; nothing was delivered for them. Reset to Draft. CL-03 moved from the stale Done to In QA |
+| 2026-10-29 | CL-03 merged (PR #9) → Done. Real `sortRecipients` and `findShadowedPatterns` are live in the contracts `core`; Antigravity advisory review of PR #9 not yet recorded |
+| 2026-10-29 | CL-04 card written (Draft, awaiting PO decisions Q1–Q3 and approval) |
+| 2026-10-29 | PO approved CL-04 (Q1–Q3 yes) → Ready → In progress |
+| 2026-10-29 | CL-04 code delivered (PR open) → In QA |

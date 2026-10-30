@@ -28,7 +28,7 @@ export function parsePattern(raw: string): OrderPattern | null {
   return compileMember({ kind: text.includes("@") ? "address" : "domain", value: text });
 }
 
-const matches = (pattern: OrderPattern | null, entry: RecipientEntry): boolean => {
+export const matchesPattern = (pattern: OrderPattern | null, entry: RecipientEntry): boolean => {
   if (pattern === null) return false;
   if (pattern.kind === "rest") return true;
   const parsed = splitAddress(entry.address);
@@ -37,7 +37,7 @@ const matches = (pattern: OrderPattern | null, entry: RecipientEntry): boolean =
 
 /** Index of the first matching pattern, or `patterns.length` when none matches. */
 export function rankRecipient(patterns: readonly (OrderPattern | null)[], entry: RecipientEntry) {
-  const first = patterns.findIndex((p) => matches(p, entry));
+  const first = patterns.findIndex((p) => matchesPattern(p, entry));
   return first < 0 ? patterns.length : first;
 }
 
@@ -116,7 +116,7 @@ export const createSortRecipients =
 export const sortRecipients = createSortRecipients(sortField);
 
 // Values of different kinds never collide: only addresses contain "@".
-const covers = (earlier: OrderPattern, later: OrderPattern): boolean => {
+export const covers = (earlier: OrderPattern, later: OrderPattern): boolean => {
   if (earlier.kind === "rest") return true;
   if (later.kind === "rest") return false;
   switch (earlier.kind) {

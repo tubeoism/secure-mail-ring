@@ -19,3 +19,32 @@ export {
   type AttachmentCheck,
   type AttachmentStatus,
 } from "./attachments";
+export {
+  findLookalikes,
+  skeleton,
+  splitRegistrable,
+  type LookalikeInput,
+  type LookalikeMatch,
+  type LookalikeReference,
+  type LookalikeRule,
+  type Registrable,
+} from "./lookalike";
+export {
+  emptyHistory,
+  findFirstTimeRecipients,
+  historyStats,
+  isLearning,
+  mightContain,
+  openHistory,
+  parseKnownAddresses,
+  recordAddresses,
+  type FirstTimeInput,
+  type FirstTimeRecipient,
+  type HistoryReader,
+  type HistoryStats,
+} from "./history";
+export {
+  detectFieldRuleConflicts,
+  evaluateFieldRules,
+  type FieldRuleViolation,
+} from "./fieldRules";

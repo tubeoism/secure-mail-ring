@@ -65,6 +65,55 @@ export function punycodeEncode(input: string): string {
   return out;
 }
 
+const digitValue = (code: number) =>
+  code >= 48 && code <= 57
+    ? code - 22
+    : code >= 97 && code <= 122
+      ? code - 97
+      : code >= 65 && code <= 90
+        ? code - 65
+        : -1;
+
+const MAX_DECODED = 0x7fffffff;
+
+/** RFC 3492 decoder for one label without the `xn--` prefix; null when the input is not valid. */
+export function punycodeDecode(input: string): string | null {
+  const delimiter = input.lastIndexOf("-");
+  const out: number[] = [];
+  for (const ch of input.slice(0, Math.max(delimiter, 0))) {
+    const cp = ch.codePointAt(0) ?? 0;
+    if (cp >= 128) return null;
+    out.push(cp);
+  }
+  let n = INITIAL_N;
+  let i = 0;
+  let bias = INITIAL_BIAS;
+  let index = delimiter + 1;
+  while (index < input.length) {
+    const oldI = i;
+    let weight = 1;
+    for (let k = BASE; ; k += BASE) {
+      if (index >= input.length) return null;
+      const d = digitValue(input.charCodeAt(index));
+      index += 1;
+      if (d < 0) return null;
+      i += d * weight;
+      if (i > MAX_DECODED) return null;
+      const t = k <= bias ? T_MIN : k >= bias + T_MAX ? T_MAX : k - bias;
+      if (d < t) break;
+      weight *= BASE - t;
+    }
+    const length = out.length + 1;
+    bias = adapt(i - oldI, length, oldI === 0);
+    n += Math.floor(i / length);
+    i %= length;
+    if (n > 0x10ffff || (n >= 0xd800 && n <= 0xdfff)) return null;
+    out.splice(i, 0, n);
+    i += 1;
+  }
+  return out.map((cp) => String.fromCodePoint(cp)).join("");
+}
+
 const isAscii = (s: string) => {
   for (let i = 0; i < s.length; i += 1) if (s.charCodeAt(i) > 127) return false;
   return true;

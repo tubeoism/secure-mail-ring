@@ -9,6 +9,15 @@ describe("contracts core (CL-03)", () => {
     expect(core.mergePolicy).toBe(stubCore.mergePolicy);
   });
 
+  it("uses the real field-rule conflict detection", () => {
+    expect(core.detectFieldRuleConflicts).not.toBe(stubCore.detectFieldRuleConflicts);
+    const rules = [
+      { pattern: "p.vn", type: "mustBeIn", field: "cc" },
+      { pattern: "x@p.vn", type: "mustNotBeIn", field: "cc" },
+    ] as const;
+    expect(core.detectFieldRuleConflicts(rules)).toHaveLength(1);
+  });
+
   it("reports shadowed patterns by first-match-wins", () => {
     expect(core.findShadowedPatterns(["*.x.vn", "x.vn"])).toEqual([]);
     expect(core.findShadowedPatterns(["*", "x.vn"])).toEqual([{ shadowed: "x.vn", by: "*" }]);
