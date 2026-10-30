@@ -12,11 +12,12 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-01 | S0 | Technical spikes 1–7 (PO executes Outlook steps on Windows, incl. 5-day sideload stability log) | CL-00 | 3–4 | In progress |
 | CL-02 | S1 | **Contract v1**: types, `OfficeAdapter`, `StorageAdapter`, `MockOfficeAdapter`, fixtures, i18n key list → tag `contract-v1` | CL-00 | 2–3 | Done |
 | CL-03 | S1 | Core: `normalize`, `match`, `order`, `attachments` | CL-02 | 2–3 | Done |
-| CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | In QA |
-| CL-05 | S1 | Core: `policy`, `codec`, `license`, `importVerify`, `diff`, ring suggestion (E-3), ring expiry (E-8), heartbeat payload builder | CL-02 | 2–3 | Draft |
+| CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | Done |
+| CL-05 | S1 | Core decision engine: `policy` (floor, Strict preset), `evaluate`, fingerprint + acknowledgement key, `diff`, ring suggestion (E-3), ring expiry (E-8) | CL-02, CL-03, CL-04 | 1–2 | Draft |
+| CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Draft (card after CL-05) |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
 | CL-07 | S3 | Compose events: `OnNewMessageCompose`, recipients/attachments changed, ring binding (`sessionData` + custom property) | CL-06 | 2–3 | Draft |
-| CL-08 | S4 | `OnMessageSend` handler: evaluation, Warn/Acknowledge/Block, ack verification, reorder with invariant, Bloom write | CL-03, CL-04, CL-05, CL-07 | 4–6 | Draft |
+| CL-08 | S4 | `OnMessageSend` handler: evaluation, Warn/Acknowledge/Block, ack verification, reorder with invariant, Bloom write | CL-03, CL-04, CL-05, CL-05B, CL-07 | 4–6 | Draft |
 | CL-09 | S6 | Domain lock (hashed), obfuscation profile, post-build check, hosting + deploy pipeline | CL-08 | 3–4 | Draft |
 | CL-10 | S7–S8 | Release, integration test plan + evidence review, pilot metrics, control description (EN) | CL-09 | 2–3 | Draft |
 | CL-QA | all | QA of every AG PR (`docs/agents/qa-checklist.md`), CCR handling | — | 3–5 | Ongoing |
@@ -35,9 +36,9 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | AG-07 | S2 | i18n catalog `vi` + `en` for every key in `contract-v1` | CL-02 | 1 | Draft |
 | AG-08 | S3 | Compose pane: ring picker, suggested ring, "Sort now" button | AG-03, CL-07 | 1–2 | Draft |
 | AG-09 | S4 | Acknowledge pane: findings with per-item tick, confirm flow | AG-08, CL-08 | 1–2 | Draft |
-| AG-10 | S5 | Export / share: code block, copy, "Share with colleagues", share-email template | AG-03, CL-05 | 1–2 | Draft |
-| AG-11 | S5 | Import: paste screen, diff preview with risk highlights, read-mode "Import from this email" with verification result | AG-10, CL-05, CL-06 | 2–3 | Draft |
-| AG-12 | S6 | Heartbeat worker (Cloudflare Worker) — D-17 approved | CL-05 | 1–2 | Draft |
+| AG-10 | S5 | Export / share: code block, copy, "Share with colleagues", share-email template | AG-03, CL-05B | 1–2 | Draft |
+| AG-11 | S5 | Import: paste screen, diff preview with risk highlights, read-mode "Import from this email" with verification result | AG-10, CL-05, CL-05B, CL-06 | 2–3 | Draft |
+| AG-12 | S6 | Heartbeat worker (Cloudflare Worker) — D-17 approved | CL-05B | 1–2 | Draft |
 | AG-13 | S7 | User docs (VI): install guide, user guide, FAQ, Wef-cache troubleshooting, 2-minute video script | AG-11 | 1–2 | Draft |
 | AG-14 | S8 | Rollout kit: announcement emails, key-user handbook, pilot feedback form | AG-13 | 1 | Draft |
 | | | **Feature total** | | **17–28** | |
@@ -73,3 +74,5 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-10-29 | CL-04 card written (Draft, awaiting PO decisions Q1–Q3 and approval) |
 | 2026-10-29 | PO approved CL-04 (Q1–Q3 yes) → Ready → In progress |
 | 2026-10-29 | CL-04 code delivered (PR open) → In QA |
+| 2026-10-30 | CL-04 merged (PR #10) → Done. Real `detectFieldRuleConflicts` is live in the contracts `core`; lookalike, history and field-rule evaluators are exported from `@smr/core` for CL-05 and CL-08. Antigravity advisory review of PRs #9 and #10 not yet recorded |
+| 2026-10-30 | CL-05 card drafted (Draft, awaiting PO answers to Q1–Q4). Old CL-05 split: decision engine stays CL-05, codec/license/importVerify/heartbeat payload become CL-05B; dependencies of CL-08, AG-10, AG-11, AG-12 updated. Open item G-1: `RingDiff` of contract-v1 omits `internalDomain`, `firstTimeCheck`, field rules and tokens; decide before AG-11 (see CL-05 Q4). Note for AG-07: `finding.lookalike` must read well when `ring` is empty (sender's own domain) |
