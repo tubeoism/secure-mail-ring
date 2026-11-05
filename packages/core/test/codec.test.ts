@@ -204,6 +204,30 @@ describe("codec: tolerance (FR-2.2)", () => {
     });
     expect(extractBody("nothing")).toEqual({ ok: false, error: { code: "malformed" } });
   });
+
+  // CL-05E (advisory review): a BEGIN line copied by mistake in front of the real block must not
+  // end up inside the body, and the first complete block still wins.
+  it("extractBody starts the block at the nearest BEGIN before the first END", () => {
+    const stray = `${BEGIN_MARKER}\nAAAA\n${BEGIN_MARKER}\nBBBB\n${END_MARKER}`;
+    expect(extractBody(stray)).toEqual({ ok: true, value: "BBBB" });
+    const two = `${BEGIN_MARKER}\nAAAA\n${END_MARKER}\n${BEGIN_MARKER}\nBBBB\n${END_MARKER}`;
+    expect(extractBody(two)).toEqual({ ok: true, value: "AAAA" });
+    const strayEnd = `${END_MARKER}\n${BEGIN_MARKER}\nCCCC\n${END_MARKER}`;
+    expect(extractBody(strayEnd)).toEqual({ ok: true, value: "CCCC" });
+    const noEnd = `${BEGIN_MARKER}\nAAAA\n${BEGIN_MARKER}\nBBBB`;
+    expect(extractBody(noEnd)).toEqual({ ok: false, error: { code: "malformed" } });
+  });
+
+  it("extractBody never returns a body that contains a marker (property)", () => {
+    const piece = fc.constantFrom(BEGIN_MARKER, END_MARKER, "AAAA", "\n", " > ", "-----");
+    fc.assert(
+      fc.property(fc.array(piece, { maxLength: 12 }), (parts) => {
+        const r = extractBody(parts.join(""));
+        if (r.ok) expect(r.value).not.toMatch(/BEGINMAILRING|ENDMAILRING/);
+      }),
+      { numRuns: 500 },
+    );
+  });
 });
 
 describe("codec: tampering", () => {

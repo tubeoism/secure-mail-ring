@@ -35,28 +35,71 @@ interface Result8601 {
   readonly props: ReadonlyMap<string, string>;
 }
 
-/** Removes RFC 5322 comments (nested parentheses). An unbalanced comment drops the rest. */
+/**
+ * Removes RFC 5322 comments (nested parentheses). An unbalanced comment drops the rest. A quoted
+ * string is kept whole: parentheses inside it are text, not comments.
+ */
 function stripComments(text: string): string {
   let depth = 0;
+  let quoted = false;
   let out = "";
   for (let i = 0; i < text.length; i += 1) {
     const ch = text.charAt(i);
-    if (ch === "\\" && depth > 0) i += 1;
+    if (quoted) {
+      out += ch;
+      if (ch === "\\") {
+        out += text.charAt(i + 1);
+        i += 1;
+      } else if (ch === '"') quoted = false;
+    } else if (ch === "\\" && depth > 0) i += 1;
     else if (ch === "(") depth += 1;
     else if (ch === ")") depth = Math.max(0, depth - 1);
-    else if (depth === 0) out += ch;
+    else if (depth === 0) {
+      out += ch;
+      if (ch === '"') quoted = true;
+    }
   }
   return out;
 }
 
+/**
+ * Splits at a separator character that is not inside a quoted string. A server may reflect text
+ * the sender chose (the `smtp.mailfrom` local part) as a quoted string, so a `;` or a space inside
+ * quotes must never start a new result or a new property: that would let a sender write a
+ * `dkim=pass` into the header (found by the CL-05B advisory re-review).
+ */
+function splitOutsideQuotes(text: string, separator: string): string[] {
+  const parts: string[] = [];
+  let current = "";
+  let quoted = false;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text.charAt(i);
+    if (quoted) {
+      current += ch;
+      if (ch === "\\") {
+        current += text.charAt(i + 1);
+        i += 1;
+      } else if (ch === '"') quoted = false;
+    } else if (ch === separator) {
+      parts.push(current);
+      current = "";
+    } else {
+      current += ch;
+      if (ch === '"') quoted = true;
+    }
+  }
+  parts.push(current);
+  return parts;
+}
+
 /** Method results of one header value: `dkim=pass header.d=example.com; dmarc=pass ...`. */
 export function parseAuthenticationResults(value: string): Result8601[] {
-  const parts = stripComments(value).replace(/\s+/g, " ").split(";");
+  const parts = splitOutsideQuotes(stripComments(value).replace(/\s+/g, " "), ";");
   const out: Result8601[] = [];
   // A part that is not `method=result` is the authserv-id (and its version) and is skipped. Some
   // servers, Exchange Online among them, write no authserv-id, so every part is looked at.
   for (const part of parts) {
-    const tokens = part.split(" ").filter((t) => t !== "");
+    const tokens = splitOutsideQuotes(part, " ").filter((t) => t !== "");
     const head = /^([A-Za-z][A-Za-z0-9-]*)=([A-Za-z]+)$/.exec(tokens[0] ?? "");
     if (!head) continue;
     const [, method = "", result = ""] = head;
