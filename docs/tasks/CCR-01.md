@@ -4,7 +4,7 @@
 |---|---|
 | Raised by | Antigravity |
 | Raised from card | AG-01B |
-| Status | Open |
+| Status | Accepted |
 | Contract version | from `contract-v1` to `contract-v3` |
 
 ## Need
@@ -24,4 +24,4 @@ Add the following 4 keys to `I18N_KEYS`:
 In `src/taskpane/screens/SettingsScreen.tsx` and `src/taskpane/screens/ShareScreen.tsx`, distinct descriptive strings are kept in a local `CCR_STRINGS` constant and passed via JSX expressions (`aria-label={CCR_STRINGS.domainA}`), keeping screen-reader names accurate without triggering the raw literal attribute check `aria-label="[A-Za-z]`. Once the lead publishes these keys in `contract-v3` (tracked in `CL-05D`), they will be switched to `t(...)`.
 
 ## Lead decision
-(Lead fills in: accepted shape and tag, or rejection with reason and alternative.)
+Accepted as proposed (2026-11-05). The four keys and their meaning go into the scope of CL-05D and ship with `contract-v3`; the `vi` and `en` texts in the table above are the starting values for AG-07. Antigravity switches `CCR_STRINGS` in `SettingsScreen.tsx` and `ShareScreen.tsx` to `t(...)` after the tag, in the card that touches those screens next.
