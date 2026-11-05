@@ -12,6 +12,9 @@ export const LEAD_OWNED = [
   /^(AGENTS\.md|CLAUDE\.md|project_plan\.md)$/,
   /^\.agents\//,
   /^docs\/agents\//,
+  /^\.claude\//,
+  /^\.mcp\.json$/,
+  /^scripts\//,
 ];
 
 export function violations(files) {

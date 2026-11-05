@@ -6,3 +6,4 @@ coverage/
 .env*
 .stryker-tmp/
 reports/
+.tools/

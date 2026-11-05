@@ -11,6 +11,17 @@ describe("path guard", () => {
       3,
     );
   });
+
+  it("treats the Antigravity bridge configuration as lead-owned (CL-11)", () => {
+    expect(
+      violations([
+        ".mcp.json",
+        ".claude/settings.json",
+        ".claude/agents/a.md",
+        "scripts/agy-guard.mjs",
+      ]),
+    ).toHaveLength(4);
+  });
 });
 
 describe("i18n check", () => {
