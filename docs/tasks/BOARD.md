@@ -16,6 +16,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-04B | S1 | Fix F-1 of the advisory review: registrable-domain heuristic for `.id.vn`, `.io.vn`, `.biz.vn` and similar national sub-domains | CL-04 | 0.5 | Done |
 | CL-05 | S1 | Core decision engine: `policy` (floor, Strict preset), `evaluate`, fingerprint + acknowledgement key, `diff`, ring suggestion (E-3), ring expiry (E-8) | CL-02, CL-03, CL-04 | 1–2 | Done |
 | CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Ready (starts after CL-05, PR #19, merges) |
+| CL-04C | S1 | Fix to CL-04 test setup: Vitest `testTimeout` 30 s so the Stryker dry run no longer aborts on the Bloom tests | CL-04 | 0.25 | In QA |
 | CL-04D | S1 | Process fix: board change log becomes one file per PR (`docs/tasks/changelog/`), so parallel PRs stop conflicting on `BOARD.md` | — | 0.25 | In QA |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
 | CL-07 | S3 | Compose events: `OnNewMessageCompose`, recipients/attachments changed, ring binding (`sessionData` + custom property) | CL-06 | 2–3 | Draft |

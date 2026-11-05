@@ -24,7 +24,7 @@ Parallel PRs stop conflicting on `docs/tasks/BOARD.md`. The PO asked for it in t
 4. `CLAUDE.md` responsibility 6 states the same in one sentence.
 
 ## Acceptance criteria
-- [x] AC-1 No row of the old change log is lost: 38 data rows on `main`, the same 38 in `CHANGELOG.md` (sorted `diff` empty).
+- [x] AC-1 No row of the old change log is lost: 39 data rows on `main` (after CL-04C), the same 39 in `CHANGELOG.md` (sorted `diff` empty).
 - [x] AC-2 Two scratch branches each adding a new file under `docs/tasks/changelog/` merge cleanly (`git merge-tree`, exit 0).
 - [x] AC-3 `npm run verify` passes.
 

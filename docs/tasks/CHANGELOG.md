@@ -1,6 +1,6 @@
 # Task Board change log (archive)
 
-Entries up to 2026-11-05 (before CL-04D). From card CL-04D on, every PR adds its own file under `docs/tasks/changelog/` instead of appending here, so parallel PRs no longer conflict. This file is closed: do not append.
+Entries up to and including CL-04C (2026-11-05). From card CL-04D on, every PR adds its own file under `docs/tasks/changelog/` instead of appending here, so parallel PRs no longer conflict. This file is closed: do not append.
 
 | Date | Change |
 |---|---|
@@ -42,3 +42,4 @@ Entries up to 2026-11-05 (before CL-04D). From card CL-04D on, every PR adds its
 | 2026-11-05 | PO approved AG-07 and the four answers of CL-05B ("Ok, go"). CL-05B → Ready, starts after CL-05 (PR #19) merges. AG-07 → Ready when PR #20 merges: it adds the placeholder check of `vi`/`en` to `scripts/i18n-check.mjs` and fixes that check, which did nothing on Windows |
 | 2026-11-05 | PO answered "Ok" to CL-05 Q1–Q4 (card approved, Ready → In progress). Delivered the same day → In QA: policy, evaluate, fingerprint + acknowledgement key, diff, ring suggestion, ring expiry; `createCore` now replaces every function except the codec. 485 tests, 100 % line coverage, mutation 94.31 %. Published fixtures left unchanged; three simplifications pinned in `evaluate.contract.test.ts` (CL-05 Notes). Advisory review by Antigravity still to be run from a session on the PO's machine |
 | 2026-11-05 | CL-05 merged (PR #19) → Done. `createCore` replaces every `CoreApi` function except `encodeRing`/`decodeRing`; the Antigravity advisory review, requested for a session on the PO's machine, is still to be recorded. CL-05B (Ready) can start |
+| 2026-11-05 | CL-04C written and implemented on the PO message "OK": the `mutation` job was red on `main` since CL-04 because the Stryker dry run timed out (5 s default) on the Bloom tests; `testTimeout` raised to 30 s → In QA |
