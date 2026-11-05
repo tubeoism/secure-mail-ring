@@ -29,6 +29,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-11 | S0 (tooling) | Antigravity bridge: project-scoped MCP, allow/deny hook, routing table in `CLAUDE.md`, T1–T6 validation. Off the critical path; not in the lead total | CL-00 | 1–2 | Done |
 | CL-12 | S0 (tooling) | Antigravity async job runner: background `agy-job` with stream-json liveness, idle/hard kill with partial output, guard on the shell route. Read-only; write mode waits for test T7. Off the critical path | CL-11 | 1 | Done |
 | CL-13 | S0 (tooling) | Agent toolkit: one versioned source for the `agy-bridge` plugin and the shared workflow content, a sync tool for vendoring into other repositories. Off the critical path | CL-11, CL-12 | 2–3 | In progress |
+| CL-14 | S1 (tooling) | Test tooling for the task pane: `jsdom`, `@testing-library/react`, `@testing-library/user-event`, per-folder Vitest environment, setup file and `renderApp` helper. Needed for AG-01B round 3 (QA finding M-2) | CL-00 | 0.5 | In QA |
 | CL-QA | all | QA of every AG PR (`docs/agents/qa-checklist.md`), CCR handling | — | 3–5 | Ongoing |
 | | | **Lead total** | | **29–43** | |
 
