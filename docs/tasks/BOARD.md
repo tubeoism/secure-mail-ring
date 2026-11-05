@@ -20,6 +20,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-08 | S4 | `OnMessageSend` handler: evaluation, Warn/Acknowledge/Block, ack verification, reorder with invariant, Bloom write | CL-03, CL-04, CL-05, CL-05B, CL-07 | 4–6 | Draft |
 | CL-09 | S6 | Domain lock (hashed), obfuscation profile, post-build check, hosting + deploy pipeline | CL-08 | 3–4 | Draft |
 | CL-10 | S7–S8 | Release, integration test plan + evidence review, pilot metrics, control description (EN) | CL-09 | 2–3 | Draft |
+| CL-11 | S0 (tooling) | Antigravity bridge: project-scoped MCP, allow/deny hook, routing table in `CLAUDE.md`, T1–T6 validation. Off the critical path; not in the lead total | CL-00 | 1–2 | Draft |
 | CL-QA | all | QA of every AG PR (`docs/agents/qa-checklist.md`), CCR handling | — | 3–5 | Ongoing |
 | | | **Lead total** | | **29–43** | |
 
@@ -76,3 +77,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-10-29 | CL-04 code delivered (PR open) → In QA |
 | 2026-10-30 | CL-04 merged (PR #10) → Done. Real `detectFieldRuleConflicts` is live in the contracts `core`; lookalike, history and field-rule evaluators are exported from `@smr/core` for CL-05 and CL-08. Antigravity advisory review of PRs #9 and #10 not yet recorded |
 | 2026-10-30 | CL-05 card drafted (Draft, awaiting PO answers to Q1–Q4). Old CL-05 split: decision engine stays CL-05, codec/license/importVerify/heartbeat payload become CL-05B; dependencies of CL-08, AG-10, AG-11, AG-12 updated. Open item G-1: `RingDiff` of contract-v1 omits `internalDomain`, `firstTimeCheck`, field rules and tokens; decide before AG-11 (see CL-05 Q4). Note for AG-07: `finding.lookalike` must read well when `ring` is empty (sender's own domain) |
+| 2026-11-05 | CL-11 card written (Draft, awaiting PO approval). PO decisions D-1 to D-6 recorded in the card, incl. read-only advisory review of core PRs through the bridge |
