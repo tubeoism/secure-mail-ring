@@ -37,7 +37,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | AG-04 | S2 | Ordering editor: 3-column drag-and-drop (To/CC/BCC), shadowed-pattern warnings from core | AG-03, CL-03 | 1–2 | Draft |
 | AG-05 | S2 | Field-rules editor (F8) with conflict display from core | AG-03, CL-04 | 1 | Draft |
 | AG-06 | S2 | Settings: global floor, lookalike exceptions, F7 learning mode + paste known addresses, storage meter, language, About (bundle + manifest version) | AG-01, CL-06 | 1–2 | Draft |
-| AG-07 | S2 | i18n catalog `vi` + `en` for every key in `contract-v1` | CL-02 | 1 | Draft |
+| AG-07 | S2 | i18n catalog `vi` + `en` for every key in `contract-v1` | CL-02 | 1 | Draft (card written, awaiting PO approval and CL-05 Q3) |
 | AG-08 | S3 | Compose pane: ring picker, suggested ring, "Sort now" button | AG-03, CL-07 | 1–2 | Draft |
 | AG-09 | S4 | Acknowledge pane: findings with per-item tick, confirm flow | AG-08, CL-08 | 1–2 | Draft |
 | AG-10 | S5 | Export / share: code block, copy, "Share with colleagues", share-email template | AG-03, CL-05B | 1–2 | Draft |
@@ -94,3 +94,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-11-05 | CL-13: repository `antigravity-agent-toolkit` created; first PR merged by the PO; tag `v0.1.0` and branch `stable` created on the PO "go". AC-1, AC-2, AC-4, AC-5 done (marketplace install tested and removed again); AC-3 tests pass. Open: AC-6, AC-7 and the migration PR (AC-8), which needs #14 merged first |
 | 2026-11-05 | PRs #13 (CL-11 close-out) and #14 (CL-12) merged by the PO → CL-12 Done. Conflicts of the CL-04B and CL-13 PRs with the new `main` resolved by merging `main` into their branches (BOARD only) |
 | 2026-11-05 | CL-13 migration: this repository now uses the agent toolkit (`v0.2.0`): scripts and generic agents removed, `.claude/agy-policy.json` added, plugin and marketplace declared in settings, workflow content synced, fail-closed tripwire registered. Finding: repository settings alone do not load the plugin in a headless run, so the tripwire (toolkit PR #2) keeps the rule where the plugin is absent; each machine installs the plugin once. AC-3, AC-8, AC-9 done; AC-6 and AC-7 open |
+| 2026-11-05 | Execution plan for the rest of v1.0 written (`docs/tasks/EXECUTION-PLAN.md`): waves, routing, what is blocked on the PO. Tag `contract-v1` pushed to the remote (it existed only locally). AG-07 card written (Draft). PR #17 merged by the PO |
