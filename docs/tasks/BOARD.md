@@ -13,6 +13,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-02 | S1 | **Contract v1**: types, `OfficeAdapter`, `StorageAdapter`, `MockOfficeAdapter`, fixtures, i18n key list → tag `contract-v1` | CL-00 | 2–3 | Done |
 | CL-03 | S1 | Core: `normalize`, `match`, `order`, `attachments` | CL-02 | 2–3 | Done |
 | CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | Done |
+| CL-04B | S1 | Fix F-1 of the advisory review: registrable-domain heuristic for `.id.vn`, `.io.vn`, `.biz.vn` and similar national sub-domains | CL-04 | 0.5 | In QA |
 | CL-05 | S1 | Core decision engine: `policy` (floor, Strict preset), `evaluate`, fingerprint + acknowledgement key, `diff`, ring suggestion (E-3), ring expiry (E-8) | CL-02, CL-03, CL-04 | 1–2 | Draft |
 | CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Draft (card after CL-05) |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
@@ -86,3 +87,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-11-05 | CL-12 card written and set In progress on the PO message "Ok, làm như đề xuất" (async runner first, then test T7). Delivered the same day → In QA: `scripts/agy-job.mjs`, shell-route guard, `CLAUDE.md` async section. Read-only; no skip-permissions. T7 confinement test not started |
 | 2026-11-05 | CL-12 test T7 done (40 agy runs in a temp lab): agy file tools read and write anywhere on disk in headless default mode; `--sandbox` and `--settings` allow-rules do not change that; only `--mode plan` blocks writes. Correction recorded in CL-11 Notes (D-3 "read-only" was wrong for the MCP tools). Runner now always uses plan mode; `CLAUDE.md` warns against `agy_ask` and `agy_research` until PO decides. No write mode is supported by the evidence |
 | 2026-11-05 | PO chose the more automated option for the MCP tools: community MCP bridge retired (CL-12 D-10). `.mcp.json` empty, hook refuses `mcp__antigravity__*`, subagents and `AGENTS.md` §9 now describe the runner. CL-11 note updated |
+| 2026-11-05 | CL-04B written and implemented on the PO message "Ok" (F-1 fix only; F-4 and F-6 stay unapproved). `splitRegistrable` now knows per-country second levels. 416 tests, 100 % line coverage, mutation score of `lookalike.ts` 92.62 % → In QA |
