@@ -127,3 +127,175 @@ describe("diffRings (FR-2.6, FR-2.7)", () => {
     );
   });
 });
+
+describe("diffRings: settings that could be weakened unseen (contract-v2, gap G-1, T-1)", () => {
+  const base = ring({
+    rev: 2,
+    internalDomain: "outsider",
+    firstTimeCheck: true,
+    fieldRules: [{ pattern: "client.com", type: "mustNotBeIn", field: "bcc" }],
+    attachments: {
+      tokens: ["ALPHA", "IA"],
+      mode: "any",
+      ignoreInline: false,
+      exemptExtensions: ["ics"],
+    },
+  });
+  const newer = (over: Parameters<typeof ring>[0]) => ring({ ...base, rev: 3, ...over });
+
+  it("reports a new ring as everything added and no setting as changed", () => {
+    const d = diffRings(null, base);
+    expect(d.internalDomainChange).toBeNull();
+    expect(d.firstTimeCheckChange).toBeNull();
+    expect(d.ignoreInlineChange).toBeNull();
+    expect(d.addedFieldRules).toEqual(base.fieldRules);
+    expect(d.removedFieldRules).toEqual([]);
+    expect(d.addedTokens).toEqual(["ALPHA", "IA"]);
+    expect(d.addedExemptExtensions).toEqual(["ics"]);
+    expect(d.removedTokens).toEqual([]);
+  });
+
+  it("reports nothing for an unchanged copy", () => {
+    const d = diffRings(base, newer({}));
+    expect(d.internalDomainChange).toBeNull();
+    expect(d.firstTimeCheckChange).toBeNull();
+    expect(d.ignoreInlineChange).toBeNull();
+    for (const list of [
+      d.addedFieldRules,
+      d.removedFieldRules,
+      d.addedTokens,
+      d.removedTokens,
+      d.addedExemptExtensions,
+      d.removedExemptExtensions,
+    ]) {
+      expect(list).toEqual([]);
+    }
+  });
+
+  it("marks a weaker treatment of the sender's own domain as loosened, a stricter one as not", () => {
+    expect(diffRings(base, newer({ internalDomain: "allow" })).internalDomainChange).toEqual({
+      from: "outsider",
+      to: "allow",
+      loosened: true,
+    });
+    expect(diffRings(base, newer({ internalDomain: "warn" })).internalDomainChange).toEqual({
+      from: "outsider",
+      to: "warn",
+      loosened: true,
+    });
+    const stricter = diffRings(
+      newer({ internalDomain: "allow" }),
+      newer({ internalDomain: "warn" }),
+    );
+    expect(stricter.internalDomainChange).toEqual({ from: "allow", to: "warn", loosened: false });
+  });
+
+  it("marks switching the first-time check off, or ignoring inline images, as loosened", () => {
+    expect(diffRings(base, newer({ firstTimeCheck: false })).firstTimeCheckChange).toEqual({
+      from: true,
+      to: false,
+      loosened: true,
+    });
+    expect(
+      diffRings(newer({ firstTimeCheck: false }), newer({ firstTimeCheck: true }))
+        .firstTimeCheckChange,
+    ).toEqual({ from: false, to: true, loosened: false });
+    const inline = (ignoreInline: boolean) => ({
+      tokens: ["ALPHA", "IA"],
+      mode: "any" as const,
+      ignoreInline,
+      exemptExtensions: ["ics"],
+    });
+    expect(diffRings(base, newer({ attachments: inline(true) })).ignoreInlineChange).toEqual({
+      from: false,
+      to: true,
+      loosened: true,
+    });
+    expect(
+      diffRings(newer({ attachments: inline(true) }), newer({ attachments: inline(false) }))
+        .ignoreInlineChange,
+    ).toEqual({ from: true, to: false, loosened: false });
+  });
+
+  it("lists field rules that appeared or vanished, ignoring case and spacing of the pattern", () => {
+    const rule = (pattern: string) => ({
+      pattern,
+      type: "mustNotBeIn" as const,
+      field: "bcc" as const,
+    });
+    const added = rule("other.com");
+    const d = diffRings(base, newer({ fieldRules: [rule("  CLIENT.com "), added] }));
+    expect(d.addedFieldRules).toEqual([added]);
+    expect(d.removedFieldRules).toEqual([]);
+    const gone = diffRings(base, newer({ fieldRules: [] }));
+    expect(gone.removedFieldRules).toEqual(base.fieldRules);
+    // Same pattern with another type or field is a different rule.
+    const other = diffRings(
+      base,
+      newer({ fieldRules: [{ pattern: "client.com", type: "onlyIn", field: "bcc" }] }),
+    );
+    expect(other.addedFieldRules).toHaveLength(1);
+    expect(other.removedFieldRules).toHaveLength(1);
+  });
+
+  it("lists attachment tokens and exempt extensions, comparing them in normal form", () => {
+    const attachments = (tokens: string[], exemptExtensions: string[]) => ({
+      tokens,
+      mode: "any" as const,
+      ignoreInline: false,
+      exemptExtensions,
+    });
+    const d = diffRings(
+      base,
+      newer({ attachments: attachments([" alpha", "Ia", "BETA"], ["ICS", "exe"]) }),
+    );
+    expect(d.addedTokens).toEqual(["BETA"]);
+    expect(d.removedTokens).toEqual([]);
+    expect(d.addedExemptExtensions).toEqual(["exe"]);
+    expect(d.removedExemptExtensions).toEqual([]);
+    const fewer = diffRings(base, newer({ attachments: attachments(["ALPHA"], []) }));
+    expect(fewer.removedTokens).toEqual(["IA"]);
+    expect(fewer.removedExemptExtensions).toEqual(["ics"]);
+  });
+
+  it("treats spellings that the attachment check matches alike as one (case, diacritics, leading dot)", () => {
+    const attachments = (tokens: string[], exemptExtensions: string[]) => ({
+      tokens,
+      mode: "any" as const,
+      ignoreInline: false,
+      exemptExtensions,
+    });
+    const before = ring({ attachments: attachments(["Hồ sơ", "ALPHA"], ["pdf"]) });
+    const same = diffRings(
+      before,
+      ring({ rev: 2, attachments: attachments(["ho so", " alpha "], [".PDF"]) }),
+    );
+    expect(same.addedTokens).toEqual([]);
+    expect(same.removedTokens).toEqual([]);
+    expect(same.addedExemptExtensions).toEqual([]);
+    expect(same.removedExemptExtensions).toEqual([]);
+    const other = diffRings(
+      before,
+      ring({ rev: 2, attachments: attachments(["beta"], [".exe", "pdf"]) }),
+    );
+    expect(other.addedTokens).toEqual(["beta"]);
+    expect(other.removedTokens).toEqual(["Hồ sơ", "ALPHA"]);
+    expect(other.addedExemptExtensions).toEqual([".exe"]);
+  });
+
+  it("never reports a change between a ring and itself, in either direction (property)", () => {
+    fc.assert(
+      fc.property(
+        fc.constantFrom("allow", "warn", "outsider"),
+        fc.boolean(),
+        (internalDomain, firstTimeCheck) => {
+          const r = ring({ internalDomain, firstTimeCheck });
+          const d = diffRings(r, r);
+          expect(d.internalDomainChange).toBeNull();
+          expect(d.firstTimeCheckChange).toBeNull();
+          expect(d.addedTokens).toEqual([]);
+        },
+      ),
+    );
+  });
+});

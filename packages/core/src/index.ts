@@ -60,4 +60,45 @@ export {
 export { acknowledgementKey, computeFingerprint } from "./fingerprint";
 export { createEvaluate } from "./evaluate";
 export { diffRings } from "./diff";
+export {
+  BEGIN_MARKER,
+  END_MARKER,
+  MAX_BODY_CHARS,
+  MAX_INFLATED_BYTES,
+  createCodec,
+  keyIdOf,
+  type Codec,
+  type CodecMeta,
+  type CodecOptions,
+  type KeyMaterial,
+  type KeyProvider,
+} from "./codec";
+export {
+  createBuildTimeDomainProvider,
+  createLicensedKeyProvider,
+  hashDomain,
+  type BuildTimeDomainOptions,
+  type LicenseProfile,
+  type LicenseProvider,
+  type LicenseReason,
+  type LicenseResult,
+  type LicensedKeysOptions,
+} from "./license";
+export {
+  parseAuthenticationResults,
+  verifyImportSource,
+  type AuthenticationVerdict,
+  type ImportSourceCheck,
+  type ImportSourceInput,
+  type ImportWarning,
+} from "./importVerify";
+export {
+  HeartbeatPayloadSchema,
+  buildHeartbeat,
+  hashMailbox,
+  shouldSendHeartbeat,
+  type HeartbeatError,
+  type HeartbeatInput,
+  type HeartbeatPayload,
+} from "./heartbeat";
 export { createSuggestRing, externalAddresses } from "./suggest";

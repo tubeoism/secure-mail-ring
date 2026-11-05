@@ -4,6 +4,12 @@ export type * from "./adapters";
 export { I18N_KEYS, type I18nKey } from "./i18nKeys";
 export { stubCore } from "./stubCore";
 export { core } from "./core";
+export { devKeys, foreignDevKeys } from "./devKeys";
+export {
+  LIVE_SHARE_CODE_ERRORS,
+  buildLiveShareCodes,
+  type LiveShareCodes,
+} from "./fixtures/liveShareCodes";
 export {
   MockOfficeAdapter,
   type MockCall,

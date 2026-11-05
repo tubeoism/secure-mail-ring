@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  createCodec,
   createCore,
   createStubCore,
   emptyHistory,
@@ -7,6 +8,7 @@ import {
   findFirstTimeRecipients,
   findLookalikes,
   findOutsiders,
+  keyIdOf,
   parseRing,
   recordAddresses,
 } from "../src";
@@ -20,7 +22,7 @@ describe("createCore", () => {
   const fallback = createStubCore({ evaluations: [], shareCodes: [] });
   const real = createCore({ fallback });
 
-  it("keeps every CoreApi method and replaces all but the share-code codec", () => {
+  it("keeps every CoreApi method and, without keys, replaces all but the share-code codec", () => {
     const keys = Object.keys(fallback).sort();
     expect(Object.keys(real).sort()).toEqual(keys);
     for (const key of [
@@ -36,6 +38,35 @@ describe("createCore", () => {
     }
     expect(real.encodeRing).toBe(fallback.encodeRing);
     expect(real.decodeRing).toBe(fallback.decodeRing);
+  });
+
+  it("replaces the share-code codec too when it is given keys (CL-05B)", async () => {
+    const secret = Uint8Array.from({ length: 32 }, (_, i) => i + 1);
+    const keyId = keyIdOf(secret);
+    const keys = {
+      current: () => ({ keyId, secret }),
+      byId: (id: string) => (id === keyId ? { keyId, secret } : null),
+    };
+    const withKeys = createCore({ fallback, keys, now: () => NOW });
+    expect(withKeys.encodeRing).not.toBe(fallback.encodeRing);
+    expect(withKeys.decodeRing).not.toBe(fallback.decodeRing);
+    const meta = { issuer: "an@abccorp.vn", issuedAt: "2026-11-05T08:00:00Z" };
+    const code = await withKeys.encodeRing(ring(), meta);
+    expect(code.ok).toBe(true);
+    expect(await withKeys.decodeRing(code.ok ? code.value : "")).toEqual({
+      ok: true,
+      value: { keyId, ring: ring(), ...meta },
+    });
+    // The codec reads expiry from the clock the core was given.
+    const dated = await createCodec({ keys, now: () => NOW }).encodeRing(ring(), {
+      ...meta,
+      expiresAt: "2026-11-06T00:00:00Z",
+    });
+    const later = createCore({ fallback, keys, now: () => new Date("2026-11-07T00:00:00Z") });
+    expect(await later.decodeRing(dated.ok ? dated.value : "")).toEqual({
+      ok: false,
+      error: { code: "expired" },
+    });
   });
 
   it("reads expiry from the clock it is given, and from the system clock by default", () => {
