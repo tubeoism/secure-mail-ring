@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { core, stubCore } from "./index";
 
 describe("contracts core (CL-03)", () => {
-  it("uses the real engine for everything except the share-code codec", () => {
+  it("uses the real engine for every function, the codec included (contract-v2)", () => {
     for (const key of [
       "evaluate",
       "sortRecipients",
@@ -11,11 +11,11 @@ describe("contracts core (CL-03)", () => {
       "mergePolicy",
       "diffRings",
       "suggestRing",
+      "encodeRing",
+      "decodeRing",
     ] as const) {
       expect(core[key]).not.toBe(stubCore[key]);
     }
-    expect(core.encodeRing).toBe(stubCore.encodeRing);
-    expect(core.decodeRing).toBe(stubCore.decodeRing);
   });
 
   it("uses the real field-rule conflict detection", () => {

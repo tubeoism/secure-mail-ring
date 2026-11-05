@@ -1,4 +1,5 @@
 // Builders shared by the decision-engine tests. All data is fictional.
+import fc from "fast-check";
 import { emptyHistory, recordAddresses } from "../src/history";
 import type {
   AttachmentInfo,
@@ -81,3 +82,58 @@ export const knowing = (...addresses: string[]): HistoryState =>
   recordAddresses(emptyHistory("test-salt"), addresses);
 
 export const noHistory = (): HistoryState => emptyHistory("test-salt");
+
+/** Arbitrary valid rings for property tests; `text` chooses the strings (printable by default). */
+export function arbRing(
+  text: fc.Arbitrary<string> = fc.string({ maxLength: 40 }),
+): fc.Arbitrary<Ring> {
+  const mode = fc.constantFrom("warn", "acknowledge", "block");
+  const word = (min: number, max: number) =>
+    text.map((s) => s.slice(0, max)).filter((s) => s.length >= min);
+  return fc.record({
+    schema: fc.constant("smr/1" as const),
+    id: word(1, 40),
+    rev: fc.integer({ min: 1, max: 1_000_000 }),
+    name: word(1, 80),
+    subjectTag: word(0, 20),
+    owner: word(0, 80),
+    updatedAt: word(0, 30),
+    members: fc.array(
+      fc.record({
+        kind: fc.constantFrom("address", "domain", "subdomains"),
+        value: word(1, 60),
+      }),
+      { maxLength: 30 },
+    ),
+    internalDomain: fc.constantFrom("allow", "warn", "outsider"),
+    order: fc.record({
+      to: fc.array(word(0, 40), { maxLength: 10 }),
+      cc: fc.array(word(0, 40), { maxLength: 10 }),
+      bcc: fc.array(word(0, 40), { maxLength: 10 }),
+    }),
+    attachments: fc.record({
+      tokens: fc.array(word(0, 20), { maxLength: 10 }),
+      mode: fc.constant("any" as const),
+      ignoreInline: fc.boolean(),
+      exemptExtensions: fc.array(word(0, 8), { maxLength: 5 }),
+    }),
+    policy: fc.record({
+      outsider: mode,
+      missingToken: mode,
+      foreignRingToken: mode,
+      lookalike: mode,
+      firstTime: mode,
+      fieldRule: mode,
+    }),
+    fieldRules: fc.array(
+      fc.record({
+        pattern: word(1, 40),
+        type: fc.constantFrom("mustBeIn", "mustNotBeIn", "onlyIn"),
+        field: fc.constantFrom("to", "cc", "bcc"),
+      }),
+      { maxLength: 5 },
+    ),
+    firstTimeCheck: fc.boolean(),
+    expiresAt: fc.option(word(0, 30), { nil: null }),
+  }) as fc.Arbitrary<Ring>;
+}

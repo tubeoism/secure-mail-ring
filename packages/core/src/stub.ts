@@ -111,6 +111,16 @@ export function createStubCore(data: StubData): CoreApi {
         addedMembers: after.members.filter((m) => !had.has(id(m))),
         removedMembers: (before?.members ?? []).filter((m) => !has.has(id(m))),
         policyChanges,
+        // The stub reports only members and modes; the real engine fills the rest (CL-05B).
+        internalDomainChange: null,
+        firstTimeCheckChange: null,
+        addedFieldRules: [],
+        removedFieldRules: [],
+        addedTokens: [],
+        removedTokens: [],
+        addedExemptExtensions: [],
+        removedExemptExtensions: [],
+        ignoreInlineChange: null,
       };
     },
 

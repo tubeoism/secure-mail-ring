@@ -48,11 +48,33 @@ export interface PolicyChange {
   readonly loosened: boolean;
 }
 
+/** A setting that changed between two revisions of a ring; `loosened` marks a weaker check. */
+export interface SettingChange<T> {
+  readonly from: T;
+  readonly to: T;
+  readonly loosened: boolean;
+}
+
+/**
+ * What an incoming ring changes (FR-2.6). Besides members and modes (contract-v1) it reports the
+ * settings that could be weakened unseen: the treatment of the sender's own domain, the first-time
+ * check, field rules, attachment tokens and exemptions (contract-v2, gap G-1, threat T-1). For a
+ * new ring (nothing to compare with) every list is reported as added and no setting as changed.
+ */
 export interface RingDiff {
   readonly revRelation: RevRelation;
   readonly addedMembers: readonly Member[];
   readonly removedMembers: readonly Member[];
   readonly policyChanges: readonly PolicyChange[];
+  readonly internalDomainChange: SettingChange<Ring["internalDomain"]> | null;
+  readonly firstTimeCheckChange: SettingChange<boolean> | null;
+  readonly addedFieldRules: readonly FieldRule[];
+  readonly removedFieldRules: readonly FieldRule[];
+  readonly addedTokens: readonly string[];
+  readonly removedTokens: readonly string[];
+  readonly addedExemptExtensions: readonly string[];
+  readonly removedExemptExtensions: readonly string[];
+  readonly ignoreInlineChange: SettingChange<boolean> | null;
 }
 
 export interface CodecError {
