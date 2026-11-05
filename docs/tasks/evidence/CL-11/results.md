@@ -6,7 +6,7 @@ Environment: Windows 11, `agy` 1.5.0, Python 3.14 (PO choice A), `agy-headless-b
 |---|---|---|
 | T1 `agy --version` | Pass: `1.5.0`, exit 0. OAuth login is cached; the token file was not opened. | command output |
 | T2 bridge round trip | Pass: prompt "reply with exactly: OK" returned `OK`, exit 0 (non-empty, so the isatty issue is bypassed on Windows). | `agy-bridge --no-workspace "reply with exactly: OK"` |
-| T3 tools visible in Claude Code | **Pending PO action.** `.mcp.json` and the hook are in place. The server answers `initialize` and `tools/list` (`agy_ask`, `agy_research`) when driven directly. Claude Code must reload the project and PO must approve the `antigravity` server, then `/mcp` is checked. | JSON-RPC probe |
+| T3 tools visible in Claude Code | **Pass (2026-11-05, after PR #12 merged).** A fresh Claude Code session on the PO machine loaded the project-scoped `antigravity` server without further approval; `agy_ask` and `agy_research` were callable, and `agy_research` with the query "reply with exactly OK" returned `OK`. | live tool call |
 | T4 boilerplate task in an allowed directory | Pass with a limit: the hook allows `src/shared/contracts`; agy returned a markdown skeleton as text. It cannot write files (see findings 2 and 3). | command output |
 | T5 forbidden directory | **Fail at agy level, mitigated at hook level.** See finding 1. | sentinel test |
 | T6 timeout and quota | Pass at bridge level: idle timeout exits 1 with a clear message; `_call_agy` maps timeout (partial kept), quota (reset seconds) and exit errors to `isError` results with `[agy-mcp] TIMEOUT/QUOTA/ERROR` markers. Quota was simulated, not triggered. | mock run |
