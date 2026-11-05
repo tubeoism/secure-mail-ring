@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Antigravity |
 | Stage | S1 (follow-up to AG-01B) |
-| Status | Ready |
+| Status | In QA |
 | Depends on | AG-01B (PRs #37 and #40 merged; QA round 3 on PR #40) |
 | Contract | `contract-v2`; no contract change in this card |
 | Plan references | `AGENTS.md` §6 (Definition of Done), §7 (accessibility), `docs/agents/qa-checklist.md` C, E |
@@ -51,4 +51,7 @@ Switching `CCR_STRINGS` to `t(...)` (waits for `contract-v3`, CL-05D); any chang
 - Tests in `src/taskpane/__tests__/*.dom.test.tsx`; the measurement table and the mutation output in the PR description. If you take a screenshot of the editor at 320 px, save it as `docs/tasks/evidence/AG-01/editor-members.png`.
 
 ## Notes
-(Owner updates during work: decisions, CCRs raised, open questions.)
+- **M-3 (Editor members add-row clipping):** Fixed in `RingEditorScreen.tsx` by setting `flexWrap: "wrap"` on the row, `flex: "1 1 120px", minWidth: 0` on the kind select, `flex: "1 1 110px", minWidth: 0` on the value input, and `minWidth: "32px"` on the `+` button. All 6 editor tabs (Members, Subject Tag, Attachments, Ordering, Field Rules, Policy) and other screens verified without clipping at 320 px and 450 px across both languages (`vi` and `en`).
+- **Tests for surviving mutations:** Added test in `behavior.dom.test.tsx` verifying navigation via the explicit "Chỉnh sửa" action button (kills mutation deleting `onNavigate("editor", ring.id)` in `RingsScreen.tsx:254`), and added tests verifying strict fallbacks for untrusted `?screen` (to 'rings') and untrusted `?lang` (to 'vi', killing mutation replacing allow-list with `if (true)` in `App.tsx:79`). Both mutations tested and confirmed to fail tests.
+- **Audit script:** Deleted `docs/tasks/evidence/AG-01/audit_viewport.mjs`. Zero new dependencies added.
+- **Verification:** `npm run verify` passed (30 test files, 627 tests passed; path guard green; check:i18n green with 126 keys).
