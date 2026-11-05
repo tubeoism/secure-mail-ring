@@ -101,8 +101,19 @@ const fail = (code: CodecError["code"]) => err<CodecError>({ code });
 
 class TooLarge extends Error {}
 
-/** Inflates with an output cap; null for invalid data, throws `TooLarge` past the cap. */
-function inflateCapped(data: Uint8Array): Uint8Array | null {
+/**
+ * Input is fed to the inflater in pieces of this many bytes. A deflate stream can expand about
+ * 1000 times, and fflate emits output only once a `push` has finished, so a single push of a
+ * hostile stream would build the whole output in memory before the cap is checked. With pieces of
+ * 256 bytes the output built between two checks stays under about 260 KB.
+ */
+const INFLATE_PIECE = 256;
+
+/**
+ * Inflates with an output cap; null for invalid data, throws `TooLarge` past the cap. Exported for
+ * its test only; it is not part of the package API.
+ */
+export function inflateCapped(data: Uint8Array): Uint8Array | null {
   const chunks: Uint8Array[] = [];
   let total = 0;
   try {
@@ -111,7 +122,10 @@ function inflateCapped(data: Uint8Array): Uint8Array | null {
       if (total > MAX_INFLATED_BYTES) throw new TooLarge();
       chunks.push(chunk);
     });
-    inflate.push(data, true);
+    for (let at = 0; at < data.length; at += INFLATE_PIECE) {
+      inflate.push(data.subarray(at, at + INFLATE_PIECE), false);
+    }
+    inflate.push(new Uint8Array(0), true);
   } catch (e) {
     if (e instanceof TooLarge) throw e;
     return null;
@@ -128,15 +142,22 @@ const QUOTE_PREFIX = /^[ \t]*(?:>[ \t]*)+/gm;
 const COMPACT_BEGIN = BEGIN_MARKER.replace(/\s/g, "");
 const COMPACT_END = END_MARKER.replace(/\s/g, "");
 
-/** The base64url body of the first complete code block in a text, or an error. */
+/**
+ * The base64url body of the first complete code block in a text, or an error. The block ends at
+ * the first END marker that follows a BEGIN marker and starts at the nearest BEGIN marker before
+ * it, so a BEGIN line copied by mistake in front of the real block does not swallow the block.
+ * Line breaks inside a marker are ignored on purpose (chat tools wrap lines); a body is
+ * authenticated by AES-GCM, so text that merely looks like a block cannot be accepted as one.
+ */
 export function extractBody(input: string): Result<string, CodecError> {
   if (input.length > MAX_INPUT_CHARS) return fail("tooLarge");
   const cleaned = input.replace(QUOTE_PREFIX, "").replace(IGNORED, "");
-  const begin = cleaned.indexOf(COMPACT_BEGIN);
-  if (begin < 0) return fail("malformed");
-  const from = begin + COMPACT_BEGIN.length;
-  const end = cleaned.indexOf(COMPACT_END, from);
+  const firstBegin = cleaned.indexOf(COMPACT_BEGIN);
+  if (firstBegin < 0) return fail("malformed");
+  const end = cleaned.indexOf(COMPACT_END, firstBegin + COMPACT_BEGIN.length);
   if (end < 0) return fail("malformed");
+  const from =
+    cleaned.lastIndexOf(COMPACT_BEGIN, end - COMPACT_BEGIN.length) + COMPACT_BEGIN.length;
   const body = cleaned.slice(from, end).replace(/=+$/, "");
   if (body.length > MAX_BODY_CHARS) return fail("tooLarge");
   return /^[A-Za-z0-9_-]+$/.test(body) ? ok(body) : fail("malformed");
