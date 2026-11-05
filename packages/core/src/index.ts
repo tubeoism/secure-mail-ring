@@ -48,3 +48,16 @@ export {
   evaluateFieldRules,
   type FieldRuleViolation,
 } from "./fieldRules";
+export { isRingExpired } from "./expiry";
+export {
+  DEFAULT_POLICY,
+  STRICT_POLICY,
+  applyFloor,
+  mergePolicy,
+  rankMode,
+  stricter,
+} from "./policy";
+export { acknowledgementKey, computeFingerprint } from "./fingerprint";
+export { createEvaluate } from "./evaluate";
+export { diffRings } from "./diff";
+export { createSuggestRing, externalAddresses } from "./suggest";

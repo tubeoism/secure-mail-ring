@@ -2,11 +2,20 @@ import { describe, expect, it } from "vitest";
 import { core, stubCore } from "./index";
 
 describe("contracts core (CL-03)", () => {
-  it("uses the real sortRecipients and findShadowedPatterns, and the stub for the rest", () => {
-    expect(core.sortRecipients).not.toBe(stubCore.sortRecipients);
-    expect(core.findShadowedPatterns).not.toBe(stubCore.findShadowedPatterns);
-    expect(core.evaluate).toBe(stubCore.evaluate);
-    expect(core.mergePolicy).toBe(stubCore.mergePolicy);
+  it("uses the real engine for everything except the share-code codec", () => {
+    for (const key of [
+      "evaluate",
+      "sortRecipients",
+      "findShadowedPatterns",
+      "detectFieldRuleConflicts",
+      "mergePolicy",
+      "diffRings",
+      "suggestRing",
+    ] as const) {
+      expect(core[key]).not.toBe(stubCore[key]);
+    }
+    expect(core.encodeRing).toBe(stubCore.encodeRing);
+    expect(core.decodeRing).toBe(stubCore.decodeRing);
   });
 
   it("uses the real field-rule conflict detection", () => {

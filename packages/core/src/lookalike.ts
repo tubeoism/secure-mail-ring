@@ -2,6 +2,7 @@
 // domain is flagged when it resembles one: same skeleton after mapping confusable characters,
 // same name apart from hyphens, same name under another suffix, or one or two typos away.
 // The confusable table is a curated subset of UTS #39 (CL-04 Q3), not the full data file.
+import { isRingExpired } from "./expiry";
 import { compileMember } from "./match";
 import type { ComposeSnapshot, FieldName, GlobalSettings, RecipientEntry, Ring } from "./model";
 import { normalizeDomain, punycodeDecode, splitAddress } from "./normalize";
@@ -182,12 +183,6 @@ export interface LookalikeInput {
   readonly now: Date;
 }
 
-const isExpired = (ring: RingDomains, now: Date) => {
-  if (ring.expiresAt == null) return false;
-  const at = Date.parse(ring.expiresAt);
-  return !Number.isNaN(at) && at < now.getTime();
-};
-
 const memberDomain = (member: RingDomains["members"][number]): string | null => {
   const compiled = compileMember(member);
   // An address value carries its domain after "@"; other kinds have no "@" and keep the whole value.
@@ -224,7 +219,7 @@ function collectReferences(input: LookalikeInput): Map<string, LookalikeReferenc
   const sender = splitAddress(input.snapshot.from);
   if (sender.ok) add(sender.value.domain, "internal", null);
   for (const ring of input.rings) {
-    if (ring.id !== input.ring?.id && !isExpired(ring, input.now)) addRing(ring, "otherRing");
+    if (ring.id !== input.ring?.id && !isRingExpired(ring, input.now)) addRing(ring, "otherRing");
   }
   return refs;
 }
