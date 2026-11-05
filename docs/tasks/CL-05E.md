@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Claude Code |
 | Stage | S1 |
-| Status | In QA |
+| Status | Done |
 | Depends on | CL-05B (Done) |
 | Contract | none (internal change; `contract-v2` unchanged) |
 | Plan references | `project_plan.md` T-1; `AGENTS.md` §8 |

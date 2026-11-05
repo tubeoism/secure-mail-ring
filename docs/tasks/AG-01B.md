@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Antigravity |
 | Stage | S1 (follow-up to AG-01) |
-| Status | In QA |
+| Status | Changes requested |
 | Depends on | AG-01 (merged by the PO on 2026-11-05 with these findings open) |
 | Contract | `contract-v1`, plus `contract-v2` as published by CL-05B; no new contract change in this card |
 | Plan references | `AGENTS.md` §6 (Definition of Done), §7 (accessibility), `docs/agents/qa-checklist.md` C, E, F |

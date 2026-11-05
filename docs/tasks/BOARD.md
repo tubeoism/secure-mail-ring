@@ -20,7 +20,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-05D | S1 | Contract v3: i18n keys for share/import (plus the keys from the AG-01 QA CCR), `headerValues` and `parseHeartbeat` in the core, `getSenderAddress` in `OfficeAdapter`, Worker folder in the toolchain → tag `contract-v3` | CL-05B | 0.5–1 | Draft (waits for the AG-01 CCR; PO approval) |
 | CL-04C | S1 | Fix to CL-04 test setup: Vitest `testTimeout` 30 s so the Stryker dry run no longer aborts on the Bloom tests | CL-04 | 0.25 | Done |
 | CL-04D | S1 | Process fix: board change log becomes one file per PR (`docs/tasks/changelog/`), so parallel PRs stop conflicting on `BOARD.md` | — | 0.25 | In QA |
-| CL-05E | S1 | Codec hardening from the advisory re-review of CL-05B: inflate in pieces so the output cap stops the work, `extractBody` starts at the nearest BEGIN marker, the `Authentication-Results` parser respects quoted strings | CL-05B | 0.25 | In QA |
+| CL-05E | S1 | Codec hardening from the advisory re-review of CL-05B: inflate in pieces so the output cap stops the work, `extractBody` starts at the nearest BEGIN marker, the `Authentication-Results` parser respects quoted strings | CL-05B | 0.25 | Done |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
 | CL-07 | S3 | Compose events: `OnNewMessageCompose`, recipients/attachments changed, ring binding (`sessionData` + custom property) | CL-06 | 2–3 | Draft |
 | CL-08 | S4 | `OnMessageSend` handler: evaluation, Warn/Acknowledge/Block, ack verification, reorder with invariant, Bloom write | CL-03, CL-04, CL-05, CL-05B, CL-07 | 4–6 | Draft |
@@ -29,7 +29,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-11 | S0 (tooling) | Antigravity bridge: project-scoped MCP, allow/deny hook, routing table in `CLAUDE.md`, T1–T6 validation. Off the critical path; not in the lead total | CL-00 | 1–2 | Done |
 | CL-12 | S0 (tooling) | Antigravity async job runner: background `agy-job` with stream-json liveness, idle/hard kill with partial output, guard on the shell route. Read-only; write mode waits for test T7. Off the critical path | CL-11 | 1 | Done |
 | CL-13 | S0 (tooling) | Agent toolkit: one versioned source for the `agy-bridge` plugin and the shared workflow content, a sync tool for vendoring into other repositories. Off the critical path | CL-11, CL-12 | 2–3 | In progress |
-| CL-14 | S1 (tooling) | Test tooling for the task pane: `jsdom`, `@testing-library/react`, `@testing-library/user-event`, per-folder Vitest environment, setup file and `renderApp` helper. Needed for AG-01B round 3 (QA finding M-2) | CL-00 | 0.5 | In QA |
+| CL-14 | S1 (tooling) | Test tooling for the task pane: `jsdom`, `@testing-library/react`, `@testing-library/user-event`, per-folder Vitest environment, setup file and `renderApp` helper. Needed for AG-01B round 3 (QA finding M-2) | CL-00 | 0.5 | Done |
 | CL-QA | all | QA of every AG PR (`docs/agents/qa-checklist.md`), CCR handling | — | 3–5 | Ongoing |
 | | | **Lead total** | | **29–43** | |
 
@@ -38,7 +38,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | ID | Stage | Task | Depends on | Est. | Status |
 |---|---|---|---|---|---|
 | AG-01 | S0–S1 | Clickable task-pane prototype on mocks for PO UX review | CL-00, CL-02 | 2–3 | Done (PO merged PR #29; QA round 1 findings in AG-01B) |
-| AG-01B | S1 | Fix the QA findings of AG-01: Settings clipped at 320 px, hard-coded strings, behavioural tests | AG-01 | 0.5–1 | In QA |
+| AG-01B | S1 | Fix the QA findings of AG-01: Settings clipped at 320 px, hard-coded strings, behavioural tests | AG-01 | 0.5–1 | Changes requested (PR #37 merged at QA round 2; round 3 needs a new PR) |
 | AG-02 | S2 | Ring list: list, search, duplicate, delete with confirm, archived rings | AG-01, CL-06 | 1–2 | Draft |
 | AG-03 | S2 | Ring editor: members, subject tag, attachment tokens, per-finding policy, Strict preset, expiry | AG-02, CL-05 | 2–3 | Draft |
 | AG-04 | S2 | Ordering editor: 3-column drag-and-drop (To/CC/BCC), shadowed-pattern warnings from core | AG-03, CL-03 | 1–2 | Draft |
