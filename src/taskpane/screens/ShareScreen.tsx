@@ -64,6 +64,10 @@ export function handleShareKeyDown(
   }
 }
 
+const CCR_STRINGS = {
+  selectRing: "Select ring to share",
+};
+
 export function ShareScreen({
   t,
   rings,
@@ -133,7 +137,11 @@ export function ShareScreen({
   };
 
   return (
-    <div className={styles.container} onKeyDown={(e) => handleShareKeyDown(e, onNavigate)}>
+    <div
+      className={styles.container}
+      tabIndex={-1}
+      onKeyDown={(e) => handleShareKeyDown(e, onNavigate)}
+    >
       <div className={styles.header}>
         <Button size="small" appearance="subtle" onClick={() => onNavigate("rings")}>
           ← {t("common.back")}
@@ -142,12 +150,12 @@ export function ShareScreen({
         <div style={{ width: "32px" }} />
       </div>
 
-      <Field label={t("share.title")}>
+      <Field label={CCR_STRINGS.selectRing}>
         <Select
           value={activeRing?.id ?? ""}
           onChange={(_e, d) => onSelectRing(d.value)}
           size="small"
-          aria-label={t("share.title")}
+          aria-label={CCR_STRINGS.selectRing}
         >
           {rings.map((r) => (
             <option key={r.id} value={r.id}>

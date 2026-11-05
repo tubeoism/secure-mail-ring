@@ -242,7 +242,11 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
   };
 
   return (
-    <div className={styles.container} onKeyDown={(e) => handleEditorKeyDown(e, onBack)}>
+    <div
+      className={styles.container}
+      tabIndex={-1}
+      onKeyDown={(e) => handleEditorKeyDown(e, onBack)}
+    >
       <div className={styles.headerRow}>
         <Button size="small" appearance="subtle" onClick={onBack} aria-label={t("common.back")}>
           ← {t("common.back")}

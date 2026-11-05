@@ -62,7 +62,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 
 | ID | From card | Summary | Status |
 |---|---|---|---|
-| — | — | — | — |
+| CCR-01 | AG-01B | Add 4 i18n keys for lookalike exception inputs/button and share ring selector | Open |
 
 ## Change log
 
