@@ -46,6 +46,7 @@ CI path guard: a PR from an `ag/*` branch that touches a lead-owned path fails.
 - One PR = one card. Start a card only when its Status is **Ready** and every dependency is **Done**.
 - Status flow: `Draft → Ready → In progress → In QA → Changes requested → Approved → Done`.
 - Ready is set by the lead after PO approval of the card. Done is set when PO merges.
+- Change log: one new file per PR in `docs/tasks/changelog/` (rules in its `README.md`). A PR edits only the Status cell of its own card in `BOARD.md` and never appends to a shared table, so open PRs do not conflict on the board.
 
 ## 5. Git conventions
 
