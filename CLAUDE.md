@@ -50,6 +50,8 @@ Card: `docs/tasks/CL-11.md`. Config: `.mcp.json` (server `antigravity`), `.claud
 | Long-context analysis, design second opinion, boilerplate drafts as text | `agy_ask` | Explicit `add_dir` from the allow list; one call at a time |
 | Advisory review of a `claude/*` PR touching `packages/core` | `agy_ask` | Prompt starts with `[REVIEW]`; `add_dir` is the PR-head checkout of `packages/core`; check the head for domains, secrets and source maps first |
 
+**Warning (CL-12, test T7): do not call `agy_ask` or `agy_research` until the PO decides.** They cannot pass `--mode plan`, and without it agy's file tools read and write anywhere on disk in headless mode, whatever `add_dir` says. Use the async job runner below, which always runs in plan mode (read-only for writes; reads are still unconfined).
+
 Rules for every `agy_ask`:
 - Always pass `add_dir` (allow list in `scripts/agy-guard.mjs`) or `workspace: "none"`. Never the repo root, never `skip_permissions`.
 - `add_dir` is not a boundary: agy reads any file whose path is named in the prompt. Name only allowed paths, and quote excerpts of `project_plan.md` instead of naming it. The hook screens prompts for denied paths, but it is a heuristic.

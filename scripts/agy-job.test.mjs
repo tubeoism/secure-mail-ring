@@ -90,6 +90,8 @@ describe("agy-job: normal run", () => {
 
     const args = JSON.parse(fs.readFileSync(argvFile, "utf8"));
     expect(args.slice(0, 2)).toEqual(["--output-format", "stream-json"]);
+    expect(args[args.indexOf("--mode") + 1]).toBe("plan");
+    expect(args).not.toContain("--dangerously-skip-permissions");
     expect(args.at(-2)).toBe("-p");
     expect(args.at(-1)).toBe(`say hello${CONSTRAINT}`);
   });

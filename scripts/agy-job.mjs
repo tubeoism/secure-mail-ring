@@ -32,7 +32,7 @@ const QUOTA_RE = /quota|rate[ _-]?limit|RESOURCE_EXHAUSTED|(?<!\d)429(?!\d)|too 
 
 /** Appended to every prompt: headless agy cannot answer permission prompts, so a command stalls it. */
 export const CONSTRAINT =
-  "\n\nConstraints: you have no command execution and no network. Do not try to run code, tests or shell commands. Reason only by reading the files you are told to read. Reply with text only.";
+  "\n\nConstraints: you have no command execution and no network. Do not try to run code, tests or shell commands, and do not create, edit or delete any file. Reason only by reading the files you are told to read. Reply with text only.";
 
 const clamp = (n, lo, hi, fallback) =>
   Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : fallback;
@@ -163,6 +163,10 @@ export async function runJob(id, opts = {}) {
   const args = [
     "--output-format",
     "stream-json",
+    // Plan mode blocks file writes and commands. T7 showed that without it agy's file tools write
+    // anywhere on disk in headless mode, whatever --add-dir says.
+    "--mode",
+    "plan",
     "--print-timeout",
     `${Math.max(1, job.hardSeconds - 15)}s`,
     ...job.add_dir.flatMap((d) => ["--add-dir", path.resolve(root, d)]),

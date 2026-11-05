@@ -65,7 +65,8 @@ export const PROMPT_DENY = [
 // heuristic against accidents and injected commands, not a sandbox.
 const JOB_RUNNER =
   /^\s*node\s+(?:\.\/)?scripts\/agy-job\.mjs\s+(?:run|status|result|cancel)\s+[a-z0-9][a-z0-9-]{1,38}[a-z0-9]\s*$/i;
-const AGY_READ_ONLY = /^\s*agy(?:\.exe)?\s+(?:--version|models)\s*$/i;
+const AGY_READ_ONLY =
+  /^\s*agy(?:\.exe)?\s+(?:--version|--help|models|changelog|help(?:\s+[a-z][a-z-]*)?)\s*$/i;
 const AGY_COMMAND_WORD =
   /(?:^|[;&|(\n]|\bStart-Process)\s*(?:-FilePath\s+)?["']?(?:[^\s;&|()"']*[\\/])?(?:agy|agy-bridge|agy-mcp-server)(?:\.exe)?["']?(?=\s|$|[;&|)])/i;
 const AGY_PYTHON_MODULE = /\b(?:python|py)(?:\.exe)?\b[^\n]*\bagy_(?:headless_bridge|mcp_server)/i;

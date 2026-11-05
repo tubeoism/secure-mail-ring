@@ -159,6 +159,10 @@ describe("agy-guard: shell route", () => {
     for (const c of [
       "agy --version",
       "agy models",
+      "agy --help",
+      "agy help",
+      "agy help mcp",
+      "agy changelog",
       "ls .tools/agy-bridge/venv",
       "git log -- docs/agents/delegation-log.md",
       "npm run verify",
@@ -172,6 +176,8 @@ describe("agy-guard: shell route", () => {
   it("denies starting agy or the bridge directly", () => {
     for (const c of [
       'agy -p "hello"',
+      "agy help mcp -p x",
+      "agy changelog && agy -p x",
       "agy --dangerously-skip-permissions -p x",
       "cd /tmp && agy -p x",
       "echo hi | agy",
