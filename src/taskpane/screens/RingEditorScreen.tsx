@@ -358,11 +358,12 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
             <Text weight="semibold" size={200}>
               {t("editor.member.add")}
             </Text>
-            <div style={{ display: "flex", gap: "6px" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
               <Select
                 value={newMemberKind}
                 onChange={(_e, d) => setNewMemberKind(d.value as Member["kind"])}
                 size="small"
+                style={{ flex: "1 1 120px", minWidth: 0 }}
                 aria-label={t("editor.tab.members")}
               >
                 <option value="address">{t("editor.member.kind.address")}</option>
@@ -374,10 +375,16 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 value={newMemberValue}
                 onChange={(_e, d) => setNewMemberValue(d.value)}
                 size="small"
-                style={{ flex: 1 }}
+                style={{ flex: "2 1 140px", minWidth: 0 }}
                 aria-label={t("editor.member.value")}
               />
-              <Button size="small" appearance="primary" onClick={handleAddMember}>
+              <Button
+                size="small"
+                appearance="primary"
+                onClick={handleAddMember}
+                style={{ minWidth: "32px" }}
+                aria-label={t("editor.member.add")}
+              >
                 +
               </Button>
             </div>
@@ -427,16 +434,22 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
               </Button>
             </div>
           ))}
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
             <Input
               placeholder={t("editor.attachments.tokens")}
               value={newToken}
               onChange={(_e, d) => setNewToken(d.value)}
               size="small"
-              style={{ flex: 1 }}
+              style={{ flex: "1 1 140px", minWidth: 0 }}
               aria-label={t("editor.attachments.tokens")}
             />
-            <Button size="small" appearance="primary" onClick={handleAddToken}>
+            <Button
+              size="small"
+              appearance="primary"
+              onClick={handleAddToken}
+              style={{ minWidth: "32px" }}
+              aria-label={t("editor.attachments.tokens")}
+            >
               +
             </Button>
           </div>
@@ -460,16 +473,22 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
               </Button>
             </div>
           ))}
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
             <Input
               placeholder={t("editor.attachments.exempt")}
               value={newExempt}
               onChange={(_e, d) => setNewExempt(d.value)}
               size="small"
-              style={{ flex: 1 }}
+              style={{ flex: "1 1 140px", minWidth: 0 }}
               aria-label={t("editor.attachments.exempt")}
             />
-            <Button size="small" appearance="primary" onClick={handleAddExempt}>
+            <Button
+              size="small"
+              appearance="primary"
+              onClick={handleAddExempt}
+              style={{ minWidth: "32px" }}
+              aria-label={t("editor.attachments.exempt")}
+            >
               +
             </Button>
           </div>
@@ -597,11 +616,12 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
             <Text weight="semibold" size={200}>
               {t("editor.fieldRules.add")}
             </Text>
-            <div style={{ display: "flex", gap: "6px" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
               <Select
                 value={newRuleType}
                 onChange={(_e, d) => setNewRuleType(d.value as FieldRule["type"])}
                 size="small"
+                style={{ flex: "1 1 120px", minWidth: 0 }}
                 aria-label={t("editor.fieldRules.add")}
               >
                 <option value="mustBeIn">{t("editor.fieldRules.type.mustBeIn")}</option>
@@ -612,6 +632,7 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 value={newRuleField}
                 onChange={(_e, d) => setNewRuleField(d.value as FieldRule["field"])}
                 size="small"
+                style={{ flex: "1 1 70px", minWidth: 0 }}
                 aria-label={t("editor.tab.fieldRules")}
               >
                 <option value="to">TO</option>

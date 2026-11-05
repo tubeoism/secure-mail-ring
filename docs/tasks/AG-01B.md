@@ -64,13 +64,16 @@ Final visual polish; any real persistence, validation or Office.js (lead tasks);
 - Tests in `src/taskpane/__tests__/*.test.tsx`; screenshots under `docs/tasks/evidence/AG-01/`; the AC-2 command output in the PR description.
 
 ## Notes
-- **Blocker B-1 (Settings at 320 px):** Fixed the look-alike exceptions row in `src/taskpane/screens/SettingsScreen.tsx` using `flexWrap: "wrap"`, `flex: "1 1 110px", minWidth: 0` on inputs, and `minWidth: "32px"` on the `+` button. Audited all 7 screens at 320 px and 450 px across both `vi` and `en` using headless Chrome DOM measurement: 28/28 checks passed with 0 horizontal page scroll (`docScrollWidth <= innerWidth`) and 0 clipped interactive content elements. Re-captured `docs/tasks/evidence/AG-01/settings.png` at 320 px (`vi`). Viewport audit script committed at `docs/tasks/evidence/AG-01/audit_viewport.mjs`.
+- **Blocker B-1 (Settings at 320 px):** Fixed the look-alike exceptions row in `src/taskpane/screens/SettingsScreen.tsx` using `flexWrap: "wrap"`, `flex: "1 1 110px", minWidth: 0` on inputs, and `minWidth: "32px"` on the `+` button. Re-captured `docs/tasks/evidence/AG-01/settings.png` at 320 px (`vi`).
+- **Major M-3 (Editor Members row wrapping at 320/450 px):** Made the member addition row in `src/taskpane/screens/RingEditorScreen.tsx` wrap/stack with `flexWrap: "wrap"` and `minWidth: 0` on kind select, value input, and add button, preventing button clipping at 320 px and 450 px. Also added wrapping and `minWidth: 0` to attachment tokens, exempt extensions, and field rule selects.
 - **Major M-1 (Strings & Scaffolding):** Replaced hard-coded labels, titles, and placeholders with `t(key)` in `NavBar.tsx`, `RingEditorScreen.tsx`, `SettingsScreen.tsx`, `ShareScreen.tsx`, `ComposeScreen.tsx`, and `ImportScreen.tsx`. Raised `docs/tasks/CCR-01.md` requesting 4 new keys (`settings.lookalike.domainA`, `settings.lookalike.domainB`, `settings.lookalike.add`, `share.selectRing`) for contract-v3, while binding distinct local fallbacks in `SettingsScreen` and `ShareScreen`. Consolidated prototype scaffolding into `src/taskpane/components/PrototypeToolbar.tsx`. AC-2 grep confirms only `PrototypeToolbar.tsx` lines 56, 66, 79 contain literal attributes. `npm run check:i18n` is green (126 keys).
-- **Major M-2 (Behavioural Tests):** Replaced static dummy tests with real DOM Testing Library + `@testing-library/user-event` tests in `src/taskpane/__tests__/behavior.dom.test.tsx` (using `renderApp()` and jsdom environment setup from CL-14):
-  1. From ring list, every screen is reachable within $\le 2$ clicks.
+- **Major M-2 (Behavioural Tests):** Implemented real DOM Testing Library + `@testing-library/user-event` tests in `src/taskpane/__tests__/behavior.dom.test.tsx` (using `renderApp()` and jsdom environment setup from CL-14):
+  1. From ring list, every screen is reachable within $\le 2$ clicks (including explicit 'Chỉnh sửa' button navigation).
   2. Tab navigates controls, Enter/Space activates them, and Escape closes RingEditorScreen, ShareScreen, and ImportScreen.
   3. Dynamic language switching (`vi` $\to$ `en` $\to$ `vi`) updates visible DOM across multiple screens without raw dotted keys.
   4. Ring with unbroken 80-char name and long Vietnamese text retains action buttons in the DOM.
   5. 500-member edge case asserts member count (500), boundary members (1st and 50th), and remainder (450 hidden members behind `+450 thành viên khác`).
+  6. Editor Members tab controls verified accessible.
+  7. Strict fallback assertions for untrusted `?screen` and `?lang` query params/props.
 - **Minor URL Query Params:** Added strict allowlist validation (`ALLOWED_SCREENS`, `ALLOWED_LANGUAGES`) in `index.tsx` and `App.tsx` for untrusted search parameters.
-- **Verification:** `npm run verify` passed (eslint, prettier, tsc, vitest [624/624 tests across node and dom], build:taskpane, path-guard, i18n-check). Path guard green. Zero new dependencies.
+- **Verification:** `npm run verify` passed (eslint, prettier, tsc, vitest [627/627 tests across node and dom], build:taskpane, path-guard, i18n-check). Path guard green. Zero new dependencies.
