@@ -20,7 +20,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-08 | S4 | `OnMessageSend` handler: evaluation, Warn/Acknowledge/Block, ack verification, reorder with invariant, Bloom write | CL-03, CL-04, CL-05, CL-05B, CL-07 | 4–6 | Draft |
 | CL-09 | S6 | Domain lock (hashed), obfuscation profile, post-build check, hosting + deploy pipeline | CL-08 | 3–4 | Draft |
 | CL-10 | S7–S8 | Release, integration test plan + evidence review, pilot metrics, control description (EN) | CL-09 | 2–3 | Draft |
-| CL-11 | S0 (tooling) | Antigravity bridge: project-scoped MCP, allow/deny hook, routing table in `CLAUDE.md`, T1–T6 validation. Off the critical path; not in the lead total | CL-00 | 1–2 | In QA |
+| CL-11 | S0 (tooling) | Antigravity bridge: project-scoped MCP, allow/deny hook, routing table in `CLAUDE.md`, T1–T6 validation. Off the critical path; not in the lead total | CL-00 | 1–2 | Done |
 | CL-QA | all | QA of every AG PR (`docs/agents/qa-checklist.md`), CCR handling | — | 3–5 | Ongoing |
 | | | **Lead total** | | **29–43** | |
 
@@ -80,3 +80,5 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-11-05 | CL-11 card written (Draft, awaiting PO approval). PO decisions D-1 to D-6 recorded in the card, incl. read-only advisory review of core PRs through the bridge |
 | 2026-11-05 | PO approved CL-11 (thread message "Duyệt") → Ready → In progress. T1–T6 run on the PO machine; nothing installed before this approval |
 | 2026-11-05 | CL-11 delivered (PR #12) → In QA. T1, T2, T4, T6 pass; T3 needs PO to approve the MCP server; T5 found agy reads named paths outside add_dir (AC-5 open, PO decision). Bridge calls are read-only |
+| 2026-11-05 | CL-11 merged (PR #12) → Done. T3 passed in a fresh session (AC-3 ticked, `delegation-log.md` row added). PO approved the next dev step: advisory `[REVIEW]` of merged PRs #9 (CL-03) and #10 (CL-04) through the bridge, one at a time |
+| 2026-11-05 | Antigravity advisory review of PRs #9 and #10 recorded (partial coverage; broad prompts time out, so it ran as narrow questions): no blockers. One Major in CL-04 code (F-1: `splitRegistrable` mishandles `.id.vn`, `.io.vn`, `.biz.vn`, `.info.vn`, so look-alikes under them are missed) and five Minor/Info items. Details and proposed follow-up in `docs/agents/advisory-review-pr9-pr10.md`; follow-up awaits PO approval |
