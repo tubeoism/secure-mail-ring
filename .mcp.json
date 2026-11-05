@@ -1,9 +1,3 @@
 {
-  "mcpServers": {
-    "antigravity": {
-      "type": "stdio",
-      "command": ".tools/agy-bridge/venv/Scripts/agy-mcp-server.exe",
-      "args": []
-    }
-  }
+  "mcpServers": {}
 }

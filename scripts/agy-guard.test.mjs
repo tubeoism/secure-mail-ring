@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import path from "node:path";
-import { evaluate, toRepoRelative } from "./agy-guard.mjs";
+import { evaluate, evaluateHook, toRepoRelative } from "./agy-guard.mjs";
 
 const ROOT = path.resolve("repo-root");
 const ask = (input) => evaluate("mcp__antigravity__agy_ask", input, ROOT);
@@ -136,6 +136,90 @@ describe("agy-guard: prompt screening (T5 finding)", () => {
     denied(
       { prompt: "[REVIEW] also read manifest/x.xml", add_dir: ["packages/core"] },
       "denied path",
+    );
+  });
+});
+
+describe("agy-guard: shell route", () => {
+  const shell = (command, tool = "Bash") => evaluate(tool, { command }, ROOT);
+
+  it("allows the job runner commands for a valid job id", () => {
+    for (const c of [
+      "node scripts/agy-job.mjs run review-pr9-a",
+      "node ./scripts/agy-job.mjs status review-pr9-a",
+      "node scripts/agy-job.mjs result abc",
+      "node scripts/agy-job.mjs cancel abc",
+    ]) {
+      expect(shell(c).allow).toBe(true);
+      expect(shell(c, "PowerShell").allow).toBe(true);
+    }
+  });
+
+  it("allows read-only agy queries and unrelated commands that only mention agy", () => {
+    for (const c of [
+      "agy --version",
+      "agy models",
+      "agy --help",
+      "agy help",
+      "agy help mcp",
+      "agy changelog",
+      "ls .tools/agy-bridge/venv",
+      "git log -- docs/agents/delegation-log.md",
+      "npm run verify",
+      "grep -n agy CLAUDE.md",
+      "cat scripts/agy-guard.mjs",
+    ]) {
+      expect(shell(c).allow, c).toBe(true);
+    }
+  });
+
+  it("denies starting agy or the bridge directly", () => {
+    for (const c of [
+      'agy -p "hello"',
+      "agy help mcp -p x",
+      "agy changelog && agy -p x",
+      "agy --dangerously-skip-permissions -p x",
+      "cd /tmp && agy -p x",
+      "echo hi | agy",
+      "(agy -p x)",
+      "./.tools/agy-bridge/venv/Scripts/agy-bridge.exe --no-workspace hi",
+      "C:\\tools\\agy.exe -p x",
+      '"agy" -p x',
+      "agy-mcp-server",
+      "python -m agy_headless_bridge hi",
+      "py -3.11 -c 'from agy_headless_bridge import bridge; bridge.run(\"x\")'",
+      "node scripts/agy-job.mjs run abc && agy -p x",
+    ]) {
+      expect(shell(c).allow, c).toBe(false);
+    }
+    expect(shell("& agy -p x", "PowerShell").allow).toBe(false);
+    expect(shell("Start-Process agy -ArgumentList '-p x'", "PowerShell").allow).toBe(false);
+    expect(shell('Start-Process -FilePath "agy.exe"', "PowerShell").allow).toBe(false);
+  });
+
+  it("tolerates a missing command", () => {
+    expect(evaluate("Bash", {}, ROOT).allow).toBe(true);
+    expect(evaluate("Bash", undefined, ROOT).allow).toBe(true);
+  });
+});
+
+describe("agy-guard: hook entry point", () => {
+  it("refuses every Antigravity MCP tool, even with a policy-clean call", () => {
+    for (const tool of [
+      "mcp__antigravity__agy_ask",
+      "mcp__antigravity__agy_research",
+      "mcp__antigravity__anything_else",
+    ]) {
+      const r = evaluateHook(tool, { prompt: "p", workspace: "none", query: "q" }, ROOT);
+      expect(r.allow, tool).toBe(false);
+      expect(r.reason).toContain("agy-job.mjs");
+    }
+  });
+
+  it("still applies the shell route", () => {
+    expect(evaluateHook("Bash", { command: "agy -p x" }, ROOT).allow).toBe(false);
+    expect(evaluateHook("Bash", { command: "node scripts/agy-job.mjs run abc" }, ROOT).allow).toBe(
+      true,
     );
   });
 });
