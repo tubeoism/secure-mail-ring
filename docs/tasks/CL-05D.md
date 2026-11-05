@@ -63,4 +63,4 @@ Lead-owned paths only: `src/shared/contracts/**`, `packages/core/**`, `scripts/i
 - Writing any text value (AG-07); any UI; the Worker code (AG-12).
 
 ## Notes
-- Open question for PO: the internal domain of the organisation is not in the repository (domains are hashed, plan section on the domain lock). Screens take it as the domain of `OfficeAdapter.getUserAddress()`. If the organisation has several mail domains, a list will have to come from the licence result (CL-09). The cards AG-10 and AG-11 use the single domain and say so.
+- Decided by PO (2026-11-05, "Ok" to the recommendation): v1 takes the internal domain from the user's own address; a list from the licence result is a CL-09 option if the organisation turns out to have several mail domains. Background: the internal domain of the organisation is not in the repository (domains are hashed, plan section on the domain lock). Screens take it as the domain of `OfficeAdapter.getUserAddress()`. If the organisation has several mail domains, a list will have to come from the licence result (CL-09). The cards AG-10 and AG-11 use the single domain and say so.
