@@ -115,7 +115,11 @@ export function ImportScreen({ t, rings, onImportRing, onNavigate }: ImportScree
   };
 
   return (
-    <div className={styles.container} onKeyDown={(e) => handleImportKeyDown(e, onNavigate)}>
+    <div
+      className={styles.container}
+      tabIndex={-1}
+      onKeyDown={(e) => handleImportKeyDown(e, onNavigate)}
+    >
       <Subtitle2>{t("import.title")}</Subtitle2>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>

@@ -67,6 +67,12 @@ const POLICY_KEYS: readonly PolicyKey[] = [
   "fieldRule",
 ];
 
+const CCR_STRINGS = {
+  domainA: "Domain A",
+  domainB: "Domain B",
+  addException: "Add exception",
+};
+
 export function SettingsScreen({
   t,
   settings,
@@ -235,27 +241,27 @@ export function SettingsScreen({
         ))}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "4px" }}>
           <Input
-            placeholder={t("editor.member.kind.domain")}
+            placeholder={CCR_STRINGS.domainA}
             value={newExceptA}
             onChange={(_e, d) => setNewExceptA(d.value)}
             size="small"
             style={{ flex: "1 1 110px", minWidth: 0 }}
-            aria-label={t("settings.lookalike.exceptions")}
+            aria-label={CCR_STRINGS.domainA}
           />
           <Input
-            placeholder={t("editor.member.kind.domain")}
+            placeholder={CCR_STRINGS.domainB}
             value={newExceptB}
             onChange={(_e, d) => setNewExceptB(d.value)}
             size="small"
             style={{ flex: "1 1 110px", minWidth: 0 }}
-            aria-label={t("settings.lookalike.exceptions")}
+            aria-label={CCR_STRINGS.domainB}
           />
           <Button
             size="small"
             appearance="primary"
             onClick={handleAddException}
             style={{ minWidth: "32px" }}
-            aria-label={t("common.save")}
+            aria-label={CCR_STRINGS.addException}
           >
             +
           </Button>

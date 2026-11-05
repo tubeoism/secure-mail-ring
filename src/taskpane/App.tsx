@@ -51,26 +51,39 @@ export function App({ initialScreen, initialLanguage = "vi" }: AppProps = {}) {
   const storage = useMemo(() => new MockStorageAdapter(), []);
 
   const getInitialScreen = (): ScreenId => {
-    if (initialScreen) return initialScreen;
-    if (typeof window !== "undefined") {
-      const p = new URLSearchParams(window.location.search).get("screen");
-      if (
-        p === "rings" ||
-        p === "editor" ||
-        p === "settings" ||
-        p === "compose" ||
-        p === "ack" ||
-        p === "share" ||
-        p === "import"
-      ) {
-        return p;
-      }
+    const raw =
+      initialScreen ??
+      (typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("screen")
+        : null);
+    if (
+      raw === "rings" ||
+      raw === "editor" ||
+      raw === "settings" ||
+      raw === "compose" ||
+      raw === "ack" ||
+      raw === "share" ||
+      raw === "import"
+    ) {
+      return raw;
     }
     return "rings";
   };
 
+  const getInitialLanguage = (): Language => {
+    const raw =
+      initialLanguage ??
+      (typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("lang")
+        : null);
+    if (raw === "vi" || raw === "en") {
+      return raw;
+    }
+    return "vi";
+  };
+
   // State
-  const [language, setLanguage] = useState<Language>(initialLanguage);
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
   const [currentScreen, setCurrentScreen] = useState<ScreenId>(getInitialScreen);
   const [rings, setRings] = useState<readonly Ring[]>(() => structuredClone(fixtures.rings));
   const [settings, setSettings] = useState<GlobalSettings>(() =>
