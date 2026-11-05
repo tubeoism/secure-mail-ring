@@ -38,7 +38,12 @@ const useStyles = makeStyles({
   },
 });
 
-export function App() {
+export interface AppProps {
+  initialScreen?: ScreenId | undefined;
+  initialLanguage?: Language | undefined;
+}
+
+export function App({ initialScreen, initialLanguage = "vi" }: AppProps = {}) {
   const styles = useStyles();
 
   const initialSnapshot = fixtures.composeByName("clean-alpha");
@@ -46,6 +51,7 @@ export function App() {
   const storage = useMemo(() => new MockStorageAdapter(), []);
 
   const getInitialScreen = (): ScreenId => {
+    if (initialScreen) return initialScreen;
     if (typeof window !== "undefined") {
       const p = new URLSearchParams(window.location.search).get("screen");
       if (
@@ -64,7 +70,7 @@ export function App() {
   };
 
   // State
-  const [language, setLanguage] = useState<Language>("vi");
+  const [language, setLanguage] = useState<Language>(initialLanguage);
   const [currentScreen, setCurrentScreen] = useState<ScreenId>(getInitialScreen);
   const [rings, setRings] = useState<readonly Ring[]>(() => structuredClone(fixtures.rings));
   const [settings, setSettings] = useState<GlobalSettings>(() =>
