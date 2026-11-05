@@ -13,7 +13,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-02 | S1 | **Contract v1**: types, `OfficeAdapter`, `StorageAdapter`, `MockOfficeAdapter`, fixtures, i18n key list → tag `contract-v1` | CL-00 | 2–3 | Done |
 | CL-03 | S1 | Core: `normalize`, `match`, `order`, `attachments` | CL-02 | 2–3 | Done |
 | CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | Done |
-| CL-04B | S1 | Fix F-1 of the advisory review: registrable-domain heuristic for `.id.vn`, `.io.vn`, `.biz.vn` and similar national sub-domains | CL-04 | 0.5 | In QA |
+| CL-04B | S1 | Fix F-1 of the advisory review: registrable-domain heuristic for `.id.vn`, `.io.vn`, `.biz.vn` and similar national sub-domains | CL-04 | 0.5 | Done |
 | CL-05 | S1 | Core decision engine: `policy` (floor, Strict preset), `evaluate`, fingerprint + acknowledgement key, `diff`, ring suggestion (E-3), ring expiry (E-8) | CL-02, CL-03, CL-04 | 1–2 | Draft |
 | CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Draft (card after CL-05) |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
@@ -22,7 +22,8 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-09 | S6 | Domain lock (hashed), obfuscation profile, post-build check, hosting + deploy pipeline | CL-08 | 3–4 | Draft |
 | CL-10 | S7–S8 | Release, integration test plan + evidence review, pilot metrics, control description (EN) | CL-09 | 2–3 | Draft |
 | CL-11 | S0 (tooling) | Antigravity bridge: project-scoped MCP, allow/deny hook, routing table in `CLAUDE.md`, T1–T6 validation. Off the critical path; not in the lead total | CL-00 | 1–2 | Done |
-| CL-12 | S0 (tooling) | Antigravity async job runner: background `agy-job` with stream-json liveness, idle/hard kill with partial output, guard on the shell route. Read-only; write mode waits for test T7. Off the critical path | CL-11 | 1 | In QA |
+| CL-12 | S0 (tooling) | Antigravity async job runner: background `agy-job` with stream-json liveness, idle/hard kill with partial output, guard on the shell route. Read-only; write mode waits for test T7. Off the critical path | CL-11 | 1 | Done |
+| CL-13 | S0 (tooling) | Agent toolkit: one versioned source for the `agy-bridge` plugin and the shared workflow content, a sync tool for vendoring into other repositories. Off the critical path | CL-11, CL-12 | 2–3 | In progress |
 | CL-QA | all | QA of every AG PR (`docs/agents/qa-checklist.md`), CCR handling | — | 3–5 | Ongoing |
 | | | **Lead total** | | **29–43** | |
 
@@ -88,3 +89,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-11-05 | CL-12 test T7 done (40 agy runs in a temp lab): agy file tools read and write anywhere on disk in headless default mode; `--sandbox` and `--settings` allow-rules do not change that; only `--mode plan` blocks writes. Correction recorded in CL-11 Notes (D-3 "read-only" was wrong for the MCP tools). Runner now always uses plan mode; `CLAUDE.md` warns against `agy_ask` and `agy_research` until PO decides. No write mode is supported by the evidence |
 | 2026-11-05 | PO chose the more automated option for the MCP tools: community MCP bridge retired (CL-12 D-10). `.mcp.json` empty, hook refuses `mcp__antigravity__*`, subagents and `AGENTS.md` §9 now describe the runner. CL-11 note updated |
 | 2026-11-05 | CL-04B written and implemented on the PO message "Ok" (F-1 fix only; F-4 and F-6 stay unapproved). `splitRegistrable` now knows per-country second levels. 416 tests, 100 % line coverage, mutation score of `lookalike.ts` 92.62 % → In QA |
+| 2026-11-05 | CL-13 card written (Draft, awaiting PO answers Q1–Q4 and approval) after the PO chose option 1: Antigravity writes code in its own session, Claude writes cards and does QA, shared tooling for future repositories |
+| 2026-11-05 | PO answered Q1–Q4 of CL-13 (name `antigravity-agent-toolkit`, private; policy JSON per repository; shared content as proposed; separate repository, create it) → In progress. Work happens in the new repository; migration of this repository is a later PR |
+| 2026-11-05 | CL-13: repository `antigravity-agent-toolkit` created; first PR merged by the PO; tag `v0.1.0` and branch `stable` created on the PO "go". AC-1, AC-2, AC-4, AC-5 done (marketplace install tested and removed again); AC-3 tests pass. Open: AC-6, AC-7 and the migration PR (AC-8), which needs #14 merged first |
+| 2026-11-05 | PRs #13 (CL-11 close-out) and #14 (CL-12) merged by the PO → CL-12 Done. Conflicts of the CL-04B and CL-13 PRs with the new `main` resolved by merging `main` into their branches (BOARD only) |

@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Claude Code |
 | Stage | S1 (fix to CL-04) |
-| Status | In progress |
+| Status | Done |
 | Depends on | CL-04 (Done) |
 | Contract | `contract-v1` (no signature changes) |
 | Plan references | `project_plan.md` §3 F6 (FR-6.1 to 6.5) |
