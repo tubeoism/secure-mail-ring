@@ -63,6 +63,16 @@ interface ImportScreenProps {
   onNavigate: (screen: ScreenId) => void;
 }
 
+export function handleImportKeyDown(
+  e: { key: string; preventDefault?: () => void; stopPropagation?: () => void },
+  onNavigate: (screen: ScreenId) => void,
+) {
+  if (e.key === "Escape") {
+    e.stopPropagation?.();
+    onNavigate("rings");
+  }
+}
+
 export function ImportScreen({ t, rings, onImportRing, onNavigate }: ImportScreenProps) {
   const styles = useStyles();
   const [inputCode, setInputCode] = useState("");
@@ -105,7 +115,7 @@ export function ImportScreen({ t, rings, onImportRing, onNavigate }: ImportScree
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onKeyDown={(e) => handleImportKeyDown(e, onNavigate)}>
       <Subtitle2>{t("import.title")}</Subtitle2>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>

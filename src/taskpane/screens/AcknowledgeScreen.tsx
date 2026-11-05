@@ -13,6 +13,7 @@ import {
 import type { ComposeSnapshot, Finding, PolicyMode } from "@smr/core";
 import { useState } from "react";
 import { fixtures, stubCore, type I18nKey, type Translator } from "../../shared/contracts";
+import { PrototypeToolbar } from "../components/PrototypeToolbar";
 import type { ScreenId } from "../types";
 
 const useStyles = makeStyles({
@@ -169,16 +170,9 @@ export function AcknowledgeScreen({
 
   return (
     <div className={styles.container}>
+      <PrototypeToolbar onSimulateStale={() => setIsStale(!isStale)} />
       <div className={styles.header}>
         <Subtitle2>{t("ack.title")}</Subtitle2>
-        <Button
-          size="small"
-          appearance="subtle"
-          onClick={() => setIsStale(!isStale)}
-          title="Mô phỏng thay đổi nội dung thư khi đang mở pane"
-        >
-          {isStale ? "Khôi phục" : "Mô phỏng Stale"}
-        </Button>
       </div>
 
       <div className={styles.introBox}>

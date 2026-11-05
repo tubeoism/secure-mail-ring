@@ -54,6 +54,16 @@ interface ShareScreenProps {
   onNavigate: (screen: ScreenId) => void;
 }
 
+export function handleShareKeyDown(
+  e: { key: string; preventDefault?: () => void; stopPropagation?: () => void },
+  onNavigate: (screen: ScreenId) => void,
+) {
+  if (e.key === "Escape") {
+    e.stopPropagation?.();
+    onNavigate("rings");
+  }
+}
+
 export function ShareScreen({
   t,
   rings,
@@ -123,7 +133,7 @@ export function ShareScreen({
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onKeyDown={(e) => handleShareKeyDown(e, onNavigate)}>
       <div className={styles.header}>
         <Button size="small" appearance="subtle" onClick={() => onNavigate("rings")}>
           ← {t("common.back")}
@@ -132,12 +142,12 @@ export function ShareScreen({
         <div style={{ width: "32px" }} />
       </div>
 
-      <Field label="Chọn vòng muốn chia sẻ:">
+      <Field label={t("share.title")}>
         <Select
           value={activeRing?.id ?? ""}
           onChange={(_e, d) => onSelectRing(d.value)}
           size="small"
-          aria-label="Select ring to share"
+          aria-label={t("share.title")}
         >
           {rings.map((r) => (
             <option key={r.id} value={r.id}>

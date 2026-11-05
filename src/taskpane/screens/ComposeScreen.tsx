@@ -16,6 +16,7 @@ import {
   type MockOfficeAdapter,
   type Translator,
 } from "../../shared/contracts";
+import { PrototypeToolbar } from "../components/PrototypeToolbar";
 import type { ScreenId } from "../types";
 
 const useStyles = makeStyles({
@@ -116,19 +117,9 @@ export function ComposeScreen({
 
   return (
     <div className={styles.container}>
+      <PrototypeToolbar onSelectPreset={handleSelectFixture} />
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Subtitle2>{t("compose.title")}</Subtitle2>
-        <Select
-          size="small"
-          aria-label="Select test email scenario"
-          onChange={(_e, d) => handleSelectFixture(d.value)}
-        >
-          {fixtures.compose.map((c) => (
-            <option key={c.name} value={c.name}>
-              Scenario: {c.name}
-            </option>
-          ))}
-        </Select>
       </div>
 
       {/* Ring Selection Section */}
@@ -235,9 +226,9 @@ export function ComposeScreen({
             appearance="primary"
             size="small"
             onClick={() => onNavigate("ack")}
-            aria-label="Open Acknowledge Pane"
+            aria-label={t("ack.title")}
           >
-            🛡️ Mở màn hình xác nhận (Acknowledge)
+            🛡️ {t("ack.title")}
           </Button>
         </div>
       )}

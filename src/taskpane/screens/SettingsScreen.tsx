@@ -227,30 +227,36 @@ export function SettingsScreen({
               size="small"
               appearance="subtle"
               onClick={() => handleRemoveException(idx)}
-              aria-label={`Remove exception ${pair.a} and ${pair.b}`}
+              aria-label={`${t("common.delete")} ${pair.a} ${pair.b}`}
             >
               ✕
             </Button>
           </div>
         ))}
-        <div style={{ display: "flex", gap: "6px", marginTop: "4px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "4px" }}>
           <Input
-            placeholder="domain1.vn"
+            placeholder={t("editor.member.kind.domain")}
             value={newExceptA}
             onChange={(_e, d) => setNewExceptA(d.value)}
             size="small"
-            style={{ flex: 1 }}
-            aria-label="Domain A"
+            style={{ flex: "1 1 110px", minWidth: 0 }}
+            aria-label={t("settings.lookalike.exceptions")}
           />
           <Input
-            placeholder="domain2.vn"
+            placeholder={t("editor.member.kind.domain")}
             value={newExceptB}
             onChange={(_e, d) => setNewExceptB(d.value)}
             size="small"
-            style={{ flex: 1 }}
-            aria-label="Domain B"
+            style={{ flex: "1 1 110px", minWidth: 0 }}
+            aria-label={t("settings.lookalike.exceptions")}
           />
-          <Button size="small" appearance="primary" onClick={handleAddException}>
+          <Button
+            size="small"
+            appearance="primary"
+            onClick={handleAddException}
+            style={{ minWidth: "32px" }}
+            aria-label={t("common.save")}
+          >
             +
           </Button>
         </div>

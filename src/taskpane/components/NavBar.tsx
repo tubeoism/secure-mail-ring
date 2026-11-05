@@ -8,9 +8,13 @@ const useStyles = makeStyles({
     ...shorthands.borderBottom("1px", "solid", tokens.colorNeutralStroke2),
     ...shorthands.padding("0", "8px"),
     overflowX: "auto",
-    scrollbarWidth: "none",
+    scrollbarWidth: "thin",
     "::-webkit-scrollbar": {
-      display: "none",
+      height: "4px",
+    },
+    "::-webkit-scrollbar-thumb": {
+      backgroundColor: tokens.colorNeutralStroke1,
+      borderRadius: "2px",
     },
   },
   tabList: {
@@ -39,7 +43,7 @@ export function NavBar({ t, currentScreen, onNavigate }: NavBarProps) {
     currentScreen === "editor" || currentScreen === "share" ? "rings" : currentScreen;
 
   return (
-    <nav className={styles.container} aria-label="Main Navigation">
+    <nav className={styles.container} aria-label={t("app.title")}>
       <TabList
         className={styles.tabList}
         selectedValue={activeValue}
@@ -47,19 +51,19 @@ export function NavBar({ t, currentScreen, onNavigate }: NavBarProps) {
         size="small"
       >
         <Tab className={styles.tab} value="rings">
-          📋 {t("nav.rings")}
+          <span aria-hidden="true">📋</span> {t("nav.rings")}
         </Tab>
         <Tab className={styles.tab} value="compose">
-          ✉️ {t("nav.compose")}
+          <span aria-hidden="true">✉️</span> {t("nav.compose")}
         </Tab>
         <Tab className={styles.tab} value="ack">
-          🛡️ {t("ack.title")}
+          <span aria-hidden="true">🛡️</span> {t("ack.title")}
         </Tab>
         <Tab className={styles.tab} value="import">
-          📥 {t("nav.import")}
+          <span aria-hidden="true">📥</span> {t("nav.import")}
         </Tab>
         <Tab className={styles.tab} value="settings">
-          ⚙️ {t("nav.settings")}
+          <span aria-hidden="true">⚙️</span> {t("nav.settings")}
         </Tab>
       </TabList>
     </nav>

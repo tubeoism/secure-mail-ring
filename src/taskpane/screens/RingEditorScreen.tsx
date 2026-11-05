@@ -107,6 +107,16 @@ const POLICY_KEYS: readonly PolicyKey[] = [
   "fieldRule",
 ];
 
+export function handleEditorKeyDown(
+  e: { key: string; preventDefault?: () => void; stopPropagation?: () => void },
+  onBack: () => void,
+) {
+  if (e.key === "Escape") {
+    e.stopPropagation?.();
+    onBack();
+  }
+}
+
 export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEditorScreenProps) {
   const styles = useStyles();
   const [activeTab, setActiveTab] = useState<EditorTab>("members");
@@ -232,7 +242,7 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onKeyDown={(e) => handleEditorKeyDown(e, onBack)}>
       <div className={styles.headerRow}>
         <Button size="small" appearance="subtle" onClick={onBack} aria-label={t("common.back")}>
           ← {t("common.back")}
@@ -327,7 +337,7 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 size="small"
                 appearance="subtle"
                 onClick={() => handleRemoveMember(idx)}
-                aria-label={`Remove ${m.value}`}
+                aria-label={`${t("common.delete")} ${m.value}`}
               >
                 ✕
               </Button>
@@ -349,14 +359,14 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 value={newMemberKind}
                 onChange={(_e, d) => setNewMemberKind(d.value as Member["kind"])}
                 size="small"
-                aria-label="Member kind"
+                aria-label={t("editor.tab.members")}
               >
                 <option value="address">{t("editor.member.kind.address")}</option>
                 <option value="domain">{t("editor.member.kind.domain")}</option>
                 <option value="subdomains">{t("editor.member.kind.subdomains")}</option>
               </Select>
               <Input
-                placeholder="name@domain.vn"
+                placeholder={t("editor.member.value")}
                 value={newMemberValue}
                 onChange={(_e, d) => setNewMemberValue(d.value)}
                 size="small"
@@ -407,7 +417,7 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 size="small"
                 appearance="subtle"
                 onClick={() => handleRemoveToken(tok)}
-                aria-label={`Remove token ${tok}`}
+                aria-label={`${t("common.delete")} ${tok}`}
               >
                 ✕
               </Button>
@@ -415,12 +425,12 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
           ))}
           <div style={{ display: "flex", gap: "6px" }}>
             <Input
-              placeholder="e.g. ALPHA, CONFIDENTIAL"
+              placeholder={t("editor.attachments.tokens")}
               value={newToken}
               onChange={(_e, d) => setNewToken(d.value)}
               size="small"
               style={{ flex: 1 }}
-              aria-label="New token"
+              aria-label={t("editor.attachments.tokens")}
             />
             <Button size="small" appearance="primary" onClick={handleAddToken}>
               +
@@ -440,7 +450,7 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 size="small"
                 appearance="subtle"
                 onClick={() => handleRemoveExempt(ext)}
-                aria-label={`Remove extension ${ext}`}
+                aria-label={`${t("common.delete")} ${ext}`}
               >
                 ✕
               </Button>
@@ -448,12 +458,12 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
           ))}
           <div style={{ display: "flex", gap: "6px" }}>
             <Input
-              placeholder=".ics, .vcf"
+              placeholder={t("editor.attachments.exempt")}
               value={newExempt}
               onChange={(_e, d) => setNewExempt(d.value)}
               size="small"
               style={{ flex: 1 }}
-              aria-label="New extension"
+              aria-label={t("editor.attachments.exempt")}
             />
             <Button size="small" appearance="primary" onClick={handleAddExempt}>
               +
@@ -566,7 +576,7 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 size="small"
                 appearance="subtle"
                 onClick={() => handleRemoveFieldRule(idx)}
-                aria-label={`Remove rule ${idx}`}
+                aria-label={`${t("common.delete")} ${idx + 1}`}
               >
                 ✕
               </Button>
@@ -588,7 +598,7 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 value={newRuleType}
                 onChange={(_e, d) => setNewRuleType(d.value as FieldRule["type"])}
                 size="small"
-                aria-label="Rule type"
+                aria-label={t("editor.fieldRules.add")}
               >
                 <option value="mustBeIn">{t("editor.fieldRules.type.mustBeIn")}</option>
                 <option value="mustNotBeIn">{t("editor.fieldRules.type.mustNotBeIn")}</option>
@@ -598,7 +608,7 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
                 value={newRuleField}
                 onChange={(_e, d) => setNewRuleField(d.value as FieldRule["field"])}
                 size="small"
-                aria-label="Rule field"
+                aria-label={t("editor.tab.fieldRules")}
               >
                 <option value="to">TO</option>
                 <option value="cc">CC</option>
@@ -606,11 +616,11 @@ export function RingEditorScreen({ t, ring, settings, onSave, onBack }: RingEdit
               </Select>
             </div>
             <Input
-              placeholder="e.g. *@partner.vn"
+              placeholder={t("editor.member.value")}
               value={newRulePattern}
               onChange={(_e, d) => setNewRulePattern(d.value)}
               size="small"
-              aria-label="Rule pattern"
+              aria-label={t("editor.member.value")}
             />
             <Checkbox
               label={t("editor.fieldRules.when.anyExternal")}

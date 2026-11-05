@@ -13,6 +13,7 @@ import {
 import type { Ring } from "@smr/core";
 import { useState } from "react";
 import type { Translator } from "../../shared/contracts";
+import { PrototypeToolbar } from "../components/PrototypeToolbar";
 import type { ScreenId } from "../types";
 
 const useStyles = makeStyles({
@@ -121,20 +122,13 @@ export function RingsScreen({
 
   return (
     <div className={styles.container}>
+      {onToggleEmptyState && (
+        <PrototypeToolbar onToggleEmpty={onToggleEmptyState} isEmptyVariant={isEmptyVariant} />
+      )}
       <div className={styles.toolbar}>
         <div className={styles.topActions}>
           <Subtitle2>{t("rings.title")}</Subtitle2>
           <div style={{ display: "flex", gap: "6px" }}>
-            {onToggleEmptyState && (
-              <Button
-                size="small"
-                appearance="subtle"
-                onClick={onToggleEmptyState}
-                title="Toggle empty state fixture"
-              >
-                {isEmptyVariant ? "Reset Fixtures" : "Simulate Empty"}
-              </Button>
-            )}
             <Button
               appearance="primary"
               size="small"
