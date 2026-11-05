@@ -53,6 +53,18 @@ The prototype that the PO merged meets the acceptance criteria of AG-01 that QA 
 - [x] AC-4 The tests of requirement 3 exist, use `userEvent`, and fail when the behaviour they name is broken (state in the PR which break you tried).
 - [x] AC-5 `npm run verify` passes; path guard green; no new dependency.
 
+## Round 3 (after QA round 2 of PR #37)
+PR #37 was merged by the PO at QA round 2 (head `f0eff11`, verdict CHANGES REQUESTED: https://github.com/tubeoism/secure-mail-ring/pull/37#issuecomment-6659715894). B-1, AC-2 and N-3 are resolved on `main`. What is left, as one more PR from the current `main` on branch `ag/AG-01B-round3` (same card, same allowed paths, plus `src/test-setup/**` is read-only: use it, do not edit it). The test tooling exists since CL-14 (PR #38): files named `*.dom.test.tsx`, helper `renderApp` in `src/test-setup/renderApp.tsx`, worked example `src/test-setup/example.dom.test.tsx`.
+
+| # | Finding | Required change | Check |
+|---|---|---|---|
+| R3-1 | M-2: tests do not exercise the app | Rewrite the five tests of requirement 3 as `*.dom.test.tsx` that call `renderApp`, find controls with `getByRole`/`getByLabelText`, and act with the `userEvent` instance it returns. Delete `src/taskpane/__tests__/helpers/userEvent.ts` and the old `screens.test.tsx` tests it served (they are replaced, not weakened). The 500-member test asserts the remainder badge and the last listed member. Tab order is not testable in jsdom with Fluent UI: set focus directly, then press Enter, Space or Esc (see CL-14 edge cases). | Each of these breaks makes a named test fail; paste the failing output in the PR: remove `onNavigate("editor")`/`onNavigate("share")` in `RingsScreen.tsx`; remove the container `onKeyDown` in `ShareScreen.tsx` and in `ImportScreen.tsx`; change `- 50` to `- 51` in `RingEditorScreen.tsx` (remainder). |
+| R3-2 | M-1: wrong accessible names | Write `docs/tasks/CCR-<nn>.md` from `_CCR_TEMPLATE.md` with `vi` and `en` text for: domain A input, domain B input, add-exception button, and the ring `select` label in Share (the field label and the select must not both be the screen title). Until the lead publishes the keys (CL-05D, `contract-v3`), keep one literal per control in a single constants module, not `common.save` or `share.title`. | AC-2 grep still clean apart from `PrototypeToolbar` and that module; no two controls on a screen share an accessible name. |
+| R3-3 | Minor: unvalidated URL parameters | In `src/taskpane/index.tsx` accept `?screen=` only from the list of screen ids and `?lang=` only `vi` or `en`; anything else falls back to the defaults. Add a test: `?lang=xx` shows no raw key, `?screen=foo` shows the ring list. | The test fails without the validation. |
+| R3-4 | Minor: AC-1 evidence | Commit the 320/450 px audit script and its output under `docs/tasks/evidence/AG-01/` (a script that runs against the dev server; no new dependency). | QA can rerun it. |
+
+Process: Status stays `Changes requested` until the PR is open, then `In QA`. QA round 3 reviews only the delta against `f0eff11`'s findings. Rounds used: 2 of 3.
+
 ## Edge cases
 - A Vietnamese label much longer than its English one must not push a button out of the viewport (AG-01 edge case).
 - A ring name with 80 characters and no spaces.
