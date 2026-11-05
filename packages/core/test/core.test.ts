@@ -13,19 +13,39 @@ import {
 import { checkAttachments } from "../src/attachments";
 import { sortRecipients } from "../src/order";
 import type { ComposeSnapshot, Member, RecipientEntry, Ring } from "../src/model";
+import { createEvaluate } from "../src/evaluate";
+import { NOW, entry, mail, ring } from "./helpers";
 
 describe("createCore", () => {
   const fallback = createStubCore({ evaluations: [], shareCodes: [] });
   const real = createCore({ fallback });
 
-  it("keeps every CoreApi method and replaces only the implemented ones", () => {
+  it("keeps every CoreApi method and replaces all but the share-code codec", () => {
     const keys = Object.keys(fallback).sort();
     expect(Object.keys(real).sort()).toEqual(keys);
-    expect(real.sortRecipients).not.toBe(fallback.sortRecipients);
-    expect(real.findShadowedPatterns).not.toBe(fallback.findShadowedPatterns);
-    expect(real.detectFieldRuleConflicts).not.toBe(fallback.detectFieldRuleConflicts);
-    expect(real.mergePolicy).toBe(fallback.mergePolicy);
-    expect(real.evaluate).toBe(fallback.evaluate);
+    for (const key of [
+      "evaluate",
+      "sortRecipients",
+      "findShadowedPatterns",
+      "detectFieldRuleConflicts",
+      "mergePolicy",
+      "diffRings",
+      "suggestRing",
+    ] as const) {
+      expect(real[key]).not.toBe(fallback[key]);
+    }
+    expect(real.encodeRing).toBe(fallback.encodeRing);
+    expect(real.decodeRing).toBe(fallback.decodeRing);
+  });
+
+  it("reads expiry from the clock it is given, and from the system clock by default", () => {
+    const old = ring({ id: "old", expiresAt: "2026-06-30T00:00:00Z" });
+    const snapshot = mail({ to: [entry("a@abccorp.vn")] });
+    const early = createCore({ fallback, now: () => new Date("2026-01-01T00:00:00Z") });
+    const late = createCore({ fallback, now: () => NOW });
+    expect(early.suggestRing([old], snapshot)).toBe("old");
+    expect(late.suggestRing([old], snapshot)).toBeNull();
+    expect(createCore({ fallback }).suggestRing([old], snapshot)).toBeNull();
   });
 
   it("uses the real field-rule conflict detection", () => {
@@ -42,8 +62,6 @@ describe("createCore", () => {
     expect(real.findShadowedPatterns(["x.vn", "a@x.vn"])).toHaveLength(1);
   });
 });
-
-const NOW = new Date("2026-10-29T00:00:00Z");
 
 describe("NFR-1 performance", () => {
   const members: Member[] = Array.from({ length: 500 }, (_, i) =>
@@ -109,7 +127,7 @@ describe("NFR-1 performance", () => {
   const instrumented = "__stryker__" in globalThis;
 
   it.skipIf(instrumented)(
-    "runs every send-time check on 50 recipients, about 2,000 reference members and 20 attachments inside 50 ms",
+    "runs every send-time check, alone and through evaluate, on 50 recipients, about 2,000 reference members and 20 attachments inside 50 ms",
     () => {
       expect(ring.ok).toBe(true);
       const r = (ring as { value: Ring }).value;
@@ -151,6 +169,22 @@ describe("NFR-1 performance", () => {
         sortRecipients(r, snapshot);
         checkAttachments(r, others, snapshot.attachments, NOW);
       };
+      const evaluate = createEvaluate(() => NOW);
+      const runEvaluate = () =>
+        evaluate({
+          ring: r,
+          allRings: [r, ...otherRings.map((o) => ({ ...r, ...o }))],
+          settings: {
+            schema: "smr/1",
+            policyFloor: {},
+            lookalikeExceptions: [],
+            learning: { enabled: false, until: null },
+            language: "en",
+          },
+          snapshot,
+          history,
+          acknowledged: [],
+        });
       run(); // warm up
       // Best of five: a shared CI runner (and Stryker's instrumented code) adds one-off stalls.
       const times = Array.from({ length: 5 }, () => {
@@ -159,6 +193,15 @@ describe("NFR-1 performance", () => {
         return performance.now() - started;
       });
       expect(Math.min(...times)).toBeLessThan(50);
+
+      // The same scenario through the single entry point of the send path (CL-05 AC-12).
+      runEvaluate();
+      const evaluateTimes = Array.from({ length: 5 }, () => {
+        const started = performance.now();
+        runEvaluate();
+        return performance.now() - started;
+      });
+      expect(Math.min(...evaluateTimes)).toBeLessThan(50);
     },
   );
 });

@@ -1,5 +1,6 @@
 // Attachment name checks (FR-4). Only names are read, never contents (FR-4.8). Matching is
 // boundary-aware: `ABC` matches `x_ABC.pdf` and `[ABC] x.pdf` but not `ABCD_x.pdf`.
+import { isRingExpired } from "./expiry";
 import type { AttachmentInfo, Ring } from "./model";
 
 const COMBINING_MARKS = /[̀-ͯ]/g;
@@ -47,12 +48,6 @@ export interface AttachmentCheck {
 
 type RingTokens = Pick<Ring, "id" | "attachments"> & Partial<Pick<Ring, "expiresAt">>;
 
-const isExpired = (ring: RingTokens, now: Date) => {
-  if (ring.expiresAt == null) return false;
-  const at = Date.parse(ring.expiresAt);
-  return !Number.isNaN(at) && at < now.getTime();
-};
-
 const hasExtension = (name: string, extensions: readonly string[]) => {
   const lower = name.toLowerCase();
   return extensions.some((ext) => {
@@ -78,7 +73,7 @@ export function checkAttachments(
   const own = ring.attachments.tokens;
   const ownFolded = new Set(own.map((t) => foldForMatch(t.trim())));
   const foreign = otherRings
-    .filter((r) => r.id !== ring.id && !isExpired(r, now))
+    .filter((r) => r.id !== ring.id && !isRingExpired(r, now))
     .map((r) => ({
       id: r.id,
       tokens: r.attachments.tokens.filter((t) => !ownFolded.has(foldForMatch(t.trim()))),
