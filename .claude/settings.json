@@ -2,7 +2,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "mcp__antigravity__.*",
+        "matcher": "mcp__antigravity__.*|Bash|PowerShell",
         "hooks": [
           {
             "type": "command",

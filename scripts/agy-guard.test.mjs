@@ -140,6 +140,63 @@ describe("agy-guard: prompt screening (T5 finding)", () => {
   });
 });
 
+describe("agy-guard: shell route", () => {
+  const shell = (command, tool = "Bash") => evaluate(tool, { command }, ROOT);
+
+  it("allows the job runner commands for a valid job id", () => {
+    for (const c of [
+      "node scripts/agy-job.mjs run review-pr9-a",
+      "node ./scripts/agy-job.mjs status review-pr9-a",
+      "node scripts/agy-job.mjs result abc",
+      "node scripts/agy-job.mjs cancel abc",
+    ]) {
+      expect(shell(c).allow).toBe(true);
+      expect(shell(c, "PowerShell").allow).toBe(true);
+    }
+  });
+
+  it("allows read-only agy queries and unrelated commands that only mention agy", () => {
+    for (const c of [
+      "agy --version",
+      "agy models",
+      "ls .tools/agy-bridge/venv",
+      "git log -- docs/agents/delegation-log.md",
+      "npm run verify",
+      "grep -n agy CLAUDE.md",
+      "cat scripts/agy-guard.mjs",
+    ]) {
+      expect(shell(c).allow, c).toBe(true);
+    }
+  });
+
+  it("denies starting agy or the bridge directly", () => {
+    for (const c of [
+      'agy -p "hello"',
+      "agy --dangerously-skip-permissions -p x",
+      "cd /tmp && agy -p x",
+      "echo hi | agy",
+      "(agy -p x)",
+      "./.tools/agy-bridge/venv/Scripts/agy-bridge.exe --no-workspace hi",
+      "C:\\tools\\agy.exe -p x",
+      '"agy" -p x',
+      "agy-mcp-server",
+      "python -m agy_headless_bridge hi",
+      "py -3.11 -c 'from agy_headless_bridge import bridge; bridge.run(\"x\")'",
+      "node scripts/agy-job.mjs run abc && agy -p x",
+    ]) {
+      expect(shell(c).allow, c).toBe(false);
+    }
+    expect(shell("& agy -p x", "PowerShell").allow).toBe(false);
+    expect(shell("Start-Process agy -ArgumentList '-p x'", "PowerShell").allow).toBe(false);
+    expect(shell('Start-Process -FilePath "agy.exe"', "PowerShell").allow).toBe(false);
+  });
+
+  it("tolerates a missing command", () => {
+    expect(evaluate("Bash", {}, ROOT).allow).toBe(true);
+    expect(evaluate("Bash", undefined, ROOT).allow).toBe(true);
+  });
+});
+
 describe("toRepoRelative", () => {
   it("normalises paths", () => {
     expect(toRepoRelative("Src\\TaskPane\\", ROOT)).toBe("src/taskpane");
