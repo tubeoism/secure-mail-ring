@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Claude Code |
 | Stage | S1 (follow-up to CL-05) |
-| Status | In QA |
+| Status | Done |
 | Depends on | CL-05 (Done), CL-05B (Done, PR #28) |
 | Contract | `contract-v1` (no change to `CoreApi`); `acknowledgementKey` and `computeFingerprint` are additive exports of CL-05 and have no consumer yet |
 | Plan references | `project_plan.md` §3 (mode Acknowledge), CL-05 D7 |
