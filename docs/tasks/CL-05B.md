@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Claude Code |
 | Stage | S1 |
-| Status | Ready |
+| Status | In QA |
 | Depends on | CL-02 (Done). Sequenced after CL-05 only because the lead works on one core card at a time; no code dependency. Input for one check: the Spike evidence for the `Authentication-Results` header (CL-01, `docs/spikes/RESULTS.md`) |
 | Contract | `contract-v1` plus an additive `contract-v2` published by this card (see D7) |
 | Plan references | `project_plan.md` FR-2.1 to FR-2.9, §6.2 (domain lock), §6.3 (`LicenseProvider`, three tiers), T-1, D-12, D-15, D-17, NFR-3 |
