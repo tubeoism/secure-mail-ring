@@ -19,7 +19,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-05C | S1 | Follow-up to CL-05 from the advisory review: `ak2` key includes `messageKey`, distinct fingerprint token shapes, no-ring sub-domain test | CL-05, CL-05B | 0.25 | In QA |
 | CL-04C | S1 | Fix to CL-04 test setup: Vitest `testTimeout` 30 s so the Stryker dry run no longer aborts on the Bloom tests | CL-04 | 0.25 | Done |
 | CL-04D | S1 | Process fix: board change log becomes one file per PR (`docs/tasks/changelog/`), so parallel PRs stop conflicting on `BOARD.md` | — | 0.25 | In QA |
-| CL-05E | S1 | Codec hardening from the advisory re-review of CL-05B: inflate in pieces so the output cap stops the work, `extractBody` starts at the nearest BEGIN marker | CL-05B | 0.25 | In QA |
+| CL-05E | S1 | Codec hardening from the advisory re-review of CL-05B: inflate in pieces so the output cap stops the work, `extractBody` starts at the nearest BEGIN marker, the `Authentication-Results` parser respects quoted strings | CL-05B | 0.25 | In QA |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
 | CL-07 | S3 | Compose events: `OnNewMessageCompose`, recipients/attachments changed, ring binding (`sessionData` + custom property) | CL-06 | 2–3 | Draft |
 | CL-08 | S4 | `OnMessageSend` handler: evaluation, Warn/Acknowledge/Block, ack verification, reorder with invariant, Bloom write | CL-03, CL-04, CL-05, CL-05B, CL-07 | 4–6 | Draft |

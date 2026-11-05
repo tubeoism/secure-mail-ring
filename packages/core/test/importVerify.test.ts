@@ -56,6 +56,48 @@ describe("parseAuthenticationResults (RFC 8601)", () => {
   });
 });
 
+// CL-05E (advisory re-review): text the sender chose can be reflected by the server as a quoted
+// string (the local part of `smtp.mailfrom`). Inside quotes a `;`, a space or a parenthesis is
+// text, so it can neither start a new result nor hide the real ones.
+describe("parseAuthenticationResults: quoted strings", () => {
+  const FORGED =
+    'mx.example.net; spf=pass smtp.mailfrom="; dkim=pass header.d=abccorp.vn ;"@evil.example';
+
+  it("does not read a result written inside a quoted string", () => {
+    const r = parseAuthenticationResults(FORGED);
+    expect(r.map((x) => x.method)).toEqual(["spf"]);
+    expect(
+      check({ authenticationResults: [FORGED] }).authentication,
+      "forged pass must not count",
+    ).toBe("unverified");
+  });
+
+  it("does not let a quoted parenthesis hide the results that follow", () => {
+    const text = 'spf=pass smtp.mailfrom="a(b"@evil.example; dkim=fail header.d=abccorp.vn';
+    expect(parseAuthenticationResults(text).map((x) => [x.method, x.result])).toEqual([
+      ["spf", "pass"],
+      ["dkim", "fail"],
+    ]);
+    expect(check({ authenticationResults: [text] }).authentication).toBe("fail");
+  });
+
+  it("keeps a quoted property value with spaces whole and ignores an escaped quote", () => {
+    const r = parseAuthenticationResults(
+      'dkim=pass header.i="a b header.d=evil.example" header.d=abccorp.vn',
+    );
+    expect(r[0]?.props.get("header.d")).toBe("abccorp.vn");
+    const escaped = parseAuthenticationResults('spf=pass smtp.mailfrom="a\\";b"; dkim=none');
+    expect(escaped.map((x) => x.method)).toEqual(["spf", "dkim"]);
+  });
+
+  it("treats an unclosed quote as text to the end, never as a pass", () => {
+    const r = parseAuthenticationResults(
+      'spf=pass smtp.mailfrom="x; dkim=pass header.d=abccorp.vn',
+    );
+    expect(r.map((x) => x.method)).toEqual(["spf"]);
+  });
+});
+
 describe("parseAuthenticationResults: edge cases", () => {
   it("keeps what follows a nested comment, and honours an escaped parenthesis inside one", () => {
     const nested = parseAuthenticationResults(
