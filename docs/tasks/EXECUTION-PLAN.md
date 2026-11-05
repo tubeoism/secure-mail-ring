@@ -48,7 +48,7 @@ Order inside Antigravity's queue (it works one card at a time): AG-01, AG-07, AG
 | 5 | CL-05 Q3 | **Answered: yes.** Acknowledgements are per finding and bound to a fingerprint of recipients, fields and file names; Warn can never be acknowledged away | Yes | CL-05, AG-07 finding texts, AG-09 |
 | 6 | CL-05 Q4 | **Answered: defer to `contract-v2`.** `RingDiff` omits `internalDomain`, `firstTimeCheck`, field rules and tokens: add it as an additive `contract-v2` before AG-11, or amend `contract-v1` now | Defer to `contract-v2` (only AG-11 uses it) | AG-01 not delayed |
 | 7 | AG-01 | The branch has a commit and a stash. Decide: continue it in Antigravity's session, then open the PR for QA, or start over from the card | Continue; the stash holds work in progress | Wave 1 for the feature track |
-| 8 | Cards | Approve AG-07 (written, Draft) and CL-05B (written, Draft; four questions of its own, Q1 to Q4 in the card). CL-05 is implemented in a separate thread since the Q1 to Q4 answers | Approve | Wave 1 |
+| 8 | Cards | **Approved 2026-11-05 ("Ok, go").** AG-07 becomes Ready when PR #20 (placeholder check) merges; CL-05B is Ready and starts after CL-05 (PR #19) merges. CL-05 was implemented in a separate thread | Done | Wave 1 |
 | 9 | Optional hardening | Finding F-4 (helper that lists invalid field-rule patterns) and F-6 (local part cap, rejecting `<` and `>`) from the advisory review | Do F-4 inside CL-05 or AG-05's prerequisite; F-6 later | AG-05 quality |
 | 10 | Later, not yet asked | Cloudflare account (AG-12), hosting and domain for CL-09, build-time secrets for the license (CL-05B) | Ask when the card is written | Waves 3 and 4 |
 

@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Claude Code |
 | Stage | S1 |
-| Status | Draft |
+| Status | Ready |
 | Depends on | CL-02 (Done). Sequenced after CL-05 only because the lead works on one core card at a time; no code dependency. Input for one check: the Spike evidence for the `Authentication-Results` header (CL-01, `docs/spikes/RESULTS.md`) |
 | Contract | `contract-v1` plus an additive `contract-v2` published by this card (see D7) |
 | Plan references | `project_plan.md` FR-2.1 to FR-2.9, §6.2 (domain lock), §6.3 (`LicenseProvider`, three tiers), T-1, D-12, D-15, D-17, NFR-3 |
@@ -68,11 +68,11 @@ The pure parts of "share a ring with colleagues" and "know who installed the add
 ## Evidence required
 - Test names for each AC, coverage and mutation output, the advisory-review job id in `docs/agents/delegation-log.md`, and the `contract-v2` BOARD note.
 
-## Open questions for the PO (needed before Ready)
+## Questions for the PO (answered 2026-11-05: yes to Q1 to Q4 as recommended, taken from "Ok, go" after the recommendations were listed)
 - **Q1** Bundle the `RingDiff` extension (gap G-1: `internalDomain`, `firstTimeCheck`, field rules, tokens) into the `contract-v2` that this card publishes? It was deferred to "an additive `contract-v2` before AG-11" in CL-05 Q4. Recommendation: yes, one tag instead of two.
 - **Q2** Approve D5's rule that a licence failure never blocks sending a mail and only disables share and import? Recommendation: yes (`AGENTS.md` §8).
 - **Q3** Approve D6's trust rule: read only the topmost `Authentication-Results` header and treat a missing or unparseable header as "unverified" (a warning, not a block)? Recommendation: yes.
 - **Q4** Approve D1 and D3: `fflate` as the only new runtime dependency (exact version), and the key model (`KeyProvider`, `keyId` rotation, key tied to the licence result)? Recommendation: yes.
 
 ## Notes
-Written by Claude Code on 2026-11-05 as part of the execution plan, after the PO answered CL-05 Q1 and Q4 (split accepted, `RingDiff` deferred to `contract-v2`). Status stays Draft until the PO answers Q1 to Q4 above.
+Written by Claude Code on 2026-11-05 as part of the execution plan, after the PO answered CL-05 Q1 and Q4 (split accepted, `RingDiff` deferred to `contract-v2`). Q1 to Q4 answered as recommended, so Status moved Draft → Ready on 2026-11-05. Work starts after CL-05 (PR #19) is merged, because both cards edit `packages/core/src/core.ts` and `index.ts`.
