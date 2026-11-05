@@ -11,7 +11,7 @@
 3. **Task cards.** Write each AG card from `docs/tasks/_TEMPLATE.md` just in time (when its contract exists), with testable acceptance criteria. Status stays `Draft` until PO approves, then `Ready`.
 4. **QA.** Review every `ag/*` PR with `docs/agents/qa-checklist.md`.
 5. **CCRs.** Answer each Contract Change Request within the stage: implement it, or reject it with the reason and an alternative.
-6. **Board hygiene.** Keep `docs/tasks/BOARD.md` current after every merge, QA verdict, or CCR.
+6. **Board hygiene.** Keep `docs/tasks/BOARD.md` current after every merge, QA verdict, or CCR. Status cells are edited in `BOARD.md`; the change-log entry is one new file per PR under `docs/tasks/changelog/` (never append to a shared file).
 
 ## QA procedure
 
