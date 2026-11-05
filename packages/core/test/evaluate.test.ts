@@ -586,6 +586,16 @@ describe("evaluate: no ring and expired ring (AC-6, D8, D9)", () => {
     ]);
   });
 
+  it("treats only the sender's exact domain as internal without a ring (I-1)", () => {
+    const sub = mail({
+      to: [entry("colleague@tunt.pro"), entry("a@sub.tunt.pro")],
+    });
+    const r = evaluate(input({ ring: null, snapshot: sub, history: noHistory() }));
+    expect(r.findings.filter((f) => f.kind === "outsider").map((f) => f.subject)).toEqual([
+      "a@sub.tunt.pro",
+    ]);
+  });
+
   it("takes modes from the default policy raised by the floor", () => {
     const r = evaluate(
       input({
