@@ -15,7 +15,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | Done |
 | CL-04B | S1 | Fix F-1 of the advisory review: registrable-domain heuristic for `.id.vn`, `.io.vn`, `.biz.vn` and similar national sub-domains | CL-04 | 0.5 | Done |
 | CL-05 | S1 | Core decision engine: `policy` (floor, Strict preset), `evaluate`, fingerprint + acknowledgement key, `diff`, ring suggestion (E-3), ring expiry (E-8) | CL-02, CL-03, CL-04 | 1–2 | Draft |
-| CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Draft (card after CL-05) |
+| CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Ready (starts after CL-05, PR #19, merges) |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
 | CL-07 | S3 | Compose events: `OnNewMessageCompose`, recipients/attachments changed, ring binding (`sessionData` + custom property) | CL-06 | 2–3 | Draft |
 | CL-08 | S4 | `OnMessageSend` handler: evaluation, Warn/Acknowledge/Block, ack verification, reorder with invariant, Bloom write | CL-03, CL-04, CL-05, CL-05B, CL-07 | 4–6 | Draft |
@@ -37,7 +37,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | AG-04 | S2 | Ordering editor: 3-column drag-and-drop (To/CC/BCC), shadowed-pattern warnings from core | AG-03, CL-03 | 1–2 | Draft |
 | AG-05 | S2 | Field-rules editor (F8) with conflict display from core | AG-03, CL-04 | 1 | Draft |
 | AG-06 | S2 | Settings: global floor, lookalike exceptions, F7 learning mode + paste known addresses, storage meter, language, About (bundle + manifest version) | AG-01, CL-06 | 1–2 | Draft |
-| AG-07 | S2 | i18n catalog `vi` + `en` for every key in `contract-v1` | CL-02 | 1 | Draft |
+| AG-07 | S2 | i18n catalog `vi` + `en` for every key in `contract-v1` | CL-02 | 1 | Draft (approved by PO; Ready when PR #20 merges) |
 | AG-08 | S3 | Compose pane: ring picker, suggested ring, "Sort now" button | AG-03, CL-07 | 1–2 | Draft |
 | AG-09 | S4 | Acknowledge pane: findings with per-item tick, confirm flow | AG-08, CL-08 | 1–2 | Draft |
 | AG-10 | S5 | Export / share: code block, copy, "Share with colleagues", share-email template | AG-03, CL-05B | 1–2 | Draft |
@@ -94,3 +94,6 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-11-05 | CL-13: repository `antigravity-agent-toolkit` created; first PR merged by the PO; tag `v0.1.0` and branch `stable` created on the PO "go". AC-1, AC-2, AC-4, AC-5 done (marketplace install tested and removed again); AC-3 tests pass. Open: AC-6, AC-7 and the migration PR (AC-8), which needs #14 merged first |
 | 2026-11-05 | PRs #13 (CL-11 close-out) and #14 (CL-12) merged by the PO → CL-12 Done. Conflicts of the CL-04B and CL-13 PRs with the new `main` resolved by merging `main` into their branches (BOARD only) |
 | 2026-11-05 | CL-13 migration: this repository now uses the agent toolkit (`v0.2.0`): scripts and generic agents removed, `.claude/agy-policy.json` added, plugin and marketplace declared in settings, workflow content synced, fail-closed tripwire registered. Finding: repository settings alone do not load the plugin in a headless run, so the tripwire (toolkit PR #2) keeps the rule where the plugin is absent; each machine installs the plugin once. AC-3, AC-8, AC-9 done; AC-6 and AC-7 open |
+| 2026-11-05 | Execution plan for the rest of v1.0 written (`docs/tasks/EXECUTION-PLAN.md`): waves, routing, what is blocked on the PO. Tag `contract-v1` pushed to the remote (it existed only locally). AG-07 card written (Draft). PR #17 merged by the PO |
+| 2026-11-05 | PO answered CL-05 Q1–Q4 as recommended (split accepted; mail without a ring and expired rings; acknowledgements per finding; `RingDiff` deferred to `contract-v2`); CL-05 is implemented in its own thread. CL-05B card written (Draft): codec, licence, import-source check, heartbeat payload, additive `contract-v2` |
+| 2026-11-05 | PO approved AG-07 and the four answers of CL-05B ("Ok, go"). CL-05B → Ready, starts after CL-05 (PR #19) merges. AG-07 → Ready when PR #20 merges: it adds the placeholder check of `vi`/`en` to `scripts/i18n-check.mjs` and fixes that check, which did nothing on Windows |
