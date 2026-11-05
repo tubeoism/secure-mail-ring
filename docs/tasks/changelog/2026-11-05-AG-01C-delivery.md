@@ -1,0 +1,1 @@
+AG-01C delivered (PR open) → In QA: RingEditorScreen member add-row wrapped and minWidth: 0 set to prevent "+" button clipping at 320/450 px; tested surviving mutations (Chỉnh sửa button navigation and strict ?screen / ?lang fallback); removed audit_viewport.mjs.

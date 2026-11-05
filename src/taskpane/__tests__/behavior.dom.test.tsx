@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { fixtures } from "../../shared/contracts";
-import type { Member, Ring } from "@smr/core";
+import type { Language, Member, Ring } from "@smr/core";
 import { getTranslator } from "../i18n";
+import { App } from "../App";
 import { renderApp } from "../../test-setup/renderApp";
 import { RingsScreen } from "../screens/RingsScreen";
 import { RingEditorScreen } from "../screens/RingEditorScreen";
@@ -22,6 +23,17 @@ describe("Taskpane Interactive Behavior (Testing Library & userEvent)", () => {
 
     // 2. Click 1: Reach Editor via clicking the ring
     await user.click(screen.getByRole("button", { name: firstRing.name }));
+    expect(screen.getByText(vi("editor.title"))).toBeTruthy();
+
+    // Return to rings list via Back button
+    await user.click(screen.getByRole("button", { name: new RegExp(vi("common.back")) }));
+    expect(screen.getByRole("button", { name: firstRing.name })).toBeTruthy();
+
+    // 2b. Click 1: Reach Editor via clicking the '✏️ Chỉnh sửa' action button (kills RingsScreen.tsx:254 mutation)
+    const editButtons = screen.getAllByRole("button", { name: new RegExp(vi("common.edit")) });
+    const firstEditButton = editButtons[0];
+    if (!firstEditButton) throw new Error("No edit buttons found");
+    await user.click(firstEditButton);
     expect(screen.getByText(vi("editor.title"))).toBeTruthy();
 
     // Return to rings list via Back button
@@ -211,5 +223,38 @@ describe("Taskpane Interactive Behavior (Testing Library & userEvent)", () => {
 
     // 5. Exact remainder text (450) is displayed
     expect(screen.getByText(/450 thành viên khác/)).toBeTruthy();
+  });
+
+  it("M-3: Editor Members tab contains accessible kind selector, value input, and add button", () => {
+    render(
+      <FluentProvider theme={webLightTheme}>
+        <RingEditorScreen
+          t={vi}
+          ring={firstRing}
+          settings={fixtures.settings}
+          onSave={() => undefined}
+          onBack={() => undefined}
+        />
+      </FluentProvider>,
+    );
+
+    // Kind select, value input, and add button are all present and accessible
+    expect(screen.getByRole("combobox", { name: vi("editor.tab.members") })).toBeTruthy();
+    expect(screen.getByRole("textbox", { name: vi("editor.member.value") })).toBeTruthy();
+    expect(screen.getByRole("button", { name: vi("editor.member.add") })).toBeTruthy();
+  });
+
+  it("Fallback behaviour: untrusted ?screen query param strictly falls back to 'rings'", () => {
+    // Untrusted ?screen falls back to 'rings' (kills App.tsx screen allow-list mutation)
+    renderApp({ screen: "untrusted_malicious_screen_xyz" });
+    expect(screen.getByRole("button", { name: firstRing.name })).toBeTruthy();
+  });
+
+  it("Fallback behaviour: untrusted ?lang query param strictly falls back to 'vi'", () => {
+    // Untrusted lang prop or query param falls back to 'vi' (kills App.tsx lang allow-list mutation)
+    render(<App initialLanguage={"untrusted_lang" as unknown as Language} />);
+    // Language button in header displays "VI" and tab list displays Vietnamese rings title
+    expect(screen.getByRole("button", { name: vi("settings.language") }).textContent).toBe("VI");
+    expect(screen.getByRole("tab", { name: new RegExp(vi("nav.rings")) })).toBeTruthy();
   });
 });
