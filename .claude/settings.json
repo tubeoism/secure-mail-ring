@@ -6,10 +6,22 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/agy-guard.mjs"
+            "command": "node .claude/hooks/agy-tripwire.mjs"
           }
         ]
       }
     ]
+  },
+  "extraKnownMarketplaces": {
+    "antigravity-agent-toolkit": {
+      "source": {
+        "source": "github",
+        "repo": "tubeoism/antigravity-agent-toolkit",
+        "ref": "stable"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "agy-bridge@antigravity-agent-toolkit": true
   }
 }

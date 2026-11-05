@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "allowWrite": [
+    "src/taskpane",
+    "src/readmode/ui",
+    "src/shared/i18n/locales",
+    "docs/user",
+    "docs/rollout",
+    "worker/heartbeat"
+  ],
+  "allowContext": ["src/shared/contracts", "docs/tasks", "docs/agents"],
+  "deny": [
+    "packages/core",
+    "src/launchevent",
+    "src/shared/office",
+    "src/shared/storage",
+    "manifest",
+    "build",
+    ".github",
+    "scripts",
+    "spikes",
+    "docs/spikes",
+    "project_plan.md",
+    "dist",
+    "coverage",
+    "reports",
+    ".stryker-tmp"
+  ],
+  "reviewOnly": ["packages/core"],
+  "reviewMarker": "[REVIEW]",
+  "promptDeny": [
+    { "pattern": "packages/core", "reviewExempt": true },
+    "src/launchevent",
+    "src/shared/(office|storage)",
+    "docs/spikes",
+    "project_plan",
+    "(^|[\\s\"'`(/])\\.(github|stryker-tmp)\\b",
+    "(^|[\\s\"'`(/])(manifest|scripts|spikes)/"
+  ]
+}

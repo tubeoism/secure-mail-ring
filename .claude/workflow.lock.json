@@ -1,0 +1,16 @@
+{
+  "source": "tubeoism/antigravity-agent-toolkit",
+  "ref": "v0.2.0",
+  "files": {
+    ".claude/agents/brief-writer.md": "c8245789c2bc929008908aa221fa164d6bdfc6210c9a140e0c5a20619fbf7582",
+    ".claude/agents/delegation-logger.md": "dac60b7782ce55d2df796bc84e07f7fce97baf2ca31549c746803286627a0032",
+    ".claude/agents/qa-reviewer.md": "46ae32f14dbcac7cf33bc998414d4ec8e8ae685fb6ff825ce657204af806e5f8",
+    ".claude/skills/two-agent-routing/SKILL.md": "1d7a37a955e4f9741cc5c615b46ea85a66f04f984b5248936d9f5c8eadffdacb",
+    "docs/templates/ccr.md": "19a2c57e4ba4679c238ff933a034fcb337b809878fdeb563b61ccf98a8a11dae",
+    "docs/templates/pull-request-template.md": "811c3475338e19b1e69386909aae1e4339c3c740bf401745f060bda57ef116f5",
+    "docs/templates/qa-checklist.md": "5d8bb182934069e996b819302fd6d11d797e4b1e94b8701c431a79db82bd3384",
+    "docs/templates/task-card.md": "5b1afc2ba940045cb8cb9b910d5a0e72830a92e721563a318a2b6cdcf4029f7e",
+    "CLAUDE.md#block": "9f4c80791ffff28ddbba15ce84deed92973b7e4c1958df7db7870cf8af5e6903",
+    ".claude/hooks/agy-tripwire.mjs": "62bdcac92f3cf3107555d8155b9a6d9d1e8cf1b6b86ceac9869a82ad4d258416"
+  }
+}
