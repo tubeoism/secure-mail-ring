@@ -37,7 +37,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | AG-04 | S2 | Ordering editor: 3-column drag-and-drop (To/CC/BCC), shadowed-pattern warnings from core | AG-03, CL-03 | 1–2 | Draft |
 | AG-05 | S2 | Field-rules editor (F8) with conflict display from core | AG-03, CL-04 | 1 | Draft |
 | AG-06 | S2 | Settings: global floor, lookalike exceptions, F7 learning mode + paste known addresses, storage meter, language, About (bundle + manifest version) | AG-01, CL-06 | 1–2 | Draft |
-| AG-07 | S2 | i18n catalog `vi` + `en` for every key in `contract-v1` | CL-02 | 1 | Draft (approved by PO; Ready when PR #20 merges) |
+| AG-07 | S2 | i18n catalog `vi` + `en` for every key in `contract-v1` | CL-02 | 1 | Ready (after AG-01 in Antigravity's queue) |
 | AG-08 | S3 | Compose pane: ring picker, suggested ring, "Sort now" button | AG-03, CL-07 | 1–2 | Draft |
 | AG-09 | S4 | Acknowledge pane: findings with per-item tick, confirm flow | AG-08, CL-08 | 1–2 | Draft |
 | AG-10 | S5 | Export / share: code block, copy, "Share with colleagues", share-email template | AG-03, CL-05B | 1–2 | Draft |
@@ -97,3 +97,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-11-05 | Execution plan for the rest of v1.0 written (`docs/tasks/EXECUTION-PLAN.md`): waves, routing, what is blocked on the PO. Tag `contract-v1` pushed to the remote (it existed only locally). AG-07 card written (Draft). PR #17 merged by the PO |
 | 2026-11-05 | PO answered CL-05 Q1–Q4 as recommended (split accepted; mail without a ring and expired rings; acknowledgements per finding; `RingDiff` deferred to `contract-v2`); CL-05 is implemented in its own thread. CL-05B card written (Draft): codec, licence, import-source check, heartbeat payload, additive `contract-v2` |
 | 2026-11-05 | PO approved AG-07 and the four answers of CL-05B ("Ok, go"). CL-05B → Ready, starts after CL-05 (PR #19) merges. AG-07 → Ready when PR #20 merges: it adds the placeholder check of `vi`/`en` to `scripts/i18n-check.mjs` and fixes that check, which did nothing on Windows |
+| 2026-11-05 | PRs #18 and #20 merged by the PO → AG-07 Ready. CL-05 (PR #19) has a merge conflict that the CL-05 thread is fixing |
