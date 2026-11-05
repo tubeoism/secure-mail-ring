@@ -13,6 +13,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-02 | S1 | **Contract v1**: types, `OfficeAdapter`, `StorageAdapter`, `MockOfficeAdapter`, fixtures, i18n key list → tag `contract-v1` | CL-00 | 2–3 | Done |
 | CL-03 | S1 | Core: `normalize`, `match`, `order`, `attachments` | CL-02 | 2–3 | Done |
 | CL-04 | S1 | Core: `lookalike`, `history` (Bloom), `fieldRules` | CL-02 | 2–3 | Done |
+| CL-04B | S1 | Fix F-1 of the advisory review: registrable-domain heuristic for `.id.vn`, `.io.vn`, `.biz.vn` and similar national sub-domains | CL-04 | 0.5 | In QA |
 | CL-05 | S1 | Core decision engine: `policy` (floor, Strict preset), `evaluate`, fingerprint + acknowledgement key, `diff`, ring suggestion (E-3), ring expiry (E-8) | CL-02, CL-03, CL-04 | 1–2 | Draft |
 | CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Draft (card after CL-05) |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
@@ -80,3 +81,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-11-05 | CL-11 card written (Draft, awaiting PO approval). PO decisions D-1 to D-6 recorded in the card, incl. read-only advisory review of core PRs through the bridge |
 | 2026-11-05 | PO approved CL-11 (thread message "Duyệt") → Ready → In progress. T1–T6 run on the PO machine; nothing installed before this approval |
 | 2026-11-05 | CL-11 delivered (PR #12) → In QA. T1, T2, T4, T6 pass; T3 needs PO to approve the MCP server; T5 found agy reads named paths outside add_dir (AC-5 open, PO decision). Bridge calls are read-only |
+| 2026-11-05 | CL-04B written and implemented on the PO message "Ok" (F-1 fix only; F-4 and F-6 stay unapproved). `splitRegistrable` now knows per-country second levels. 416 tests, 100 % line coverage, mutation score of `lookalike.ts` 92.62 % → In QA |
