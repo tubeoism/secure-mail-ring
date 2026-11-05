@@ -358,6 +358,23 @@ describe("codec: framing details", () => {
     expect(await errorOf(middle.join("\n"))).toBe("malformed");
   });
 
+  it("reads a hostile input of the largest allowed size in linear time", async () => {
+    const hostile = [
+      " ".repeat(MAX_INPUT_CHARS),
+      "\t".repeat(MAX_INPUT_CHARS),
+      "> ".repeat(MAX_INPUT_CHARS / 2),
+      ">\n".repeat(MAX_INPUT_CHARS / 2),
+      "\n".repeat(MAX_INPUT_CHARS),
+      `${BEGIN_MARKER}${" ".repeat(MAX_INPUT_CHARS - 100)}`,
+      "-----BEGIN".repeat(MAX_INPUT_CHARS / 10),
+    ];
+    for (const text of hostile) {
+      const started = Date.now();
+      expect(await errorOf(text.slice(0, MAX_INPUT_CHARS))).toBe("malformed");
+      expect(Date.now() - started, text.slice(0, 12)).toBeLessThan(1_000);
+    }
+  });
+
   it("wraps at 64 columns and never ends with an empty line", () => {
     for (const n of [1, 63, 64, 65, 128]) {
       const lines = wrapCode("A".repeat(n)).split("\n");
