@@ -60,6 +60,30 @@ export const PROMPT_DENY = [
   /(^|[\s"'`(/])(manifest|scripts|spikes|node_modules)\//i,
 ];
 
+// Shell route (CL-12). Running agy from a shell would skip every check above, so a shell command
+// may start agy only through the job runner, whose own start-up repeats these checks. This is a
+// heuristic against accidents and injected commands, not a sandbox.
+const JOB_RUNNER =
+  /^\s*node\s+(?:\.\/)?scripts\/agy-job\.mjs\s+(?:run|status|result|cancel)\s+[a-z0-9][a-z0-9-]{1,38}[a-z0-9]\s*$/i;
+const AGY_READ_ONLY =
+  /^\s*agy(?:\.exe)?\s+(?:--version|--help|models|changelog|help(?:\s+[a-z][a-z-]*)?)\s*$/i;
+const AGY_COMMAND_WORD =
+  /(?:^|[;&|(\n]|\bStart-Process)\s*(?:-FilePath\s+)?["']?(?:[^\s;&|()"']*[\\/])?(?:agy|agy-bridge|agy-mcp-server)(?:\.exe)?["']?(?=\s|$|[;&|)])/i;
+const AGY_PYTHON_MODULE = /\b(?:python|py)(?:\.exe)?\b[^\n]*\bagy_(?:headless_bridge|mcp_server)/i;
+
+/** @returns {{ allow: true } | { allow: false, reason: string }} */
+export function evaluateShell(command) {
+  if (JOB_RUNNER.test(command) || AGY_READ_ONLY.test(command)) return { allow: true };
+  if (AGY_COMMAND_WORD.test(command) || AGY_PYTHON_MODULE.test(command)) {
+    return {
+      allow: false,
+      reason:
+        "agy must be started through `node scripts/agy-job.mjs run <job-id>` so the allow/deny checks apply",
+    };
+  }
+  return { allow: true };
+}
+
 const norm = (p) => p.replace(/\\/g, "/").replace(/\/+$/, "").toLowerCase();
 
 function isWithin(child, parent) {
@@ -85,6 +109,9 @@ export function evaluate(toolName, input, repoRoot) {
   const args = input ?? {};
   const deny = (reason) => ({ allow: false, reason });
 
+  if (toolName === "Bash" || toolName === "PowerShell") {
+    return evaluateShell(typeof args.command === "string" ? args.command : "");
+  }
   if (toolName.endsWith("agy_research")) {
     const q = typeof args.query === "string" ? args.query.replace(/\\/g, "/") : "";
     const hit = PROMPT_DENY.find((re) => re.test(q));
@@ -148,6 +175,25 @@ export function evaluate(toolName, input, repoRoot) {
   return { allow: true };
 }
 
+const MCP_PREFIX = "mcp__antigravity__";
+
+/**
+ * Entry point of the PreToolUse hook. The MCP tools of the community bridge cannot pass
+ * `--mode plan`, and CL-12 test T7 showed that without it agy's file tools write anywhere on disk,
+ * so they are refused outright. `evaluate()` stays the policy function that the job runner reuses.
+ * @returns {{ allow: true } | { allow: false, reason: string }}
+ */
+export function evaluateHook(toolName, input, repoRoot) {
+  if (toolName.startsWith(MCP_PREFIX)) {
+    return {
+      allow: false,
+      reason:
+        "the Antigravity MCP tools run agy without plan mode and can write anywhere on disk (CL-12 test T7); start a job with `node scripts/agy-job.mjs run <job-id>` instead",
+    };
+  }
+  return evaluate(toolName, input, repoRoot);
+}
+
 function main() {
   let raw = "";
   process.stdin.setEncoding("utf8");
@@ -162,7 +208,7 @@ function main() {
       return;
     }
     const root = process.env.CLAUDE_PROJECT_DIR || event.cwd || process.cwd();
-    const result = evaluate(String(event.tool_name ?? ""), event.tool_input, root);
+    const result = evaluateHook(String(event.tool_name ?? ""), event.tool_input, root);
     emit(result.allow, result.allow ? "" : result.reason);
   });
 }
