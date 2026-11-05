@@ -24,9 +24,9 @@ Parallel PRs stop conflicting on `docs/tasks/BOARD.md`. The PO asked for it in t
 4. `CLAUDE.md` responsibility 6 states the same in one sentence.
 
 ## Acceptance criteria
-- [ ] AC-1 No row of the old change log is lost: `CHANGELOG.md` has the same data rows as `BOARD.md` had on `main` (count and text). Evidence: command output in the PR.
-- [ ] AC-2 Two branches that each add a new file under `docs/tasks/changelog/` merge without conflict. Evidence: `git merge-tree` run on two scratch branches.
-- [ ] AC-3 `npm run verify` passes (Prettier, path guard, i18n check).
+- [x] AC-1 No row of the old change log is lost: 38 data rows on `main`, the same 38 in `CHANGELOG.md` (sorted `diff` empty).
+- [x] AC-2 Two scratch branches each adding a new file under `docs/tasks/changelog/` merge cleanly (`git merge-tree`, exit 0).
+- [x] AC-3 `npm run verify` passes.
 
 ## Edge cases
 - Two PRs changing the same status row of `BOARD.md` can still conflict; the README says to merge them one at a time. Accepted.
