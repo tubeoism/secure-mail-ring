@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Claude Code |
 | Stage | S1 (fix to CL-04 test setup) |
-| Status | In QA |
+| Status | Done |
 | Depends on | CL-04 (Done) |
 | Contract | `contract-v1` (no change) |
 | Plan references | `CLAUDE.md` compensating controls (mutation score ≥ 80 %), `AGENTS.md` §6 (verify) |
@@ -26,7 +26,7 @@ The `mutation` job of CI stops failing before it runs a single mutant. Its initi
 
 ## Acceptance criteria
 - [x] AC-1 Root cause shown. Evidence: with `--testTimeout=200` the Bloom property test and the 3,000-address false-positive test fail with "Test timed out in 200ms" locally (about 430 ms and 250 ms uninstrumented), which is the CI failure at a different scale.
-- [ ] AC-2 `npm run verify` passes and the `mutation` job of this PR is green on the CI runner.
+- [x] AC-2 `npm run verify` passes and the `mutation` job is green on the CI runner. Evidence: run 41989544920 on `main` (merge of PR #23): `verify` 1 min, `mutation` 30 min, both success. Note: runs 59 and 60 of `main` also passed before the fix, so the 5 s timeout was intermittent (runner speed); the fix removes the risk, it does not change a constant failure.
 - [x] AC-3 No test, source file or dependency changed; mutation score unchanged (the run is the same code).
 
 ## Edge cases
@@ -39,4 +39,4 @@ Making the Bloom hash faster, or splitting the heavy tests.
 - The `mutation` check of the PR.
 
 ## Notes
-Written and implemented 2026-11-05 on the PO message "OK". AC-2 is ticked when CI is green on the PR head.
+Written and implemented 2026-11-05 on the PO message "OK". AC-2 ticked after the merge run of PR #23 was green.

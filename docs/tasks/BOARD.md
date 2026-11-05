@@ -17,7 +17,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-05 | S1 | Core decision engine: `policy` (floor, Strict preset), `evaluate`, fingerprint + acknowledgement key, `diff`, ring suggestion (E-3), ring expiry (E-8) | CL-02, CL-03, CL-04 | 1–2 | Done |
 | CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Ready (CL-05 is merged, so it can start) |
 | CL-05C | S1 | Follow-up to CL-05 from the advisory review: `ak2` key includes `messageKey`, distinct fingerprint token shapes, no-ring sub-domain test | CL-05, CL-05B | 0.25 | Ready (starts after CL-05B merges) |
-| CL-04C | S1 | Fix to CL-04 test setup: Vitest `testTimeout` 30 s so the Stryker dry run no longer aborts on the Bloom tests | CL-04 | 0.25 | In QA |
+| CL-04C | S1 | Fix to CL-04 test setup: Vitest `testTimeout` 30 s so the Stryker dry run no longer aborts on the Bloom tests | CL-04 | 0.25 | Done |
 | CL-04D | S1 | Process fix: board change log becomes one file per PR (`docs/tasks/changelog/`), so parallel PRs stop conflicting on `BOARD.md` | — | 0.25 | In QA |
 | CL-06 | S2 | Manifest v1 (all events, compose + read-mode buttons, `?mv=`), real `OfficeAdapter`, `StorageAdapter` on `roamingSettings` | CL-01, CL-02 | 2–3 | Draft |
 | CL-07 | S3 | Compose events: `OnNewMessageCompose`, recipients/attachments changed, ring binding (`sessionData` + custom property) | CL-06 | 2–3 | Draft |
