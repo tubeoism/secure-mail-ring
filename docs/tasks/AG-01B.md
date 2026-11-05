@@ -1,0 +1,67 @@
+# AG-01B — Fix the QA findings of AG-01 (round 1)
+
+| Field | Value |
+|---|---|
+| Owner | Antigravity |
+| Stage | S1 (follow-up to AG-01) |
+| Status | Ready |
+| Depends on | AG-01 (merged by the PO on 2026-11-05 with these findings open) |
+| Contract | `contract-v1`, plus `contract-v2` as published by CL-05B; no new contract change in this card |
+| Plan references | `AGENTS.md` §6 (Definition of Done), §7 (accessibility), `docs/agents/qa-checklist.md` C, E, F |
+| Estimate | 0.5–1 day |
+
+## Goal
+The prototype that the PO merged meets the acceptance criteria of AG-01 that QA could not confirm: no clipped control at 320 px, every user-visible and accessible string comes from `t()`, and the tests exercise behaviour. The PO chose this route in the project thread on 2026-11-05 ("(a) … làm cách này"). Source of the findings: the QA comment on PR #29, https://github.com/tubeoism/secure-mail-ring/pull/29#issuecomment-6657069720
+
+## Branch
+`ag/AG-01B-qa-fixes`, from the current `main`. One PR, one card.
+
+## Allowed paths
+- `src/taskpane/**`
+- `src/shared/i18n/locales/**` (translation values only)
+- `docs/tasks/evidence/AG-01/**`
+- `docs/tasks/AG-01B.md` (Status and Notes only), one new file `docs/tasks/changelog/<date>-AG-01B.md`
+- `docs/tasks/CCR-<nn>.md` (new, only if a key is missing, see requirement 2)
+
+## Requirements
+1. **Blocker B-1, Settings at 320 px.** In the look-alike exceptions block of `SettingsScreen.tsx` the second input and the "+" button run past the right edge. Make the row wrap or stack so that every control is inside the viewport and reachable at 320 px and 450 px. Re-take `docs/tasks/evidence/AG-01/settings.png` at 320 px (`vi`). Check every other screen again at both widths: no control may be wider than the viewport and no horizontal scroll on the page.
+2. **Major M-1, strings.** Replace each hard-coded user-visible or accessible string with `t(key)`, using an existing key when one fits. For a string with no key, do not edit `src/shared/contracts/i18nKeys.ts`: write `docs/tasks/CCR-<nn>.md` from `docs/tasks/_CCR_TEMPLATE.md` listing each proposed key with its `vi` and `en` text and its parameters, then keep the literal in one place until the lead publishes the keys. Places found by QA (all aria-labels, placeholders and titles; template literals count):
+
+   | File | Lines | Text |
+   |---|---|---|
+   | `components/NavBar.tsx` | 42 | "Main Navigation" |
+   | `screens/RingEditorScreen.tsx` | 330, 352, 359, 380, 410, 418, 423, 443, 451, 456, 569, 591, 601, 609, 613 | "Remove …", "Member kind", example placeholders, "New token", "New extension", "Rule type", "Rule field", "Rule pattern" |
+   | `screens/SettingsScreen.tsx` | 230, 238, 243, 246, 251 | "Remove exception …", "Domain A", "Domain B", placeholders |
+   | `screens/ShareScreen.tsx` | 140 | "Select ring to share" |
+   | `screens/ComposeScreen.tsx` | 238 | "Open Acknowledge Pane" |
+   | `screens/ImportScreen.tsx` | 129 | the placeholder text (the marker lines may stay literal: they are the code format, not prose) |
+
+   The prototype scaffolding (Minor N-1) is allowed to stay in plain text if it is grouped in one component named `PrototypeToolbar` that the later cards remove: "Simulate Empty", "Reset Fixtures", its title, "Select test email scenario", "Scenario: …" and the Vietnamese `title` at `AcknowledgeScreen.tsx:178`. State this in the card Notes.
+3. **Major M-2, tests.** Add Testing Library tests with `userEvent` (not static HTML strings) in `src/taskpane/__tests__/`:
+   - from the ring list, every screen of AG-01 requirement 1 is reachable in at most two clicks (editor, share, compose, acknowledge, import, settings);
+   - Tab reaches a control on each of two screens and Enter and Space activate it; Esc closes what the card AG-01 names;
+   - switching `vi` → `en` → `vi` changes visible text on at least two screens, and no raw key (`foo.bar`) is on the page;
+   - a ring with a very long name and a very long Vietnamese string renders with its action buttons still in the document;
+   - the 500-member edge case asserts something about the content (for example that the member count and the first and last member are shown), not only that it renders.
+   Do not weaken or remove an existing test.
+4. **Minor N-2 and N-3 (optional, no AC).** The tab strip at 320 px hides "Nhập vòng" and "Cài đặt" with the scrollbar hidden: add a visible cue (fade, arrow or a visible scrollbar) or shorten the labels; emoji used as icons get `aria-hidden`.
+
+## Acceptance criteria
+- [ ] AC-1 At 320 px and at 450 px, on every screen, no interactive element lies outside the viewport and the page has no horizontal scroll. Evidence: a test or script that measures it, plus the new `settings.png`.
+- [ ] AC-2 `grep` of `src/taskpane` (non-test files) for `aria-label="`, `placeholder="` and `title="` followed by a letter finds only the `PrototypeToolbar` and the marker-line placeholder. Evidence: command output in the PR.
+- [ ] AC-3 Every string moved to `t()` has `vi` and `en` values; strings without a key are listed in a CCR. `npm run check:i18n` is green.
+- [ ] AC-4 The tests of requirement 3 exist, use `userEvent`, and fail when the behaviour they name is broken (state in the PR which break you tried).
+- [ ] AC-5 `npm run verify` passes; path guard green; no new dependency.
+
+## Edge cases
+- A Vietnamese label much longer than its English one must not push a button out of the viewport (AG-01 edge case).
+- A ring name with 80 characters and no spaces.
+
+## Out of scope
+Final visual polish; any real persistence, validation or Office.js (lead tasks); new screens.
+
+## Evidence required
+- Tests in `src/taskpane/__tests__/*.test.tsx`; screenshots under `docs/tasks/evidence/AG-01/`; the AC-2 command output in the PR description.
+
+## Notes
+(Owner updates during work.) QA round 2 re-reviews only the changes since round 1 (round limit 3).
