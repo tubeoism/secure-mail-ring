@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import path from "node:path";
-import { evaluate, toRepoRelative } from "./agy-guard.mjs";
+import { evaluate, evaluateHook, toRepoRelative } from "./agy-guard.mjs";
 
 const ROOT = path.resolve("repo-root");
 const ask = (input) => evaluate("mcp__antigravity__agy_ask", input, ROOT);
@@ -200,6 +200,27 @@ describe("agy-guard: shell route", () => {
   it("tolerates a missing command", () => {
     expect(evaluate("Bash", {}, ROOT).allow).toBe(true);
     expect(evaluate("Bash", undefined, ROOT).allow).toBe(true);
+  });
+});
+
+describe("agy-guard: hook entry point", () => {
+  it("refuses every Antigravity MCP tool, even with a policy-clean call", () => {
+    for (const tool of [
+      "mcp__antigravity__agy_ask",
+      "mcp__antigravity__agy_research",
+      "mcp__antigravity__anything_else",
+    ]) {
+      const r = evaluateHook(tool, { prompt: "p", workspace: "none", query: "q" }, ROOT);
+      expect(r.allow, tool).toBe(false);
+      expect(r.reason).toContain("agy-job.mjs");
+    }
+  });
+
+  it("still applies the shell route", () => {
+    expect(evaluateHook("Bash", { command: "agy -p x" }, ROOT).allow).toBe(false);
+    expect(evaluateHook("Bash", { command: "node scripts/agy-job.mjs run abc" }, ROOT).allow).toBe(
+      true,
+    );
   });
 });
 

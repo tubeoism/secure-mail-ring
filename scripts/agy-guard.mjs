@@ -175,6 +175,25 @@ export function evaluate(toolName, input, repoRoot) {
   return { allow: true };
 }
 
+const MCP_PREFIX = "mcp__antigravity__";
+
+/**
+ * Entry point of the PreToolUse hook. The MCP tools of the community bridge cannot pass
+ * `--mode plan`, and CL-12 test T7 showed that without it agy's file tools write anywhere on disk,
+ * so they are refused outright. `evaluate()` stays the policy function that the job runner reuses.
+ * @returns {{ allow: true } | { allow: false, reason: string }}
+ */
+export function evaluateHook(toolName, input, repoRoot) {
+  if (toolName.startsWith(MCP_PREFIX)) {
+    return {
+      allow: false,
+      reason:
+        "the Antigravity MCP tools run agy without plan mode and can write anywhere on disk (CL-12 test T7); start a job with `node scripts/agy-job.mjs run <job-id>` instead",
+    };
+  }
+  return evaluate(toolName, input, repoRoot);
+}
+
 function main() {
   let raw = "";
   process.stdin.setEncoding("utf8");
@@ -189,7 +208,7 @@ function main() {
       return;
     }
     const root = process.env.CLAUDE_PROJECT_DIR || event.cwd || process.cwd();
-    const result = evaluate(String(event.tool_name ?? ""), event.tool_input, root);
+    const result = evaluateHook(String(event.tool_name ?? ""), event.tool_input, root);
     emit(result.allow, result.allow ? "" : result.reason);
   });
 }

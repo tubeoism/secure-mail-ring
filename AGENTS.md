@@ -85,7 +85,7 @@ CI path guard: a PR from an `ag/*` branch that touches a lead-owned path fails.
 
 There is no direct channel between agents. Communicate only through task cards, PR descriptions and QA comments. Every PR description states what changed, how it was verified, and open questions. Every QA comment ends with one verdict line: `QA: PASS`, `QA: CHANGES REQUESTED`, or `QA: BLOCKED (<reason>)`.
 
-The Antigravity bridge (`.mcp.json`, CL-11) is a transport only. A Claude session on the PO's machine may send Antigravity a bounded read-only brief (research, long-context analysis, design second opinion, advisory PR review) and read the reply. The card, PR description and QA verdict stay the record; every bridge call is logged in `docs/agents/delegation-log.md`. Bridge calls never write to the repository.
+The Antigravity job runner (`scripts/agy-job.mjs`, CL-11 and CL-12) is a transport only. A Claude session on the PO's machine may send Antigravity a bounded read-only brief (research, long-context analysis, design second opinion, advisory PR review) and read the reply. The card, PR description and QA verdict stay the record; every job is logged in `docs/agents/delegation-log.md`. Jobs run in plan mode and never write to the repository; the community MCP bridge is retired because it cannot guarantee that (CL-12 test T7).
 
 ## 10. Environments
 
