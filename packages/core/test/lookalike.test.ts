@@ -258,10 +258,67 @@ describe("splitRegistrable", () => {
     ["abc.go.jp", "abc", "go.jp"],
     ["abc.co.uk", "abc", "co.uk"],
     ["abc.com.au", "abc", "com.au"],
+    // National sub-domains (CL-04B, finding F-1)
+    ["abc.id.vn", "abc", "id.vn"],
+    ["abc.io.vn", "abc", "io.vn"],
+    ["abc.biz.vn", "abc", "biz.vn"],
+    ["abc.info.vn", "abc", "info.vn"],
+    ["abc.name.vn", "abc", "name.vn"],
+    ["abc.pro.vn", "abc", "pro.vn"],
+    ["abc.health.vn", "abc", "health.vn"],
+    ["abc.int.vn", "abc", "int.vn"],
+    ["mail.abc.id.vn", "abc", "id.vn"],
+    ["abc.ltd.uk", "abc", "ltd.uk"],
+    ["abc.plc.uk", "abc", "plc.uk"],
+    ["abc.me.uk", "abc", "me.uk"],
+    ["abc.sch.uk", "abc", "sch.uk"],
+    ["abc.id.au", "abc", "id.au"],
+    ["abc.asn.au", "abc", "asn.au"],
+    ["abc.ad.jp", "abc", "ad.jp"],
+    ["abc.ed.jp", "abc", "ed.jp"],
+    ["abc.gr.jp", "abc", "gr.jp"],
+    ["abc.lg.jp", "abc", "lg.jp"],
+    ["abc.re.kr", "abc", "re.kr"],
+    ["abc.pe.kr", "abc", "pe.kr"],
+    // Country-specific second levels do not leak to other country codes
+    ["abc.biz.uk", "biz", "uk"],
+    ["abc.ltd.vn", "ltd", "vn"],
+    ["abc.id.uk", "id", "uk"],
+    ["abc.io.it", "io", "it"],
+    ["abc.ed.vn", "ed", "vn"],
+    // Two labels are a suffix on its own, not a registrable name
+    ["id.vn", "id", "vn"],
   ])("%s", (domain, primary, suffix) => {
     const parts = splitRegistrable(domain);
     expect([parts.primary, parts.suffix]).toEqual([primary, suffix]);
     expect(parts.domain).toBe(suffix === "" ? primary : `${primary}.${suffix}`);
+  });
+});
+
+describe("findLookalikes: national sub-domains (CL-04B)", () => {
+  it("compares abccorp.id.vn with the trusted abccorp.vn", () => {
+    expect(summary(run(["x@abccorp.id.vn"]))).toEqual([
+      ["x@abccorp.id.vn", "abccorp.vn", "suffix"],
+    ]);
+    expect(summary(run(["x@abccorp.io.vn"]))).toEqual([
+      ["x@abccorp.io.vn", "abccorp.vn", "suffix"],
+    ]);
+  });
+
+  it("tells two organisations under id.vn apart instead of merging them", () => {
+    const ring = { domains: ["trusted.id.vn"] };
+    expect(summary(run(["x@trusted1.id.vn"], ring))).toEqual([
+      ["x@trusted1.id.vn", "trusted.id.vn", "editDistance"],
+    ]);
+    expect(run(["x@evil.id.vn"], ring)).toEqual([]);
+    expect(run(["x@trusted.id.vn", "y@mail.trusted.id.vn"], ring)).toEqual([]);
+  });
+
+  it("flags a look-alike label under the same sub-domain", () => {
+    const ring = { domains: ["abccorp.id.vn"] };
+    expect(summary(run(["x@abcc0rp.id.vn"], ring))).toEqual([
+      ["x@abcc0rp.id.vn", "abccorp.id.vn", "skeleton"],
+    ]);
   });
 });
 

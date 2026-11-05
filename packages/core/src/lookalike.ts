@@ -21,6 +21,18 @@ const GENERIC_SECOND_LEVEL = new Set([
   "ne",
   "go",
 ]);
+/**
+ * Second levels that exist only under one country code (CL-04B). They stay out of the generic set
+ * so that `abc.id.uk` or `abc.io.it` keep their old split. The list is a hand-kept subset, not a
+ * public suffix list; provincial names such as `hanoi.vn` are not covered.
+ */
+const COUNTRY_SECOND_LEVEL: Readonly<Record<string, ReadonlySet<string>>> = {
+  vn: new Set(["biz", "info", "name", "pro", "health", "int", "id", "io"]),
+  uk: new Set(["ltd", "plc", "me", "sch"]),
+  au: new Set(["id", "asn"]),
+  jp: new Set(["ad", "ed", "gr", "lg"]),
+  kr: new Set(["re", "pe"]),
+};
 const MIN_LABEL_FOR_DISTANCE = 4;
 const SHORT_LABEL = 8;
 
@@ -38,7 +50,10 @@ export function splitRegistrable(domain: string): Registrable {
   const last = labels[labels.length - 1] ?? "";
   const second = labels[labels.length - 2] ?? "";
   if (labels.length === 1) return { primary: last, suffix: "", domain: last };
-  const twoPartSuffix = labels.length >= 3 && last.length === 2 && GENERIC_SECOND_LEVEL.has(second);
+  const twoPartSuffix =
+    labels.length >= 3 &&
+    last.length === 2 &&
+    (GENERIC_SECOND_LEVEL.has(second) || COUNTRY_SECOND_LEVEL[last]?.has(second) === true);
   const suffixLength = twoPartSuffix ? 2 : 1;
   const primary = labels[labels.length - suffixLength - 1] ?? "";
   const suffix = labels.slice(labels.length - suffixLength).join(".");
