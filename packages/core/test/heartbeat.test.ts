@@ -70,7 +70,24 @@ describe("buildHeartbeat (D-17, NFR-3)", () => {
       ok: false,
       error: { code: "noSalt" },
     });
-    for (const bad of ["", " 1.0", "1.0 beta", "x".repeat(33), "a@b.vn", "-1", "1/2", "v1\n"]) {
+    for (const bad of [
+      "",
+      " 1.0",
+      "1.0 beta",
+      "1".repeat(33),
+      "a@b.vn",
+      "-1",
+      "1/2",
+      "1\n",
+      "v1_rc-2",
+      "john_doe",
+      "1.0.0-john",
+      "john",
+      "1.0+john doe",
+      "1.2.3.4.5",
+      "1+",
+      "1+" + "a".repeat(17),
+    ]) {
       expect(buildHeartbeat({ ...input, bundleVersion: bad }), bad).toEqual({
         ok: false,
         error: { code: "badVersion" },
@@ -80,8 +97,9 @@ describe("buildHeartbeat (D-17, NFR-3)", () => {
         error: { code: "badVersion" },
       });
     }
-    for (const good of ["1", "1.0.0", "2026.11.05+build.7", "v1_rc-2"]) {
+    for (const good of ["1", "1.0.0", "2026.11.05+build.7", "1.2.3.4", "1".repeat(32)]) {
       expect(buildHeartbeat({ ...input, bundleVersion: good }).ok, good).toBe(true);
+      expect(buildHeartbeat({ ...input, manifestVersion: good }).ok, good).toBe(true);
     }
   });
 

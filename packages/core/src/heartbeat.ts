@@ -9,7 +9,9 @@ import { sha256, utf8 } from "./hash";
 import { normalizeAddress } from "./normalize";
 import { err, ok, type Result } from "./model";
 
-const VERSION = /^[0-9A-Za-z][0-9A-Za-z._+-]{0,31}$/;
+// A version is dotted numbers with an optional short build tag, so that no name or address can be
+// smuggled in as a "version": 1, 1.0.0, 2026.11.05+build.7.
+const VERSION = /^(?=.{1,32}$)\d+(?:\.\d+){0,3}(?:\+[0-9A-Za-z.]{1,16})?$/;
 
 export const HeartbeatPayloadSchema = v.strictObject({
   /** Hex SHA-256 of the salt and the normalised mailbox address. */
