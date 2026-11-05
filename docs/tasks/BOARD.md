@@ -16,7 +16,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-04B | S1 | Fix F-1 of the advisory review: registrable-domain heuristic for `.id.vn`, `.io.vn`, `.biz.vn` and similar national sub-domains | CL-04 | 0.5 | Done |
 | CL-05 | S1 | Core decision engine: `policy` (floor, Strict preset), `evaluate`, fingerprint + acknowledgement key, `diff`, ring suggestion (E-3), ring expiry (E-8) | CL-02, CL-03, CL-04 | 1–2 | Done |
 | CL-05B | S1 | Core: `codec` (share code, `fflate` + WebCrypto), `license`, `importVerify`, heartbeat payload builder | CL-02 | 1–2 | Done |
-| CL-05C | S1 | Follow-up to CL-05 from the advisory review: `ak2` key includes `messageKey`, distinct fingerprint token shapes, no-ring sub-domain test | CL-05, CL-05B | 0.25 | Ready (starts after CL-05B merges) |
+| CL-05C | S1 | Follow-up to CL-05 from the advisory review: `ak2` key includes `messageKey`, distinct fingerprint token shapes, no-ring sub-domain test | CL-05, CL-05B | 0.25 | Done |
 | CL-05D | S1 | Contract v3: i18n keys for share/import (plus the keys from the AG-01 QA CCR), `headerValues` and `parseHeartbeat` in the core, `getSenderAddress` in `OfficeAdapter`, Worker folder in the toolchain → tag `contract-v3` | CL-05B | 0.5–1 | Draft (waits for the AG-01 CCR; PO approval) |
 | CL-04C | S1 | Fix to CL-04 test setup: Vitest `testTimeout` 30 s so the Stryker dry run no longer aborts on the Bloom tests | CL-04 | 0.25 | Done |
 | CL-04D | S1 | Process fix: board change log becomes one file per PR (`docs/tasks/changelog/`), so parallel PRs stop conflicting on `BOARD.md` | — | 0.25 | In QA |
@@ -35,7 +35,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 
 | ID | Stage | Task | Depends on | Est. | Status |
 |---|---|---|---|---|---|
-| AG-01 | S0–S1 | Clickable task-pane prototype on mocks for PO UX review | CL-00, CL-02 | 2–3 | Ready (dependencies Done; starts when PO releases it) |
+| AG-01 | S0–S1 | Clickable task-pane prototype on mocks for PO UX review | CL-00, CL-02 | 2–3 | In QA |
 | AG-02 | S2 | Ring list: list, search, duplicate, delete with confirm, archived rings | AG-01, CL-06 | 1–2 | Draft |
 | AG-03 | S2 | Ring editor: members, subject tag, attachment tokens, per-finding policy, Strict preset, expiry | AG-02, CL-05 | 2–3 | Draft |
 | AG-04 | S2 | Ordering editor: 3-column drag-and-drop (To/CC/BCC), shadowed-pattern warnings from core | AG-03, CL-03 | 1–2 | Draft |

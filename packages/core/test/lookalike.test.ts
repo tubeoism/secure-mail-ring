@@ -226,7 +226,7 @@ describe("findLookalikes: rule details", () => {
   });
 
   it("does not apply the edit-distance rule to very short names", () => {
-    expect(run(["x@fbt.vn"], { domains: ["fpt.vn"] })).toEqual([]);
+    expect(run(["x@qzt.vn"], { domains: ["qzu.vn"] })).toEqual([]);
     expect(run(["x@abc.vn"], { domains: ["abd.vn"] })).toEqual([]);
     expect(summary(run(["x@abcd.vn"], { domains: ["abce.vn"] }))).toHaveLength(1);
     expect(run(["x@ab.vn"], { domains: ["abcde.vn"] })).toEqual([]);

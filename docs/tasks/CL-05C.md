@@ -4,8 +4,8 @@
 |---|---|
 | Owner | Claude Code |
 | Stage | S1 (follow-up to CL-05) |
-| Status | Ready (starts after the CL-05B PR merges: both touch `packages/core`) |
-| Depends on | CL-05 (Done), CL-05B merged |
+| Status | In QA |
+| Depends on | CL-05 (Done), CL-05B (Done, PR #28) |
 | Contract | `contract-v1` (no change to `CoreApi`); `acknowledgementKey` and `computeFingerprint` are additive exports of CL-05 and have no consumer yet |
 | Plan references | `project_plan.md` §3 (mode Acknowledge), CL-05 D7 |
 | Estimate | 0.25 day |
@@ -38,11 +38,15 @@ Each finding was re-checked against the code on `main` (5759def) before it went 
 5. CL-05 D7 text updated (`ak2`, `v: 2`, I-2).
 
 ## Acceptance criteria
-- [ ] AC-1 M-1: test with two findings that differ only in `messageKey`; keys differ; old behaviour reproduced on `main` first (failing test shown).
-- [ ] AC-2 M-2: test that fails on `main` and passes after the change.
-- [ ] AC-3 I-1 test added and passing on unchanged code.
-- [ ] AC-4 I-3: no real domain in `lookalike.test.ts`.
-- [ ] AC-5 `npm run verify` passes; line coverage ≥ 90 % and mutation score ≥ 80 % on `packages/core`, reported in the PR; `evaluate.contract.test.ts` unchanged and green.
+- [x] AC-1 M-1: `fingerprint.test.ts` > "depends on the fingerprint, kind, field, subject and message key". Failed on `main` (`ak1` key identical with another `messageKey`), passes now.
+- [x] AC-2 M-2: `fingerprint.test.ts` > "tells an unresolved name from a resolved address that starts with a question mark (M-2)". Failed on `main` (equal fingerprints), passes now.
+- [x] AC-3 I-1: `evaluate.test.ts` > "treats only the sender's exact domain as internal without a ring (I-1)", green on the unchanged code.
+- [x] AC-4 I-3: `lookalike.test.ts:229` now uses `qzt.vn` / `qzu.vn`; `grep` for `fpt.vn` finds nothing.
+- [x] AC-5 `npm run verify` passes (594 tests); line coverage of `packages/core` 100 %; mutation score of `fingerprint.ts` 88.89 % (the 5 survivors are equivalent mutants of the sort comparator); `evaluate.contract.test.ts` unchanged and green. The CI `mutation` job runs the whole package.
+
+## Notes
+- Two golden tests pin the fingerprint and key values of a sample mail, so a later change that would orphan stored acknowledgements fails loudly.
+- The delegation-log row of the PR #19 review was replaced by the detailed row of the six narrow jobs (supplied by the CL-05B thread).
 
 ## Edge cases
 - The unresolved recipient without a display name falls back to the raw address text (unchanged).

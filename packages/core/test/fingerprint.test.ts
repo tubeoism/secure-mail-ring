@@ -53,6 +53,17 @@ describe("computeFingerprint (D7)", () => {
     expect(computeFingerprint(null, base)).not.toBe(fp);
   });
 
+  it("keeps its published value: a stored acknowledgement must survive an update (golden)", () => {
+    const golden = mail({
+      to: [entry("a@abccorp.vn"), entry("", "Nguyễn Văn A", false)],
+      cc: [entry("kt@partner.vn")],
+      attachments: [file("ALPHA_1.xlsx")],
+    });
+    expect(computeFingerprint(r, golden)).toBe(
+      "905795aad93c9e63de6a78216b13baac1e55abf9d9b06ff8c1b6423ebb7db62e",
+    );
+  });
+
   it("tells two unresolved recipients apart by display name", () => {
     const one = mail({ to: [entry("", "Nguyễn Văn A", false)] });
     const two = mail({ to: [entry("", "Nguyễn Văn B", false)] });
@@ -66,6 +77,12 @@ describe("computeFingerprint (D7)", () => {
     const a = computeFingerprint(r, mail({ to: [entry("???", "", false)] }));
     const b = computeFingerprint(r, mail({ to: [entry("!!!", "", false)] }));
     expect(a).not.toBe(b);
+  });
+
+  it("tells an unresolved name from a resolved address that starts with a question mark (M-2)", () => {
+    const unresolved = mail({ to: [entry("", "a@x.vn", false)] });
+    const resolvedQ = mail({ to: [entry("?a@x.vn")] });
+    expect(computeFingerprint(r, unresolved)).not.toBe(computeFingerprint(r, resolvedQ));
   });
 
   it("is unaffected by applying the reordering the engine asks for (property)", () => {
@@ -102,24 +119,40 @@ describe("computeFingerprint (D7)", () => {
 });
 
 describe("acknowledgementKey (D7)", () => {
-  const finding: Pick<Finding, "kind" | "field" | "subject"> = {
+  const finding: Pick<Finding, "kind" | "field" | "subject" | "messageKey"> = {
     kind: "outsider",
+    messageKey: "finding.outsider",
     field: "bcc",
     subject: "x@gmail.com",
   };
   const fp = computeFingerprint(r, base);
 
   it("has a versioned prefix and 32 hex characters", () => {
-    expect(acknowledgementKey(fp, finding)).toMatch(/^ak1:[0-9a-f]{32}$/);
+    expect(acknowledgementKey(fp, finding)).toMatch(/^ak2:[0-9a-f]{32}$/);
   });
 
-  it("depends on the fingerprint, kind, field and subject", () => {
+  it("keeps its published value (golden)", () => {
+    const goldenFp = "905795aad93c9e63de6a78216b13baac1e55abf9d9b06ff8c1b6423ebb7db62e";
+    expect(acknowledgementKey(goldenFp, finding)).toBe("ak2:72b9267efe4740d3ceaa08be7aa45087");
+  });
+
+  it("depends on the fingerprint, kind, field, subject and message key", () => {
     const key = acknowledgementKey(fp, finding);
     expect(acknowledgementKey(fp, finding)).toBe(key);
     expect(acknowledgementKey("other", finding)).not.toBe(key);
     expect(acknowledgementKey(fp, { ...finding, kind: "firstTime" })).not.toBe(key);
     expect(acknowledgementKey(fp, { ...finding, field: "cc" })).not.toBe(key);
     expect(acknowledgementKey(fp, { ...finding, subject: "y@gmail.com" })).not.toBe(key);
-    expect(acknowledgementKey(fp, { kind: finding.kind, subject: finding.subject })).not.toBe(key);
+    expect(
+      acknowledgementKey(fp, {
+        kind: finding.kind,
+        subject: finding.subject,
+        messageKey: finding.messageKey,
+      }),
+    ).not.toBe(key);
+    // M-1: two rules of different type on the same address and field must not share a key.
+    expect(
+      acknowledgementKey(fp, { ...finding, messageKey: "finding.fieldRule.mustNotBeIn" }),
+    ).not.toBe(key);
   });
 });
