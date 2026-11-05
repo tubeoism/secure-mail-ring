@@ -258,6 +258,31 @@ describe("diffRings: settings that could be weakened unseen (contract-v2, gap G-
     expect(fewer.removedExemptExtensions).toEqual(["ics"]);
   });
 
+  it("treats spellings that the attachment check matches alike as one (case, diacritics, leading dot)", () => {
+    const attachments = (tokens: string[], exemptExtensions: string[]) => ({
+      tokens,
+      mode: "any" as const,
+      ignoreInline: false,
+      exemptExtensions,
+    });
+    const before = ring({ attachments: attachments(["Hồ sơ", "ALPHA"], ["pdf"]) });
+    const same = diffRings(
+      before,
+      ring({ rev: 2, attachments: attachments(["ho so", " alpha "], [".PDF"]) }),
+    );
+    expect(same.addedTokens).toEqual([]);
+    expect(same.removedTokens).toEqual([]);
+    expect(same.addedExemptExtensions).toEqual([]);
+    expect(same.removedExemptExtensions).toEqual([]);
+    const other = diffRings(
+      before,
+      ring({ rev: 2, attachments: attachments(["beta"], [".exe", "pdf"]) }),
+    );
+    expect(other.addedTokens).toEqual(["beta"]);
+    expect(other.removedTokens).toEqual(["Hồ sơ", "ALPHA"]);
+    expect(other.addedExemptExtensions).toEqual([".exe"]);
+  });
+
   it("never reports a change between a ring and itself, in either direction (property)", () => {
     fc.assert(
       fc.property(

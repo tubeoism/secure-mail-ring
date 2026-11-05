@@ -4,6 +4,7 @@
 // weakened unseen (contract-v2, gap G-1, threat T-1): the treatment of the sender's own domain, the
 // first-time check, field rules, attachment tokens and exemptions.
 import type { PolicyChange, RevRelation, RingDiff, SettingChange } from "./api";
+import { foldForMatch } from "./attachments";
 import { canonicalText } from "./normalize";
 import { compileMember } from "./match";
 import { POLICY_KEYS, type FieldRule, type Member, type Ring } from "./model";
@@ -38,7 +39,11 @@ function change<T>(from: T, to: T, loosened: boolean): SettingChange<T> | null {
   return from === to ? null : { from, to, loosened };
 }
 
-const text = (s: string) => canonicalText(s.trim());
+// Tokens and extensions are compared the way attachment checking matches them, so that two spellings
+// the check treats as one are not shown as a removal plus an addition: tokens ignore case and
+// diacritics (`foldForMatch`), extensions ignore case and a leading dot.
+const token = (s: string) => foldForMatch(s.trim());
+const extension = (s: string) => canonicalText(s.trim()).replace(/^\./, "");
 
 export function diffRings(before: Ring | null, after: Ring): RingDiff {
   const policyChanges: PolicyChange[] = [];
@@ -77,10 +82,10 @@ export function diffRings(before: Ring | null, after: Ring): RingDiff {
           ),
     addedFieldRules: added(oldRules, after.fieldRules, ruleKey),
     removedFieldRules: added(after.fieldRules, oldRules, ruleKey),
-    addedTokens: added(oldTokens, after.attachments.tokens, text),
-    removedTokens: added(after.attachments.tokens, oldTokens, text),
-    addedExemptExtensions: added(oldExempt, after.attachments.exemptExtensions, text),
-    removedExemptExtensions: added(after.attachments.exemptExtensions, oldExempt, text),
+    addedTokens: added(oldTokens, after.attachments.tokens, token),
+    removedTokens: added(after.attachments.tokens, oldTokens, token),
+    addedExemptExtensions: added(oldExempt, after.attachments.exemptExtensions, extension),
+    removedExemptExtensions: added(after.attachments.exemptExtensions, oldExempt, extension),
     ignoreInlineChange:
       before === null
         ? null
