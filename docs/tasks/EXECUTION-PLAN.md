@@ -16,7 +16,7 @@ Critical path (from the board): `CL-00 → CL-02 → (CL-03..05 ∥ AG-01, AG-07
 
 | Wave | Stage | Claude (lead) | Antigravity (own session, `ag/*` branch, one card at a time) | PO | Gate to leave the wave |
 |---|---|---|---|---|---|
-| 0, now | S0 | Cards in Draft: AG-07 (written), CL-05B; finish CL-13 AC-6 and AC-7 | AG-01: review what exists | Install the plugin on each machine; run CL-01 step 0 to Spike 7; answer CL-05 Q1 to Q4 | Spikes started, Q1 to Q4 answered |
+| 0, now | S0 | Cards in Draft: AG-07 and CL-05B (both written); finish CL-13 AC-6 and AC-7 | AG-01: review what exists | Install the plugin on each machine; run CL-01 step 0 to Spike 7; answer CL-05 Q1 to Q4 | Spikes started, Q1 to Q4 answered |
 | 1 | S1 | CL-05 decision engine (1 to 2), then CL-05B codec, license, importVerify, heartbeat payload (1 to 2) | AG-01 (2 to 3), then AG-07 i18n catalogs (1) | Approve each card; UX review of AG-01 | `@smr/core` complete for CL-08; AG-01 and AG-07 merged |
 | 2 | S2 | CL-06 manifest v1, real adapters (2 to 3) | AG-02 ring list, AG-06 settings, AG-03 ring editor, AG-04 ordering editor, AG-05 field-rules editor (7 to 11 in total) | CL-01 Go/No-go for plan A; install check of the first sideload build | Task pane complete on real adapters |
 | 3 | S3 to S5 | CL-07 compose events (2 to 3), CL-08 `OnMessageSend` handler (4 to 6) | AG-08 compose pane, AG-10 export and share, AG-11 import, AG-09 acknowledge pane, AG-12 heartbeat worker | Manual test matrix of plan 8.2 with evidence; Cloudflare account for AG-12 | Send-time path works end to end in Outlook |
@@ -43,12 +43,12 @@ Order inside Antigravity's queue (it works one card at a time): AG-01, AG-07, AG
 |---|---|---|---|---|
 | 1 | Plugin (CL-13) | PR #17 is merged. Install the plugin once per machine: `/plugin install agy-bridge --marketplace tubeoism/antigravity-agent-toolkit`. Without it jobs cannot run on that machine; direct `agy` calls stay refused by the tripwire | Install on the main Windows machine | Advisory reviews and briefs through jobs; CL-13 AC-6 and AC-7 |
 | 2 | CL-01 spikes | Run step 0 to Spike 7 on the Windows tenant, fill `docs/spikes/RESULTS.md`. Spike 7 may start before the others finish; the five working days start when the harness is up | Start Spike 7 first, as agreed on 2026-10-29 | CL-06 and the Go/No-go for plan A |
-| 3 | CL-05 Q1 | Split the old CL-05 into CL-05 and CL-05B | Yes | CL-05, CL-05B |
-| 4 | CL-05 Q2 | Mail without a ring and expired rings: external recipients, look-alikes and external first-time recipients only; an expired ring counts as no ring; suggest a ring only when one is the unique best match | Yes | CL-05 |
-| 5 | CL-05 Q3 | Acknowledgements are per finding and bound to a fingerprint of recipients, fields and file names; Warn can never be acknowledged away | Yes | CL-05, AG-07 finding texts, AG-09 |
-| 6 | CL-05 Q4 | `RingDiff` omits `internalDomain`, `firstTimeCheck`, field rules and tokens: add it as an additive `contract-v2` before AG-11, or amend `contract-v1` now | Defer to `contract-v2` (only AG-11 uses it) | AG-01 not delayed |
+| 3 | CL-05 Q1 | **Answered 2026-11-05: yes, as recommended.** Split the old CL-05 into CL-05 and CL-05B | Yes | CL-05, CL-05B |
+| 4 | CL-05 Q2 | **Answered: yes.** Mail without a ring and expired rings: external recipients, look-alikes and external first-time recipients only; an expired ring counts as no ring; suggest a ring only when one is the unique best match | Yes | CL-05 |
+| 5 | CL-05 Q3 | **Answered: yes.** Acknowledgements are per finding and bound to a fingerprint of recipients, fields and file names; Warn can never be acknowledged away | Yes | CL-05, AG-07 finding texts, AG-09 |
+| 6 | CL-05 Q4 | **Answered: defer to `contract-v2`.** `RingDiff` omits `internalDomain`, `firstTimeCheck`, field rules and tokens: add it as an additive `contract-v2` before AG-11, or amend `contract-v1` now | Defer to `contract-v2` (only AG-11 uses it) | AG-01 not delayed |
 | 7 | AG-01 | The branch has a commit and a stash. Decide: continue it in Antigravity's session, then open the PR for QA, or start over from the card | Continue; the stash holds work in progress | Wave 1 for the feature track |
-| 8 | Cards | Approve AG-07 (written, Draft), CL-05 (after Q1 to Q4), CL-05B (to be written) | Approve | Wave 1 |
+| 8 | Cards | Approve AG-07 (written, Draft) and CL-05B (written, Draft; four questions of its own, Q1 to Q4 in the card). CL-05 is implemented in a separate thread since the Q1 to Q4 answers | Approve | Wave 1 |
 | 9 | Optional hardening | Finding F-4 (helper that lists invalid field-rule patterns) and F-6 (local part cap, rejecting `<` and `>`) from the advisory review | Do F-4 inside CL-05 or AG-05's prerequisite; F-6 later | AG-05 quality |
 | 10 | Later, not yet asked | Cloudflare account (AG-12), hosting and domain for CL-09, build-time secrets for the license (CL-05B) | Ask when the card is written | Waves 3 and 4 |
 
@@ -66,6 +66,6 @@ Order inside Antigravity's queue (it works one card at a time): AG-01, AG-07, AG
 ## 6. First steps proposed (nothing below starts without the PO)
 
 1. The PO installs the plugin and starts the CL-01 runbook (items 1 and 2). Nothing else waits on item 1; item 2 starts the five-day clock.
-2. The PO answers CL-05 Q1 to Q4 and approves the AG-07 card. Claude then sets AG-07 to `Ready` and starts CL-05.
-3. Claude writes the CL-05B card (Draft) as soon as the PO answers Q1 and Q4, because its scope depends on them.
+2. CL-05 Q1 to Q4 are answered and CL-05 is under way in its own thread. The PO approves the AG-07 card; Claude then sets it to `Ready`.
+3. The CL-05B card is written (Draft). The PO answers its Q1 to Q4 (bundle the `RingDiff` extension into `contract-v2`, licence failure is fail-open, header trust rule, the `fflate` dependency and key model) and approves it; it runs after CL-05.
 4. The PO decides what to do with AG-01 (item 7).
