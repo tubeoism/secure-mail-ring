@@ -15,13 +15,13 @@ Parallel PRs stop conflicting on `docs/tasks/BOARD.md`. The PO asked for it in t
 
 ## Allowed paths
 - `docs/tasks/BOARD.md`, `docs/tasks/CHANGELOG.md`, `docs/tasks/changelog/**`, `docs/tasks/CL-04D.md`
-- `CLAUDE.md` (one sentence in responsibility 6)
+- `CLAUDE.md` (one sentence in responsibility 6), `AGENTS.md` §4 (one bullet)
 
 ## Requirements
 1. Move the existing change-log table out of `BOARD.md` into `docs/tasks/CHANGELOG.md`, unchanged and marked closed.
 2. `BOARD.md` keeps a short pointer under "Change log"; the status tables stay in place.
 3. `docs/tasks/changelog/README.md` states the rule: one new file per PR, named `YYYY-MM-DD-<ID>.md`, one paragraph, never edit another PR's file.
-4. `CLAUDE.md` responsibility 6 states the same in one sentence.
+4. `CLAUDE.md` responsibility 6 and `AGENTS.md` §4 state the same in one sentence each (wording of the AGENTS.md bullet taken from PR #25, which this PR replaces).
 
 ## Acceptance criteria
 - [x] AC-1 No row of the old change log is lost: 39 data rows on `main` (after CL-04C), the same 39 in `CHANGELOG.md` (sorted `diff` empty).
