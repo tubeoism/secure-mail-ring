@@ -21,7 +21,7 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | CL-09 | S6 | Domain lock (hashed), obfuscation profile, post-build check, hosting + deploy pipeline | CL-08 | 3–4 | Draft |
 | CL-10 | S7–S8 | Release, integration test plan + evidence review, pilot metrics, control description (EN) | CL-09 | 2–3 | Draft |
 | CL-11 | S0 (tooling) | Antigravity bridge: project-scoped MCP, allow/deny hook, routing table in `CLAUDE.md`, T1–T6 validation. Off the critical path; not in the lead total | CL-00 | 1–2 | In QA |
-| CL-13 | S0 (tooling) | Agent toolkit: one versioned source for the `agy-bridge` plugin and the shared workflow content, a sync tool for vendoring into other repositories. Off the critical path | CL-11, CL-12 | 2–3 | Draft |
+| CL-13 | S0 (tooling) | Agent toolkit: one versioned source for the `agy-bridge` plugin and the shared workflow content, a sync tool for vendoring into other repositories. Off the critical path | CL-11, CL-12 | 2–3 | In progress |
 | CL-QA | all | QA of every AG PR (`docs/agents/qa-checklist.md`), CCR handling | — | 3–5 | Ongoing |
 | | | **Lead total** | | **29–43** | |
 
@@ -82,3 +82,4 @@ Estimates are person-days for the owning agent and are indicative (plan §7).
 | 2026-11-05 | PO approved CL-11 (thread message "Duyệt") → Ready → In progress. T1–T6 run on the PO machine; nothing installed before this approval |
 | 2026-11-05 | CL-11 delivered (PR #12) → In QA. T1, T2, T4, T6 pass; T3 needs PO to approve the MCP server; T5 found agy reads named paths outside add_dir (AC-5 open, PO decision). Bridge calls are read-only |
 | 2026-11-05 | CL-13 card written (Draft, awaiting PO answers Q1–Q4 and approval) after the PO chose option 1: Antigravity writes code in its own session, Claude writes cards and does QA, shared tooling for future repositories |
+| 2026-11-05 | PO answered Q1–Q4 of CL-13 (name `antigravity-agent-toolkit`, private; policy JSON per repository; shared content as proposed; separate repository, create it) → In progress. Work happens in the new repository; migration of this repository is a later PR |
