@@ -21,6 +21,7 @@ Maker → checker → approver: Antigravity makes, Claude checks, PO approves. C
 - `manifest/**`, `build/**`, `.github/**`
 - Root config: `package.json`, lockfile, `tsconfig*`, `webpack*`, `eslint*`, `vitest*`
 - `AGENTS.md`, `CLAUDE.md`, `.agents/**`, `docs/agents/**`, `project_plan.md`
+- `.mcp.json`, `.claude/**`, `scripts/**` (agent bridge configuration, hook and repo guards; CL-11)
 
 **Antigravity-owned**
 - `src/taskpane/**`, `src/readmode/ui/**`
@@ -84,6 +85,8 @@ CI path guard: a PR from an `ag/*` branch that touches a lead-owned path fails.
 
 There is no direct channel between agents. Communicate only through task cards, PR descriptions and QA comments. Every PR description states what changed, how it was verified, and open questions. Every QA comment ends with one verdict line: `QA: PASS`, `QA: CHANGES REQUESTED`, or `QA: BLOCKED (<reason>)`.
 
+The Antigravity bridge (`.mcp.json`, CL-11) is a transport only. A Claude session on the PO's machine may send Antigravity a bounded read-only brief (research, long-context analysis, design second opinion, advisory PR review) and read the reply. The card, PR description and QA verdict stay the record; every bridge call is logged in `docs/agents/delegation-log.md`. Bridge calls never write to the repository.
+
 ## 10. Environments
 
 | Agent | Runs on | Can | Cannot |
@@ -91,3 +94,5 @@ There is no direct channel between agents. Communicate only through task cards, 
 | Claude Code | Cloud Linux container | Build, unit/component/mutation tests, review, CI | Run Outlook |
 | Antigravity | PO's Windows machine | Dev server, browser preview with mocks, sideload for visual check | Push to lead-owned paths |
 | PO | Windows + Outlook | Manual test matrix (plan §8.2) with evidence | — |
+
+The Antigravity bridge runs only in Claude sessions on the PO's Windows machine. Cloud sessions and CI cannot use it.

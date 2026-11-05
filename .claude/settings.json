@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__antigravity__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/agy-guard.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}
