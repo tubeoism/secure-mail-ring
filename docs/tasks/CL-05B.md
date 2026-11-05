@@ -4,7 +4,7 @@
 |---|---|
 | Owner | Claude Code |
 | Stage | S1 |
-| Status | In QA |
+| Status | Done |
 | Depends on | CL-02 (Done). Sequenced after CL-05 only because the lead works on one core card at a time; no code dependency. Input for one check: the Spike evidence for the `Authentication-Results` header (CL-01, `docs/spikes/RESULTS.md`) |
 | Contract | `contract-v1` plus an additive `contract-v2` published by this card (see D7) |
 | Plan references | `project_plan.md` FR-2.1 to FR-2.9, §6.2 (domain lock), §6.3 (`LicenseProvider`, three tiers), T-1, D-12, D-15, D-17, NFR-3 |
@@ -51,9 +51,9 @@ The pure parts of "share a ring with colleagues" and "know who installed the add
 - [x] AC-5 Licence: a domain on the list is licensed, any other, an empty list and a malformed profile are not; with the wrong licence the codec cannot decode a code made with the right one; the hash comparison does not depend on case, a trailing dot or punycode form of the domain. Evidence: `license.test.ts` (all cases, including the patched-out build that cannot read a code).
 - [x] AC-6 Import-source check: table tests for internal and external senders, DKIM and DMARC pass, fail and none, domain misalignment, `issuer` mismatch, several `Authentication-Results` headers (only the topmost counts), and an unparseable header; plus fixtures from the real tenant once CL-01 has them. Evidence: `importVerify.test.ts` (header shapes of Exchange Online and of a gateway, only the topmost header counts). **Open:** fixtures from the real tenant wait for the CL-01 result.
 - [x] AC-7 Heartbeat: the payload has exactly three fields and no recipient, subject, file name or ring text (test that serialises it and searches for the inputs); `h` changes with the salt and the mailbox, not with letter case; `shouldSendHeartbeat` is true at 24 h and false at 23 h 59 m. Evidence: `heartbeat.test.ts` (three fields, property test that no input text appears, 24 h boundary; versions are dotted numbers only after the advisory review).
-- [ ] AC-8 `contract-v2` published and tagged after merge with a BOARD note; `contract-v1` tests unchanged and green; the dev server still runs on the mocks. Done in the PR: `RingDiff` v2, `devKeys`, live share-code fixtures. The tag follows the merge.
+- [x] AC-8 `contract-v2` published and tagged after merge with a BOARD note; `contract-v1` tests unchanged and green; the dev server still runs on the mocks. Done in the PR: `RingDiff` v2, `devKeys`, live share-code fixtures. Tag `contract-v2` created on the merge commit `307c318` of PR #28 and pushed on 2026-11-05.
 - [x] AC-9 Compensating controls on the PR: line coverage of `packages/core` at least 90 %, mutation score of the new files at least 80 % (reported), an advisory review through the job runner in plan mode (no blocker open), and the dependency line (`fflate`, exact version) stated in the PR. Evidence: line coverage of `packages/core` 100 %; mutation score 92.56 % over the six files (codec 88.69, importVerify 93.07, license 97.83, heartbeat 94.83, bytes 94.61, diff 93.02); new dependency `fflate` 0.8.3, exact. Advisory review through the job runner in plan mode: decode, encode, licence, heartbeat, regular expressions and the diff were reviewed without a blocker; the header-parsing and inflate-cap jobs timed out twice and are not covered (see Notes).
-- [ ] AC-10 `npm run verify` passes; the send-time bundle imports nothing beyond core and `fflate` (checked by the build). `npm run verify` passes; the bundle check cannot exist yet (no send-time bundle until CL-07). Core runtime dependencies are only `valibot` and `fflate`.
+- [ ] AC-10 `npm run verify` passes; the send-time bundle imports nothing beyond core and `fflate` (checked by the build). `npm run verify` passes; the bundle check cannot exist yet (no send-time bundle until CL-07). Core runtime dependencies are only `valibot` and `fflate`. **Carried to CL-07**, which creates the send-time bundle and adds the check there.
 
 ## Edge cases
 - A code pasted twice, or two codes in one text: the first complete block wins; a trailing second block is ignored, not an error.
