@@ -11,6 +11,7 @@
 
 ## Verification
 - [ ] `npm run verify` passes locally
+- [ ] Touches `packages/core` or `src/launchevent`: mutation score ≥ 80 % from a manual run on the final head (link or output) — otherwise write "n/a"
 - [ ] Only the card's allowed paths changed
 - [ ] No new dependency
 - [ ] All user-visible text through i18n (vi + en)

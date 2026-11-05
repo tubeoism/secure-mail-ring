@@ -1,0 +1,18 @@
+name: Mutation
+# Manual only (CL-15). A full Stryker run costs 25-45 runner minutes, so it is
+# not part of CI. Run it on the final head of every PR that touches
+# packages/core or src/launchevent and paste the score into the PR.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mutation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run test:mutation

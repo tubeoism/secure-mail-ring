@@ -26,7 +26,7 @@
 Nobody independent writes or checks the core, so these gates are mandatory on every `claude/*` PR touching `packages/core/**` or `src/launchevent/**`:
 
 - Line coverage ≥ 90 % on `packages/core`.
-- Mutation score ≥ 80 % on `packages/core` (StrykerJS), reported in the PR.
+- Mutation score ≥ 80 % on `packages/core` (StrykerJS), reported in the PR. Run it by hand on the final head of the PR (workflow `Mutation`, "Run workflow" on the PR branch, or `npm run test:mutation`); it is not part of CI (CL-15).
 - Property-based tests (fast-check) for matching, ordering and codec round-trips.
 - Request an advisory review from Antigravity; PO merges.
 
